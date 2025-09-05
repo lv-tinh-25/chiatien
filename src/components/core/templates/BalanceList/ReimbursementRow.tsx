@@ -1,8 +1,11 @@
 'use client'
 
+import { Avatar } from '@/components/core/atoms/Avatar'
+import { Button } from '@/components/core/atoms/Button'
 import { Money } from '@/components/core/atoms/Money'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
+import { ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
@@ -32,27 +35,37 @@ export function ReimbursementRow({
       data-testid="reimbursement-row"
       data-from={fromName}
       data-to={toName}
-      className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2"
+      className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-3"
     >
-      <span className="flex-1 text-body-lg text-foreground">
-        {t.rich('owes', {
-          strong: (chunks) => <strong>{chunks}</strong>,
-          from: fromName,
-          to: toName,
-        })}
+      <span className="flex min-w-0 flex-1 items-center gap-2.5">
+        <span aria-hidden className="flex shrink-0 items-center gap-1">
+          <Avatar name={fromName} size="sm" />
+          <ArrowRight className="size-3.5 text-muted-foreground" />
+          <Avatar name={toName} size="sm" />
+        </span>
+        <span className="min-w-0 text-body-lg text-foreground">
+          {t.rich('owes', {
+            strong: (chunks) => (
+              <strong className="font-semibold">{chunks}</strong>
+            ),
+            from: fromName,
+            to: toName,
+          })}
+        </span>
       </span>
-      <Money
-        amount={amount}
-        currency={currency}
-        locale={locale}
-        className="text-numeric-table-md"
-      />
-      <Link
-        href={settleHref}
-        className="flex min-h-touch-min items-center rounded-control border border-credit/25 bg-credit/10 px-3 text-label-md text-credit"
-      >
-        {t('markAsPaid')}
-      </Link>
+
+      <span className="flex items-center justify-between gap-3 sm:justify-end">
+        <Money
+          amount={amount}
+          currency={currency}
+          locale={locale}
+          className="whitespace-nowrap text-numeric-table-md"
+        />
+
+        <Button variant="settle" size="sm" asChild>
+          <Link href={settleHref}>{t('markAsPaid')}</Link>
+        </Button>
+      </span>
     </li>
   )
 }

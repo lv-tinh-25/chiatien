@@ -40,7 +40,7 @@ export function ActivityLog() {
   if (isPending) return null
 
   return (
-    <Card className="my-4">
+    <Card>
       <CardHeader>
         <CardTitle>{t('title')}</CardTitle>
         <CardDescription>{t('description')}</CardDescription>
@@ -53,8 +53,9 @@ export function ActivityLog() {
         ) : (
           sections.map(({ group, activities }) => (
             <section key={group} className="flex flex-col">
-              <h3 className="sticky top-0 bg-card py-2 text-label-md tracking-wide text-muted-foreground uppercase">
+              <h3 className="flex items-center gap-3 pt-3 pb-2 text-label-sm tracking-wider text-muted-foreground uppercase">
                 {t(`Groups.${group}`)}
+                <span aria-hidden className="h-px flex-1 bg-border" />
               </h3>
               <ul className="mb-2 flex flex-col">
                 {activities.map((activity) => {
@@ -70,7 +71,7 @@ export function ActivityLog() {
                   return (
                     <li
                       key={activity.id}
-                      className="flex flex-col gap-0.5 border-b border-border py-3 last:border-b-0"
+                      className="flex flex-col gap-0.5 border-b border-border/50 py-3 last:border-b-0"
                     >
                       <span className="text-body-md text-foreground">
                         {activity.expenseId &&

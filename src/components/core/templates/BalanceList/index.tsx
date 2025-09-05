@@ -41,14 +41,14 @@ export function BalanceList() {
     `/groups/${groupId}/expenses/create?reimbursement=yes&from=${from}&to=${to}&amount=${amount}`
 
   return (
-    <div className="flex flex-col gap-4 py-4">
+    <div className="flex flex-col gap-5">
       <Card>
         <CardHeader>
           <CardTitle>{t('title')}</CardTitle>
           <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <ul className="flex flex-col">
+          <ul className="flex flex-col divide-y divide-border/50">
             {balances.map((balance) => (
               <BalanceRow
                 key={balance.participantId}
@@ -74,7 +74,7 @@ export function BalanceList() {
               {t('Reimbursements.noImbursements')}
             </p>
           ) : (
-            <ul className="flex flex-col">
+            <ul className="flex flex-col divide-y divide-border/50">
               {reimbursements.map((reimbursement) => (
                 <ReimbursementRow
                   key={`${reimbursement.from}-${reimbursement.to}`}

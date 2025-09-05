@@ -19,6 +19,10 @@ type PaidForRowProps = {
  * `data-id` and a checkbox whose accessible name starts with the participant's
  * name are the contract the ported Playwright helpers use to find a row: the
  * share inputs inside carry no name attribute of their own.
+ *
+ * That contract also reads the participant's name off the row's first line of
+ * `innerText`, which is why this row carries no avatar: initials would render
+ * as text and be read as the name.
  */
 export function PaidForRow({
   participant,
@@ -32,7 +36,7 @@ export function PaidForRow({
   return (
     <li
       data-id={participant.id}
-      className="flex items-center justify-between gap-3 rounded-control px-1 py-1.5"
+      className="flex items-center justify-between gap-3 rounded-control px-2 py-1 transition-colors duration-150 ease-out-soft hover:bg-foreground/4"
     >
       <label className="flex min-h-touch-min flex-1 items-center gap-3">
         <Checkbox

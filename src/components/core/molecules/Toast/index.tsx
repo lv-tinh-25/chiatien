@@ -22,7 +22,7 @@ export function ToastViewport() {
           onOpenChange={(open) => {
             if (!open) dismiss(toast.id)
           }}
-          className="flex items-start gap-3 rounded-card border border-border bg-card p-4 shadow-sheet data-[state=closed]:opacity-0"
+          className="glass-float flex items-start gap-3 rounded-card p-4 transition-opacity duration-200 ease-out-soft data-[state=closed]:opacity-0"
         >
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             <ToastPrimitive.Title className="text-headline-sm text-foreground">

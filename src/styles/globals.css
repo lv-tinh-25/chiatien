@@ -6,28 +6,79 @@
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
   --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted-foreground: 215 19% 42%;
   --border: 214 32% 91%;
   --input: 214 32% 91%;
-  --ring: 160 84% 39%;
+  --ring: 162 84% 30%;
 
-  --primary: 161 94% 30%;
+  /* Darkened from the reference palette's 30% lightness: white on that
+     measured 3.86:1 in the browser, under the 4.5:1 floor, and this token backs
+     every primary button and the active bottom-bar item. Now 5.57:1. */
+  --primary: 162 94% 24%;
   --primary-foreground: 0 0% 100%;
-  --primary-active: 163 94% 24%;
-  --secondary: 199 89% 48%;
+  --primary-active: 163 96% 18%;
+  --secondary: 201 92% 32%;
   --secondary-foreground: 0 0% 100%;
   --accent: 38 92% 50%;
   --accent-foreground: 222 47% 11%;
 
   /* Money the viewer is owed, and money the viewer owes. `--debit` is kept
      separate from `--destructive` on purpose: debt is not an error, and the two
-     must be able to diverge without a find-and-replace. */
-  --credit: 161 94% 30%;
+     must be able to diverge without a find-and-replace.
+
+     Both are darker than the palette they came from because they are read as
+     text far more often than they are used as a fill: at the original
+     lightness, `text-debit` measured 3.78:1 on a white card. */
+  --credit: 162 94% 24%;
   --credit-subtle: 152 81% 96%;
-  --debit: 0 84% 60%;
+  --debit: 0 74% 45%;
   --debit-subtle: 0 86% 97%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
+
+  /* One stable hue per participant, so a person keeps the same swatch on every
+     screen. Each is checked to clear 4.5:1 as text on a white glass tint. */
+  --participant-1: 161 84% 28%;
+  --participant-2: 201 90% 34%;
+  --participant-3: 262 60% 52%;
+  --participant-4: 22 82% 42%;
+  --participant-5: 330 68% 45%;
+  --participant-6: 187 82% 27%;
+  --participant-7: 45 90% 30%;
+  --participant-8: 231 62% 52%;
+
+  /* The three washes the glass refracts. Without them `backdrop-filter` has
+     nothing to pick up and every surface reads as flat white. */
+  --aurora-1: 161 94% 30%;
+  --aurora-2: 199 89% 48%;
+  --aurora-3: 38 92% 50%;
+
+  /* Tint is deliberately high — 55% to 85% white, not the 10-20% that
+     glassmorphism references assume. Those numbers presume a dark or saturated
+     backdrop; over this pale aurora a 15% tint drops body text below 4.5:1.
+     High tint keeps text at 7:1 while the blur still carries the colour wash. */
+  --glass-tint-flush: 0.55;
+  --glass-tint-raised: 0.64;
+  --glass-tint-float: 0.74;
+  --glass-tint-modal: 0.86;
+
+  --glass-blur-flush: 8px;
+  --glass-blur-raised: 16px;
+  --glass-blur-float: 24px;
+  --glass-blur-modal: 32px;
+
+  --glass-edge-flush: 0.55;
+  --glass-edge-raised: 0.7;
+  --glass-edge-float: 0.8;
+  --glass-edge-modal: 0.9;
+
+  /* Saturation boost is what separates glass from frosted plastic: it amplifies
+     whatever colour sits behind the surface instead of washing it grey. */
+  --glass-saturate: 150%;
+
+  /* The lit top edge. Removing this is the single fastest way to make every
+     surface stop reading as glass. */
+  --glass-highlight: inset 0 1px 0 0 rgb(255 255 255 / 0.85);
 }
 
 @theme inline {
@@ -53,61 +104,76 @@
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
+  --color-participant-1: hsl(var(--participant-1));
+  --color-participant-2: hsl(var(--participant-2));
+  --color-participant-3: hsl(var(--participant-3));
+  --color-participant-4: hsl(var(--participant-4));
+  --color-participant-5: hsl(var(--participant-5));
+  --color-participant-6: hsl(var(--participant-6));
+  --color-participant-7: hsl(var(--participant-7));
+  --color-participant-8: hsl(var(--participant-8));
+
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
-  /* Four elevation levels: hairline card, raised control, floating sheet,
-     and the primary action bar, which carries a tinted shadow. */
+  /* Glass carries its own depth through blur and tint, so these shadows only
+     have to seat a surface against the aurora, not fake elevation on their own. */
   --shadow-card:
-    0 1px 3px 0 hsl(var(--foreground) / 0.04),
-    0 1px 2px -1px hsl(var(--foreground) / 0.02);
+    0 1px 2px 0 hsl(var(--foreground) / 0.04),
+    0 4px 12px -4px hsl(var(--foreground) / 0.06);
   --shadow-raised:
-    0 4px 6px -1px hsl(var(--foreground) / 0.06),
-    0 2px 4px -2px hsl(var(--foreground) / 0.04);
+    0 2px 4px -1px hsl(var(--foreground) / 0.05),
+    0 12px 24px -8px hsl(var(--foreground) / 0.1);
   --shadow-sheet:
-    0 20px 25px -5px hsl(var(--foreground) / 0.1),
-    0 8px 10px -6px hsl(var(--foreground) / 0.05);
-  --shadow-action: 0 10px 15px -3px hsl(var(--primary) / 0.25);
+    0 8px 16px -6px hsl(var(--foreground) / 0.1),
+    0 24px 48px -12px hsl(var(--foreground) / 0.18);
+  --shadow-action: 0 8px 20px -6px hsl(var(--primary) / 0.45);
 
-  --radius-card: 1rem;
-  --radius-control: 0.75rem;
+  --radius-control: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-sheet: 1.75rem;
 
-  --spacing-thumb-safe: 5rem;
+  --spacing-thumb-safe: 6.5rem;
   --spacing-touch-min: 3rem;
 
-  --text-display-currency: 2.25rem;
-  --text-display-currency--line-height: 2.75rem;
-  --text-display-currency--letter-spacing: -0.03em;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --text-display-currency: 2.5rem;
+  --text-display-currency--line-height: 2.875rem;
+  --text-display-currency--letter-spacing: -0.035em;
   --text-display-currency--font-weight: 700;
-  --text-headline-lg: 1.875rem;
-  --text-headline-lg--line-height: 2.375rem;
-  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg: 1.75rem;
+  --text-headline-lg--line-height: 2.125rem;
+  --text-headline-lg--letter-spacing: -0.025em;
   --text-headline-lg--font-weight: 700;
-  --text-headline-md: 1.25rem;
-  --text-headline-md--line-height: 1.75rem;
-  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md: 1.1875rem;
+  --text-headline-md--line-height: 1.625rem;
+  --text-headline-md--letter-spacing: -0.015em;
   --text-headline-md--font-weight: 600;
   --text-headline-sm: 1rem;
   --text-headline-sm--line-height: 1.5rem;
+  --text-headline-sm--letter-spacing: -0.01em;
   --text-headline-sm--font-weight: 600;
   --text-body-lg: 1rem;
   --text-body-lg--line-height: 1.5rem;
   --text-body-md: 0.875rem;
-  --text-body-md--line-height: 1.25rem;
+  --text-body-md--line-height: 1.3125rem;
   --text-body-sm: 0.75rem;
   --text-body-sm--line-height: 1.125rem;
-  --text-numeric-table-lg: 1.125rem;
+  --text-numeric-table-lg: 1.1875rem;
   --text-numeric-table-lg--line-height: 1.5rem;
-  --text-numeric-table-lg--letter-spacing: -0.01em;
-  --text-numeric-table-lg--font-weight: 600;
+  --text-numeric-table-lg--letter-spacing: -0.02em;
+  --text-numeric-table-lg--font-weight: 700;
   --text-numeric-table-md: 0.9375rem;
   --text-numeric-table-md--line-height: 1.25rem;
+  --text-numeric-table-md--letter-spacing: -0.01em;
   --text-numeric-table-md--font-weight: 600;
   --text-label-md: 0.8125rem;
   --text-label-md--line-height: 1rem;
   --text-label-md--font-weight: 600;
   --text-label-sm: 0.6875rem;
   --text-label-sm--line-height: 0.875rem;
-  --text-label-sm--letter-spacing: 0.02em;
+  --text-label-sm--letter-spacing: 0.03em;
   --text-label-sm--font-weight: 600;
 }
 
@@ -116,8 +182,156 @@
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
   }
+
+  /* Scroll to a hash target without the sticky top bar covering it. */
+  :target {
+    scroll-margin-top: 5rem;
+  }
 }
 
 @utility tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Four glass tiers. Depth is carried by blur radius and tint, so a surface
+   stays legible as glass even where a shadow would be clipped. */
+@utility glass-flush {
+  background-color: rgb(255 255 255 / var(--glass-tint-flush));
+  backdrop-filter: blur(var(--glass-blur-flush)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-flush))
+    saturate(var(--glass-saturate));
+  border: 1px solid rgb(255 255 255 / var(--glass-edge-flush));
+  box-shadow: var(--glass-highlight);
+}
+
+@utility glass-raised {
+  background-color: rgb(255 255 255 / var(--glass-tint-raised));
+  backdrop-filter: blur(var(--glass-blur-raised))
+    saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-raised))
+    saturate(var(--glass-saturate));
+  border: 1px solid rgb(255 255 255 / var(--glass-edge-raised));
+  box-shadow: var(--glass-highlight), var(--shadow-card);
+}
+
+@utility glass-float {
+  background-color: rgb(255 255 255 / var(--glass-tint-float));
+  backdrop-filter: blur(var(--glass-blur-float)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-float))
+    saturate(var(--glass-saturate));
+  border: 1px solid rgb(255 255 255 / var(--glass-edge-float));
+  box-shadow: var(--glass-highlight), var(--shadow-raised);
+}
+
+@utility glass-modal {
+  background-color: rgb(255 255 255 / var(--glass-tint-modal));
+  backdrop-filter: blur(var(--glass-blur-modal)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-modal))
+    saturate(var(--glass-saturate));
+  border: 1px solid rgb(255 255 255 / var(--glass-edge-modal));
+  box-shadow: var(--glass-highlight), var(--shadow-sheet);
+}
+
+/* A sticky bar spans the viewport, so it takes an edge only where content
+   passes under it rather than the full outline the tiered utilities draw. */
+@utility glass-bar {
+  background-color: rgb(255 255 255 / var(--glass-tint-float));
+  backdrop-filter: blur(var(--glass-blur-float)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-float))
+    saturate(var(--glass-saturate));
+  border-bottom: 1px solid hsl(var(--border) / 0.7);
+}
+
+/* Blurring the page behind a modal is what stops the overlay reading as a flat
+   scrim: the content stays visible but demonstrably out of focus. */
+@utility glass-scrim {
+  background-color: hsl(var(--foreground) / 0.25);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+/* The wash every glass surface refracts. Fixed, so it does not scroll with
+   content and the whole app feels lit from one place. */
+@utility aurora {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(
+      44rem 32rem at 8% -4%,
+      hsl(var(--aurora-1) / 0.16),
+      transparent 60%
+    ),
+    radial-gradient(
+      38rem 30rem at 98% 12%,
+      hsl(var(--aurora-2) / 0.14),
+      transparent 62%
+    ),
+    radial-gradient(
+      42rem 34rem at 62% 104%,
+      hsl(var(--aurora-3) / 0.12),
+      transparent 60%
+    );
+}
+
+/* Long lists composite far fewer layers when each row is its own paint root. */
+@utility glass-contain {
+  contain: paint layout;
+}
+
+@utility rise-in {
+  animation: rise-in 260ms var(--ease-out-soft) both;
+}
+
+/* The delays are written out per child rather than driven by an inline custom
+   property, so no component has to reach for a style prop to animate a list. */
+@utility stagger-children {
+  & > * {
+    animation: rise-in 300ms var(--ease-out-soft) both;
+  }
+  & > *:nth-child(1) {
+    animation-delay: 0ms;
+  }
+  & > *:nth-child(2) {
+    animation-delay: 35ms;
+  }
+  & > *:nth-child(3) {
+    animation-delay: 70ms;
+  }
+  & > *:nth-child(4) {
+    animation-delay: 105ms;
+  }
+  & > *:nth-child(5) {
+    animation-delay: 140ms;
+  }
+  & > *:nth-child(6) {
+    animation-delay: 175ms;
+  }
+  & > *:nth-child(7) {
+    animation-delay: 210ms;
+  }
+  & > *:nth-child(n + 8) {
+    animation-delay: 245ms;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

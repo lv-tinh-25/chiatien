@@ -1,13 +1,29 @@
 import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
 import type { HTMLAttributes } from 'react'
 
-export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+const cardVariants = cva('rounded-card text-card-foreground', {
+  variants: {
+    tier: {
+      flush: 'glass-flush',
+      raised: 'glass-raised',
+      float: 'glass-float',
+    },
+    interactive: {
+      true: 'transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-raised active:translate-y-0 active:duration-75',
+      false: '',
+    },
+  },
+  defaultVariants: { tier: 'raised', interactive: false },
+})
+
+export type CardProps = HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof cardVariants>
+
+export function Card({ className, tier, interactive, ...props }: CardProps) {
   return (
     <div
-      className={cn(
-        'rounded-card border border-border bg-card text-card-foreground shadow-card',
-        className,
-      )}
+      className={cn(cardVariants({ tier, interactive }), className)}
       {...props}
     />
   )
@@ -17,7 +33,7 @@ export function CardHeader({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex flex-col gap-1 p-4', className)} {...props} />
+  return <div className={cn('flex flex-col gap-1 p-5', className)} {...props} />
 }
 
 export function CardTitle({
@@ -43,7 +59,7 @@ export function CardContent({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('p-4 pt-0', className)} {...props} />
+  return <div className={cn('p-5 pt-0', className)} {...props} />
 }
 
 export function CardFooter({
@@ -52,8 +68,10 @@ export function CardFooter({
 }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('flex items-center gap-2 p-4 pt-0', className)}
+      className={cn('flex items-center gap-2 p-5 pt-0', className)}
       {...props}
     />
   )
 }
+
+export { cardVariants }

@@ -26,12 +26,12 @@ export function GroupHeader() {
   const { groupId, group } = useCurrentGroup()
 
   return (
-    <header className="flex items-center justify-between gap-3 pt-4">
+    <header className="glass-bar sticky top-0 z-20 -mx-4 mb-5 flex items-center gap-3 px-4 py-3 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       <h1 className="min-w-0 flex-1 truncate text-headline-lg text-foreground">
         {group?.name ?? ''}
       </h1>
 
-      <div className="flex items-center gap-1">
+      <div className="flex shrink-0 items-center gap-1">
         <ShareSheet groupId={groupId} />
 
         <Sheet>

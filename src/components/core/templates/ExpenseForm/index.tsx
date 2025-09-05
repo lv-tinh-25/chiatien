@@ -77,7 +77,10 @@ function ExpenseFormFields({
   const scope = isIncome ? 'Income' : 'Expense'
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-4 py-4">
+    <form
+      onSubmit={submit}
+      className="mx-auto flex w-full max-w-3xl flex-col gap-5"
+    >
       <Card>
         <CardHeader>
           <CardTitle>

@@ -68,10 +68,10 @@ export function CategorySelect({
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-control border border-border bg-card shadow-sheet"
+          className="glass-modal z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-control"
         >
           <Command>
-            <div className="border-b border-border px-3">
+            <div className="border-b border-border/60 px-3">
               <Command.Input
                 placeholder={t('search')}
                 className="h-touch-min w-full bg-transparent text-body-lg text-foreground outline-none placeholder:text-muted-foreground"
@@ -97,7 +97,7 @@ export function CategorySelect({
                         onValueChange(category.id)
                         setOpen(false)
                       }}
-                      className="flex min-h-touch-min cursor-default items-center justify-between rounded-control px-3 text-body-lg text-foreground data-[selected=true]:bg-muted"
+                      className="flex min-h-touch-min cursor-default items-center justify-between rounded-control px-3 text-body-lg text-foreground data-[selected=true]:bg-foreground/6"
                     >
                       <span className="flex items-center gap-2">
                         <CategoryIcon category={category} className="size-4" />

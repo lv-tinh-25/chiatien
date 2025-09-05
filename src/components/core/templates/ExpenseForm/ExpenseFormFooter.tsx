@@ -29,7 +29,7 @@ export function ExpenseFormFooter({
       : t('save')
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="glass-float sticky bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-10 flex flex-wrap items-center gap-2 rounded-card p-3 lg:bottom-4">
       <Button type="submit" disabled={isSubmitting}>
         {label}
       </Button>
