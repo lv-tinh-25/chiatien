@@ -13,6 +13,8 @@ type SelectProps = {
   options: SelectOption[]
   placeholder?: string
   name?: string
+  /** Stable hook for end-to-end tests that must target this trigger. */
+  testId?: string
   'aria-describedby'?: string
   className?: string
 }
@@ -24,6 +26,7 @@ export function Select({
   options,
   placeholder,
   name,
+  testId,
   className,
   ...aria
 }: SelectProps) {
@@ -31,6 +34,7 @@ export function Select({
     <SelectPrimitive.Root value={value} onValueChange={onValueChange} name={name}>
       <SelectPrimitive.Trigger
         id={id}
+        data-testid={testId}
         aria-describedby={aria['aria-describedby']}
         className={cn(
           'flex min-h-touch-min w-full items-center justify-between gap-2 rounded-control border border-input bg-card px-3 text-body-lg text-foreground',

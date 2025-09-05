@@ -1,5 +1,10 @@
 import type { SplittingOptions } from '@/lib/schemas'
 
+/** Splitting options that always name every participant. */
+export type ConcreteSplittingOptions = SplittingOptions & {
+  paidFor: NonNullable<SplittingOptions['paidFor']>
+}
+
 type ParticipantRef = { id: string }
 
 /**
@@ -8,7 +13,7 @@ type ParticipantRef = { id: string }
  */
 export function defaultSplittingOptions(
   participants: ParticipantRef[],
-): SplittingOptions {
+): ConcreteSplittingOptions {
   return {
     splitMode: 'EVENLY',
     paidFor: participants.map(({ id }) => ({ participant: id, shares: '1' })),
@@ -24,16 +29,16 @@ export function defaultSplittingOptions(
 export function reconcileSplittingOptions(
   stored: SplittingOptions | null,
   participants: ParticipantRef[],
-): SplittingOptions {
+): ConcreteSplittingOptions {
   const fallback = defaultSplittingOptions(participants)
   if (stored === null) return fallback
-  if (stored.paidFor === null) {
+
+  const paidFor = stored.paidFor
+  if (paidFor === null) {
     return { splitMode: stored.splitMode, paidFor: fallback.paidFor }
   }
 
   const known = new Set(participants.map(({ id }) => id))
-  const allKnown = stored.paidFor.every(({ participant }) =>
-    known.has(participant),
-  )
-  return allKnown ? stored : fallback
+  const allKnown = paidFor.every(({ participant }) => known.has(participant))
+  return allKnown ? { splitMode: stored.splitMode, paidFor } : fallback
 }
