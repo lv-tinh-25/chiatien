@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
+import { Card, CardContent } from '@/components/core/atoms/Card'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
@@ -38,33 +39,37 @@ export function AddGroupByUrl({
   }
 
   return (
-    <form
-      className="flex items-end gap-2"
-      onSubmit={(event) => {
-        event.preventDefault()
-        void submit()
-      }}
-    >
-      <FormInput
-        name="groupUrl"
-        label={t('title')}
-        description={t('description')}
-        placeholder="https://…/groups/…"
-        fieldClassName="flex-1"
-        value={value}
-        onChange={(event) => {
-          setValue(event.target.value)
-          setFailed(false)
-        }}
-      />
-      <Button type="submit" variant="outline" className="mb-6">
-        {t('button')}
-      </Button>
-      {failed && (
-        <p role="alert" className="text-body-sm text-destructive">
-          {t('error')}
-        </p>
-      )}
-    </form>
+    <Card>
+      <CardContent className="p-4">
+        <form
+          className="flex flex-col gap-3 sm:flex-row sm:items-end"
+          onSubmit={(event) => {
+            event.preventDefault()
+            void submit()
+          }}
+        >
+          <FormInput
+            name="groupUrl"
+            label={t('title')}
+            description={t('description')}
+            placeholder="https://…/groups/…"
+            fieldClassName="flex-1"
+            value={value}
+            onChange={(event) => {
+              setValue(event.target.value)
+              setFailed(false)
+            }}
+          />
+          <Button type="submit" variant="outline" className="sm:mb-8">
+            {t('button')}
+          </Button>
+        </form>
+        {failed && (
+          <p role="alert" className="mt-2 text-body-sm text-destructive">
+            {t('error')}
+          </p>
+        )}
+      </CardContent>
+    </Card>
   )
 }

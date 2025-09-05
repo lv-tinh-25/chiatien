@@ -15,7 +15,9 @@ export default defineConfig({
   webServer: {
     command: 'npm run start',
     url: 'http://localhost:3000/api/health/liveness',
-    reuseExistingServer: true,
+    // Never reuse: a dev server left running from an earlier build silently
+    // serves stale code and every assertion fails for the wrong reason.
+    reuseExistingServer: false,
     timeout: 120_000,
   },
   use: {
