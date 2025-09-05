@@ -48,5 +48,17 @@
     "updateTitle": "Update available",
     "updateDescription": "A new version of ChiaTien is available.",
     "reload": "Reload"
+  },
+  "Nav": {
+    "groupSections": "Group sections",
+    "mainSections": "Main sections",
+    "expenses": "Expenses",
+    "balances": "Balances",
+    "stats": "Stats",
+    "activity": "Activity",
+    "groups": "Groups",
+    "settings": "Settings",
+    "backToGroups": "Back to groups",
+    "more": "More"
   }
 }
