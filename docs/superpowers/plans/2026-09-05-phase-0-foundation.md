@@ -1753,3 +1753,47 @@ executed so it can account for what the previous slice actually produced:
 6. `ActivityLog` and `GroupInfo`
 7. `Settings` and the active-user modal — gated by `active-user`
 8. PWA and service worker — gated by `pwa`
+
+---
+
+## Execution record
+
+Phase 0 is complete. Every exit criterion holds: 20 Jest suites / 242 tests green,
+`check-types` and `lint` clean, `next build` compiles 17 routes, 6 Playwright specs
+pass, `messages/vi` covers all 369 English keys, and `git remote -v` is empty.
+
+Nine deviations from the plan, all forced by what the code or the machine actually
+required:
+
+1. **Node 24 was installed.** Prisma 7 refuses odd-numbered Node releases outright, so
+   the machine's 23.11.1 could not install it. Node 24.20.0 was added through nvm and
+   pinned per-project with `.nvmrc`. The user's `default` alias resolves through
+   `node -> stable`, so it now points at 24 as a side effect; 23.11.1 remains installed.
+2. **npm 11 blocks install scripts.** `prisma`, `@prisma/engines`, `@swc/core`,
+   `unrs-resolver`, `@parcel/watcher` and `esbuild` had to be approved explicitly with
+   `npm install-scripts approve` before the Prisma engine would download.
+3. **`deepmerge` and `decimal.js` were added as direct dependencies.** spliit imports
+   both but declares neither, relying on transitive resolution.
+4. **The ESLint config uses spliit's `defineConfig` form.** The `FlatCompat` config in
+   the plan crashes against eslint-config-next 16 with a circular-reference error.
+5. **`src/i18n/locales.ts` was pulled forward into Task 3, and the message split and
+   `request.ts` into Task 5.** `currency.ts` and `locale.ts` do not type-check without
+   the locale union, and next-intl refuses to load `next.config.mjs` without a request
+   configuration module. The locale constants live in their own module rather than in
+   `request.ts` so importing the `Locale` type does not drag in server-only code.
+6. **The currency data generator was rewritten as plain Node.** `ts-node -T` failed on
+   this tsconfig; `scripts/generate-currency-data.mjs` reads the locales and currency
+   codes out of the source files so the three cannot drift.
+7. **Three inherited workarounds were fixed rather than carried across.**
+   `useMediaQuery` and `useBaseUrl` are now built on `useSyncExternalStore`, so
+   `react-hooks/set-state-in-effect` does not have to be disabled as spliit disables it;
+   `useActiveUser` was dropped, since the spec replaces it with a store. `prisma.ts` uses
+   `server-only` plus a typed global instead of `undefined as any as PrismaClient`.
+   `SplittingOptions` is typed against `ExpenseFormInput`, removing the `'1' as any`.
+8. **The perf-instrumentation harness was dropped.** It belongs to spliit's
+   `compose.perf.yaml` benchmark suite, which is not part of the port.
+9. **`output: 'standalone'` was removed and Playwright starts its own server.**
+   Next refuses to serve a standalone build through `next start`, and Docker is not
+   available on this machine. Jest also needed `superjson`, `copy-anything`, `is-what`
+   and `nanoid` spliced into next/jest's `transformIgnorePatterns`: they ship ESM only
+   and the suite runs as CommonJS.
