@@ -10,8 +10,8 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 import { ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 const SPLIT_MODES: SplitMode[] = [
   'EVENLY',
@@ -49,7 +49,9 @@ export function AdvancedSplitCollapsible({
         <Button type="button" variant="ghost" className="px-0">
           <ChevronDown
             aria-hidden
-            className={open ? 'rotate-180 transition-transform' : 'transition-transform'}
+            className={
+              open ? 'rotate-180 transition-transform' : 'transition-transform'
+            }
           />
           {t('advancedOptions')}
         </Button>

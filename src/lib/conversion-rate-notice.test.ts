@@ -21,9 +21,9 @@ describe('conversionRateNotice', () => {
   })
 
   it('says nothing about the API while a custom rate is in use', () => {
-    expect(keys(conversionRateNotice({ ...base, usingCustomRate: true }))).toEqual(
-      ['customRate'],
-    )
+    expect(
+      keys(conversionRateNotice({ ...base, usingCustomRate: true })),
+    ).toEqual(['customRate'])
   })
 
   it('reports the fetch in flight', () => {

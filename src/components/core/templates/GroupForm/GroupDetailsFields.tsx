@@ -13,8 +13,8 @@ import { FormTextarea } from '@/components/core/molecules/FormTextarea'
 import { asLocale } from '@/i18n/locales'
 import type { GroupFormValues } from '@/lib/schemas'
 import { useLocale, useTranslations } from 'next-intl'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 type GroupDetailsFieldsProps = {
   form: UseFormReturn<GroupFormValues>

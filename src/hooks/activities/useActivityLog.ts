@@ -39,7 +39,9 @@ export function useActivityLog() {
   )
 
   const participantName = useMemo(() => {
-    const names = new Map((group?.participants ?? []).map((p) => [p.id, p.name]))
+    const names = new Map(
+      (group?.participants ?? []).map((p) => [p.id, p.name]),
+    )
     return (participantId: string | null) =>
       participantId === null ? null : (names.get(participantId) ?? null)
   }, [group])

@@ -23,7 +23,9 @@ function Body({
   return (
     <>
       <span className="flex items-baseline justify-between gap-3">
-        <span className="min-w-0 truncate text-body-md text-foreground">{label}</span>
+        <span className="min-w-0 truncate text-body-md text-foreground">
+          {label}
+        </span>
         <span className="shrink-0 tabular text-numeric-table-md text-foreground">
           {value}
         </span>
@@ -34,7 +36,9 @@ function Body({
             'block h-full',
             tone === 'secondary' ? 'bg-secondary' : 'bg-primary',
           )}
-          style={{ width: `${Math.round(Math.max(0, Math.min(1, fill)) * 100)}%` }}
+          style={{
+            width: `${Math.round(Math.max(0, Math.min(1, fill)) * 100)}%`,
+          }}
         />
       </span>
     </>

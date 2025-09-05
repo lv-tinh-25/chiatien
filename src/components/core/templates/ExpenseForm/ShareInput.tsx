@@ -1,10 +1,10 @@
 'use client'
 
 import { Input } from '@/components/core/atoms/Input'
+import type { SplitMode } from '@/generated/prisma/browser'
 import type { Currency } from '@/lib/currency'
 import { enforceCurrencyPattern } from '@/lib/currency-input'
 import { useTranslations } from 'next-intl'
-import type { SplitMode } from '@/generated/prisma/browser'
 import { match } from 'ts-pattern'
 
 type ShareInputProps = {
@@ -43,7 +43,9 @@ export function ShareInput({
         inputMode="decimal"
         className="w-24 text-right"
         value={value}
-        onChange={(event) => onChange(enforceCurrencyPattern(event.target.value))}
+        onChange={(event) =>
+          onChange(enforceCurrencyPattern(event.target.value))
+        }
       />
       <span className="w-10 shrink-0 text-body-sm text-muted-foreground">
         {adornment}

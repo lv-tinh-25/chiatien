@@ -4,8 +4,8 @@ import { FormField } from '@/components/core/molecules/FormField'
 import { Select } from '@/components/core/molecules/Select'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useTranslations } from 'next-intl'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 const RULES = ['NONE', 'DAILY', 'WEEKLY', 'MONTHLY'] as const
 const LABEL_KEYS = {
@@ -21,7 +21,10 @@ export function ExpenseRecurrenceField({
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>
 }) {
   const t = useTranslations('ExpenseForm.Expense.recurrenceRule')
-  const recurrenceRule = useWatch({ control: form.control, name: 'recurrenceRule' })
+  const recurrenceRule = useWatch({
+    control: form.control,
+    name: 'recurrenceRule',
+  })
 
   return (
     <FormField label={t('label')} description={t('description')}>
@@ -31,7 +34,10 @@ export function ExpenseRecurrenceField({
           aria-describedby={describedBy}
           value={String(recurrenceRule ?? 'NONE')}
           onValueChange={(value) =>
-            form.setValue('recurrenceRule', RULES.find((rule) => rule === value))
+            form.setValue(
+              'recurrenceRule',
+              RULES.find((rule) => rule === value),
+            )
           }
           options={RULES.map((rule) => ({
             value: rule,

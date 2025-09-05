@@ -60,7 +60,10 @@ export function useGroupForm({
           information: group.information ?? '',
           currency: group.currency,
           currencyCode: group.currencyCode ?? '',
-          participants: group.participants.map(({ id, name }) => ({ id, name })),
+          participants: group.participants.map(({ id, name }) => ({
+            id,
+            name,
+          })),
         }
       : {
           name: '',
@@ -106,7 +109,9 @@ export function useGroupForm({
       return
     }
 
-    const { groupId } = await createGroup.mutateAsync({ groupFormValues: values })
+    const { groupId } = await createGroup.mutateAsync({
+      groupFormValues: values,
+    })
     await utils.groups.invalidate()
     visit({ id: groupId, name: values.name })
     router.push(`/groups/${groupId}/expenses`)

@@ -7,8 +7,8 @@ import { Select } from '@/components/core/molecules/Select'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 type Props = {
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>

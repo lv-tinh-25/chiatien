@@ -49,7 +49,9 @@ export function ExpensesDialog({
           </DialogPrimitive.Description>
 
           {expenses.length === 0 ? (
-            <p className="mt-4 text-body-md text-muted-foreground">{emptyLabel}</p>
+            <p className="mt-4 text-body-md text-muted-foreground">
+              {emptyLabel}
+            </p>
           ) : (
             <ul className="mt-4 flex flex-col">
               {expenses.map((expense) => (

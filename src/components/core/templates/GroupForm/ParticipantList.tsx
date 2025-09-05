@@ -51,7 +51,12 @@ export function ParticipantList({
             />
           ))}
         </ul>
-        <Button type="button" variant="outline" className="mt-4" onClick={onAdd}>
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-4"
+          onClick={onAdd}
+        >
           <Plus aria-hidden />
           {t('add')}
         </Button>

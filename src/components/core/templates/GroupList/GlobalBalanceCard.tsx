@@ -1,6 +1,11 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/atoms/Card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/atoms/Card'
 import { Money } from '@/components/core/atoms/Money'
 import { asLocale } from '@/i18n/locales'
 import { getCurrencyFromGroup } from '@/lib/utils'
@@ -18,7 +23,10 @@ type Balance = {
  * dong and one in dollars have no meaningful total.
  */
 function totalsByCurrency(balances: Balance[]) {
-  const totals = new Map<string, { owed: number; owing: number; currency: Balance }>()
+  const totals = new Map<
+    string,
+    { owed: number; owing: number; currency: Balance }
+  >()
 
   for (const balance of balances) {
     const key = balance.currencyCode ?? balance.currency

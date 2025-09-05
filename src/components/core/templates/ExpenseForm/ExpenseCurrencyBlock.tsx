@@ -45,7 +45,10 @@ export function ExpenseCurrencyBlock({
   const t = useTranslations('ExpenseForm')
   const tRate = useTranslations('ExpenseForm.conversionRateState')
   const scope = isIncome ? 'Income' : 'Expense'
-  const currencyCode = useWatch({ control: form.control, name: 'originalCurrency' })
+  const currencyCode = useWatch({
+    control: form.control,
+    name: 'originalCurrency',
+  })
   const isReimbursement = useWatch({
     control: form.control,
     name: 'isReimbursement',

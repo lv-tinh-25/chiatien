@@ -13,7 +13,9 @@ test('scans a receipt and reports a failed extraction', async ({ page }) => {
   })
 
   await page.goto(`/groups/${groupId}/expenses`)
-  await page.getByRole('button', { name: 'Create expense from receipt' }).click()
+  await page
+    .getByRole('button', { name: 'Create expense from receipt' })
+    .click()
 
   const dialog = page.getByRole('dialog')
   await expect(dialog).toContainText('Create from receipt')

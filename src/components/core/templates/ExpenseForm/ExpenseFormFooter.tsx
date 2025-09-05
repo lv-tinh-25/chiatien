@@ -41,7 +41,11 @@ export function ExpenseFormFooter({
         <div className="ml-auto">
           <ConfirmDialog
             trigger={
-              <Button type="button" variant="ghost" className="text-destructive">
+              <Button
+                type="button"
+                variant="ghost"
+                className="text-destructive"
+              >
                 {t('DeletePopup.label')}
               </Button>
             }

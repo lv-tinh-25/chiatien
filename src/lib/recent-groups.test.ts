@@ -7,10 +7,12 @@ import {
 
 describe('addRecent', () => {
   it('puts a newly visited group first', () => {
-    expect(addRecent([{ id: 'a', name: 'A' }], { id: 'b', name: 'B' })).toEqual([
-      { id: 'b', name: 'B' },
-      { id: 'a', name: 'A' },
-    ])
+    expect(addRecent([{ id: 'a', name: 'A' }], { id: 'b', name: 'B' })).toEqual(
+      [
+        { id: 'b', name: 'B' },
+        { id: 'a', name: 'A' },
+      ],
+    )
   })
 
   it('moves an already known group to the front instead of duplicating it', () => {
@@ -25,9 +27,9 @@ describe('addRecent', () => {
   })
 
   it('refreshes a renamed group', () => {
-    expect(addRecent([{ id: 'a', name: 'Old' }], { id: 'a', name: 'New' })).toEqual(
-      [{ id: 'a', name: 'New' }],
-    )
+    expect(
+      addRecent([{ id: 'a', name: 'Old' }], { id: 'a', name: 'New' }),
+    ).toEqual([{ id: 'a', name: 'New' }])
   })
 })
 

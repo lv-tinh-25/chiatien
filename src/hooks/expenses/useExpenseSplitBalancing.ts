@@ -4,8 +4,8 @@ import type { Currency } from '@/lib/currency'
 import { redistributeShares } from '@/lib/expense-split'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 /**
  * Keeps `BY_AMOUNT` shares adding up to the expense total.

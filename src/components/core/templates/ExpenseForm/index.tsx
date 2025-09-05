@@ -14,13 +14,13 @@ import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/E
 import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/ExpenseFormFooter'
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
 import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
+import { ExpenseTitleField } from '@/components/core/templates/ExpenseForm/ExpenseTitleField'
 import { PaidForList } from '@/components/core/templates/ExpenseForm/PaidForList'
-import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import { useExpenseForm } from '@/hooks/expenses/useExpenseForm'
+import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { useTranslations } from 'next-intl'
 import { useWatch } from 'react-hook-form'
-import { ExpenseTitleField } from '@/components/core/templates/ExpenseForm/ExpenseTitleField'
 
 type Expense = AppRouterOutput['groups']['expenses']['get']['expense']
 

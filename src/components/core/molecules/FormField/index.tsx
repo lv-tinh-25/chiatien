@@ -10,7 +10,10 @@ type FormFieldProps = {
   /** A message *key* from the Zod schemas, not a sentence. */
   errorKey?: string
   className?: string
-  children: (props: { id: string; describedBy: string | undefined }) => ReactNode
+  children: (props: {
+    id: string
+    describedBy: string | undefined
+  }) => ReactNode
 }
 
 /**
@@ -29,7 +32,8 @@ export function FormField({
   const id = useId()
   const descriptionId = description ? `${id}-description` : undefined
   const errorId = errorKey ? `${id}-error` : undefined
-  const describedBy = [descriptionId, errorId].filter(Boolean).join(' ') || undefined
+  const describedBy =
+    [descriptionId, errorId].filter(Boolean).join(' ') || undefined
 
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>

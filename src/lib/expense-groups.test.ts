@@ -1,4 +1,7 @@
-import { groupExpensesByDate, type ExpenseDateGroup } from '@/lib/expense-groups'
+import {
+  groupExpensesByDate,
+  type ExpenseDateGroup,
+} from '@/lib/expense-groups'
 import dayjs from 'dayjs'
 
 const MONDAY = dayjs('2026-07-08T12:00:00')

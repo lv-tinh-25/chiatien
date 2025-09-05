@@ -19,7 +19,9 @@ test('creating a group lands on its expenses and remembers it', async ({
   })
 
   await page.goto('/groups')
-  await expect(page.getByRole('heading', { name: 'Recent groups' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Recent groups' }),
+  ).toBeVisible()
   await expect(page.getByRole('link', { name })).toBeVisible()
   expect(groupId).not.toHaveLength(0)
 })
@@ -29,7 +31,10 @@ test('opening a shared link adds the group to this browser list', async ({
   context,
 }) => {
   const name = `E2E Shared ${uniqueSuffix()}`
-  const groupId = await createGroup(page, { name, participants: ['Alice', 'Bob'] })
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
 
   // A second profile has never seen the group, so it must arrive purely from
   // visiting the link.

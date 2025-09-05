@@ -13,8 +13,8 @@ import type { SplitMode } from '@/generated/prisma/browser'
 import type { Currency } from '@/lib/currency'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useTranslations } from 'next-intl'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 type PaidForRows = ExpenseFormInput['paidFor']
 
@@ -36,8 +36,10 @@ export function PaidForList({
   const t = useTranslations('ExpenseForm')
   const tErrors = useTranslations('SchemaErrors')
   const scope = isIncome ? 'Income' : 'Expense'
-  const paidFor: PaidForRows = useWatch({ control: form.control, name: 'paidFor' }) ?? []
-  const splitMode: SplitMode = useWatch({ control: form.control, name: 'splitMode' }) ?? 'EVENLY'
+  const paidFor: PaidForRows =
+    useWatch({ control: form.control, name: 'paidFor' }) ?? []
+  const splitMode: SplitMode =
+    useWatch({ control: form.control, name: 'splitMode' }) ?? 'EVENLY'
   const errorKey = form.formState.errors.paidFor?.message
 
   const rowFor = (participantId: string) =>
@@ -49,7 +51,10 @@ export function PaidForList({
       checked
         ? participants.map(
             (participant) =>
-              rowFor(participant.id) ?? { participant: participant.id, shares: '1' },
+              rowFor(participant.id) ?? {
+                participant: participant.id,
+                shares: '1',
+              },
           )
         : [],
       { shouldValidate: true },
@@ -83,10 +88,20 @@ export function PaidForList({
           <CardDescription>{t(`${scope}.paidFor.description`)}</CardDescription>
         </div>
         <div className="flex shrink-0 gap-1">
-          <Button type="button" variant="ghost" size="sm" onClick={() => setAll(true)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setAll(true)}
+          >
             {t('selectAll')}
           </Button>
-          <Button type="button" variant="ghost" size="sm" onClick={() => setAll(false)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setAll(false)}
+          >
             {t('selectNone')}
           </Button>
         </div>

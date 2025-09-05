@@ -2,16 +2,16 @@
 
 import { conversionRateNotice } from '@/lib/conversion-rate-notice'
 import type { Currency } from '@/lib/currency'
-import { enforceCurrencyPattern } from '@/lib/currency-input'
 import {
   convertToGroupCurrency,
   convertToOriginalCurrency,
 } from '@/lib/currency-conversion'
+import { enforceCurrencyPattern } from '@/lib/currency-input'
 import { useCurrencyRate } from '@/lib/hooks'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useEffect, useState } from 'react'
-import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 type Options = {
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>
@@ -42,11 +42,20 @@ export function useExpenseCurrencyConversion({
   )
 
   const expenseDate = useWatch({ control: form.control, name: 'expenseDate' })
-  const originalCode = useWatch({ control: form.control, name: 'originalCurrency' }) ?? ''
+  const originalCode =
+    useWatch({ control: form.control, name: 'originalCurrency' }) ?? ''
   const amount = useWatch({ control: form.control, name: 'amount' })
-  const originalAmount = useWatch({ control: form.control, name: 'originalAmount' })
-  const conversionRate = useWatch({ control: form.control, name: 'conversionRate' })
-  const isReimbursement = Boolean(useWatch({ control: form.control, name: 'isReimbursement' }))
+  const originalAmount = useWatch({
+    control: form.control,
+    name: 'originalAmount',
+  })
+  const conversionRate = useWatch({
+    control: form.control,
+    name: 'conversionRate',
+  })
+  const isReimbursement = Boolean(
+    useWatch({ control: form.control, name: 'isReimbursement' }),
+  )
 
   const conversionRequired =
     groupCurrency.code.length > 0 &&

@@ -14,8 +14,12 @@ export const Primary: Story = {}
 export const Secondary: Story = { args: { variant: 'secondary' } }
 export const Outline: Story = { args: { variant: 'outline' } }
 export const Ghost: Story = { args: { variant: 'ghost' } }
-export const Settle: Story = { args: { variant: 'settle', children: 'Trả hết' } }
-export const Destructive: Story = { args: { variant: 'destructive', children: 'Xoá' } }
+export const Settle: Story = {
+  args: { variant: 'settle', children: 'Trả hết' },
+}
+export const Destructive: Story = {
+  args: { variant: 'destructive', children: 'Xoá' },
+}
 export const Disabled: Story = { args: { disabled: true } }
 export const Small: Story = { args: { size: 'sm' } }
 export const Large: Story = { args: { size: 'lg' } }
