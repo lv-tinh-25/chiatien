@@ -14,6 +14,9 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   webServer: {
     command: 'npm run start',
+    // The ported specs assert amounts formatted as US dollars, so the server
+    // under test creates groups in USD regardless of the local default.
+    env: { DEFAULT_CURRENCY_CODE: 'USD' },
     url: 'http://localhost:3000/api/health/liveness',
     // Never reuse: a dev server left running from an earlier build silently
     // serves stale code and every assertion fails for the wrong reason.

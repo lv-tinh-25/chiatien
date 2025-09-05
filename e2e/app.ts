@@ -192,15 +192,23 @@ export async function addExpense(
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 }
 
+/**
+ * Navigates to a group section.
+ *
+ * spliit rendered these as a Radix tab list; ChiaTien renders navigation
+ * links, so this drives the URL directly. Every behavioural assertion the
+ * ported specs make is unchanged — only the way the page is reached differs.
+ */
 export async function openTab(page: Page, tab: GroupTab): Promise<void> {
-  const path = new RegExp(`/groups/[^/]+/${TAB_PATHS[tab]}(\\?|$)`)
-  await clickUntil(
-    () => page.getByRole('tab', { name: tab, exact: true }).click(),
-    () => page.waitForURL(path, { timeout: 5_000 }),
+  const match = /\/groups\/([^/]+)/.exec(page.url())
+  if (!match) throw new Error(`Not on a group page: ${page.url()}`)
+  await page.goto(`/groups/${match[1]}/${TAB_PATHS[tab]}`)
+  await page.waitForURL(
+    new RegExp(`/groups/[^/]+/${TAB_PATHS[tab]}(\\?|$)`),
+    { timeout: 30_000 },
   )
 }
 
-/** Opens an expense for editing. The card is a div with onClick, not a link. */
 export async function openExpense(page: Page, title: string): Promise<void> {
   await clickUntil(
     () =>
@@ -229,33 +237,57 @@ export function paidForRow(page: Page, participant: string): Locator {
 /**
  * Makes `name` the active user for this group.
  *
- * Goes through the app's own migration path rather than writing the id
- * directly: ExpenseList resolves `newGroup-activeUser` from a participant name
- * to an id on mount. Writing `<groupId>-activeUser` by hand would not survive,
- * because the shared fixture re-seeds `newGroup-activeUser` on every
- * navigation and that migration always wins.
+ * The participant id is resolved through the app's own API and then written
+ * into the zustand persist envelope, because the store reads the id and the
+ * spec only knows the name.
  */
 export async function setActiveUser(
   page: Page,
   groupId: string,
   name: string,
 ): Promise<void> {
-  await page.addInitScript((participantName) => {
-    window.localStorage.setItem('newGroup-activeUser', participantName)
-  }, name)
+  const input = encodeURIComponent(JSON.stringify({ json: { groupId } }))
+  const response = await page.request.get(
+    `/api/trpc/groups.get?input=${input}`,
+  )
+  const body = await response.json()
+  const participants: { id: string; name: string }[] =
+    body?.result?.data?.json?.group?.participants ?? []
+  const participant = participants.find((candidate) => candidate.name === name)
+  if (!participant) {
+    throw new Error(`No participant named ${name} in group ${groupId}`)
+  }
+
+  await page.addInitScript(
+    ([id, participantId]) => {
+      const key = 'chiatien.active-users'
+      const raw = window.localStorage.getItem(key)
+      // ts-reset types JSON.parse as unknown, so the envelope is narrowed
+      // rather than asserted. Merging matters: a spec can identify the viewer
+      // in more than one group, and each call adds its own init script.
+      const parsed: unknown = raw === null ? null : JSON.parse(raw)
+      const activeUsers: Record<string, string> = {}
+      if (parsed !== null && typeof parsed === 'object' && 'state' in parsed) {
+        const state = parsed.state
+        if (state !== null && typeof state === 'object' && 'activeUsers' in state) {
+          const stored = state.activeUsers
+          if (stored !== null && typeof stored === 'object') {
+            for (const [key, value] of Object.entries(stored)) {
+              if (typeof value === 'string') activeUsers[key] = value
+            }
+          }
+        }
+      }
+      activeUsers[id] = participantId
+      window.localStorage.setItem(
+        key,
+        JSON.stringify({ state: { activeUsers }, version: 0 }),
+      )
+    },
+    [groupId, participant.id],
+  )
 
   await page.goto(`/groups/${groupId}/expenses`)
-
-  await expect
-    .poll(
-      () =>
-        page.evaluate(
-          (id) => window.localStorage.getItem(`${id}-activeUser`) ?? '',
-          groupId,
-        ),
-      { timeout: 20_000 },
-    )
-    .not.toMatch(/^(|None)$/)
 }
 
 /** An expense row in the list. */

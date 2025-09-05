@@ -1,90 +1,74 @@
-// `var` and the indirection through an arrow are both deliberate: the module
-// under test constructs its OpenAI client at import time, which jest hoists
-// above this file's own initialisation.
-var mockCreate = jest.fn()
+import type { Currency } from '@/lib/currency'
+import { redistributeShares } from '@/lib/expense-split'
 
-jest.mock('openai', () => ({
-  __esModule: true,
-  default: class {
-    chat = {
-      completions: { create: (...args: unknown[]) => mockCreate(...args) },
-    }
-  },
-}))
-jest.mock('./env', () => ({
-  env: {
-    OPENAI_API_KEY: 'sk-test',
-    OPENAI_BASE_URL: undefined,
-    OPENAI_MODEL_CATEGORY_EXTRACT: 'test-model',
-  },
-}))
-jest.mock('./featureFlags', () => ({
-  getRuntimeFeatureFlags: async () => ({ enableCategoryExtract: true }),
-}))
-jest.mock('./api', () => ({
-  getCategories: async () => [
-    { id: 0, grouping: 'General', name: 'General' },
-    { id: 4, grouping: 'Transport', name: 'Taxi' },
-  ],
-}))
-
-import { extractCategoryFromTitle } from '@/lib/expense-split'
-
-function respondWith(content: string | null) {
-  mockCreate.mockResolvedValue({ choices: [{ message: { content } }] })
+const USD: Currency = {
+  name: 'US dollar',
+  symbol_native: '$',
+  symbol: '$',
+  code: 'USD',
+  name_plural: 'US dollars',
+  rounding: 0,
+  decimal_digits: 2,
 }
 
-describe('extractCategoryFromTitle', () => {
-  beforeEach(() => mockCreate.mockReset())
+const rows = (...participants: string[]) =>
+  participants.map((participant) => ({ participant, shares: '0' }))
 
-  it('returns the category the model picked', async () => {
-    respondWith(JSON.stringify({ categoryId: 4 }))
-    expect(await extractCategoryFromTitle('Taxi to the airport')).toEqual({
-      categoryId: 4,
-    })
+describe('redistributeShares', () => {
+  it('leaves every mode but BY_AMOUNT alone', () => {
+    const paidFor = rows('a', 'b')
+    expect(redistributeShares('EVENLY', paidFor, 90, new Set(), USD)).toBe(paidFor)
+    expect(redistributeShares('BY_SHARES', paidFor, 90, new Set(), USD)).toBe(paidFor)
   })
 
-  it('asks for a strict JSON schema, and for the configured model', async () => {
-    respondWith(JSON.stringify({ categoryId: 4 }))
-    await extractCategoryFromTitle('Taxi to the airport')
-
-    const request = mockCreate.mock.calls[0][0]
-    expect(request.model).toBe('test-model')
-    expect(request.response_format.type).toBe('json_schema')
-    expect(request.response_format.json_schema.strict).toBe(true)
-    // Both were tuned for a free-text answer and are rejected by the models
-    // that support structured outputs.
-    expect(request.max_tokens).toBeUndefined()
-    expect(request.temperature).toBeUndefined()
+  it('splits the amount evenly when nothing was edited by hand', () => {
+    const result = redistributeShares('BY_AMOUNT', rows('a', 'b'), 90, new Set(), USD)
+    expect(result.map((row) => row.shares)).toEqual(['45.00', '45.00'])
   })
 
-  it('truncates the title before sending it', async () => {
-    respondWith(JSON.stringify({ categoryId: 4 }))
-    await extractCategoryFromTitle('T'.repeat(100))
-
-    const userMessage = mockCreate.mock.calls[0][0].messages.at(-1)
-    expect(userMessage.content).toHaveLength(40)
+  it('apportions the remainder rather than rounding each share', () => {
+    // 95 over three would be 31.666… each; rounding each independently gives
+    // 95.01, which the schema then rejects.
+    const result = redistributeShares('BY_AMOUNT', rows('a', 'b', 'c'), 95, new Set(), USD)
+    const total = result.reduce((sum, row) => sum + Number(row.shares), 0)
+    expect(Number(total.toFixed(2))).toBe(95)
   })
 
-  // Everything below must degrade to the "General" fallback rather than throw:
-  // a self-hosted endpoint may ignore the schema entirely.
-  it.each([
-    ['an id that does not exist', JSON.stringify({ categoryId: 9999 })],
-    ['a value of the wrong type', JSON.stringify({ categoryId: 'four' })],
-    ['a missing field', JSON.stringify({})],
-    ['a response that is not JSON', 'Transport'],
-    ['an empty response', ''],
-  ])('falls back to the first category for %s', async (_name, content) => {
-    respondWith(content)
-    expect(await extractCategoryFromTitle('Taxi to the airport')).toEqual({
-      categoryId: 0,
-    })
+  it('leaves a hand-edited share untouched and splits what remains', () => {
+    const paidFor = [
+      { participant: 'a', shares: '60' },
+      { participant: 'b', shares: '0' },
+      { participant: 'c', shares: '0' },
+    ]
+    const result = redistributeShares('BY_AMOUNT', paidFor, 100, new Set(['a']), USD)
+    expect(result[0].shares).toBe('60')
+    expect(result[1].shares).toBe('20.00')
+    expect(result[2].shares).toBe('20.00')
   })
 
-  it('falls back to the first category when there is no content at all', async () => {
-    respondWith(null)
-    expect(await extractCategoryFromTitle('Taxi to the airport')).toEqual({
-      categoryId: 0,
-    })
+  it('changes nothing when every participant was edited by hand', () => {
+    const paidFor = [
+      { participant: 'a', shares: '30' },
+      { participant: 'b', shares: '70' },
+    ]
+    const result = redistributeShares(
+      'BY_AMOUNT',
+      paidFor,
+      100,
+      new Set(['a', 'b']),
+      USD,
+    )
+    expect(result.map((row) => row.shares)).toEqual(['30', '70'])
+  })
+
+  it('handles a zero-decimal currency without inventing cents', () => {
+    const VND: Currency = { ...USD, code: 'VND', decimal_digits: 0 }
+    const result = redistributeShares('BY_AMOUNT', rows('a', 'b'), 90001, new Set(), VND)
+    expect(result.map((row) => row.shares)).toEqual(['45001', '45000'])
+  })
+
+  it('returns zero shares for an empty amount', () => {
+    const result = redistributeShares('BY_AMOUNT', rows('a', 'b'), 0, new Set(), USD)
+    expect(result.map((row) => row.shares)).toEqual(['0.00', '0.00'])
   })
 })

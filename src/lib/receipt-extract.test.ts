@@ -1,4 +1,4 @@
-// See the note in src/lib/expense-split.test.ts on why this is a
+// See the note in src/lib/category-extract.test.ts on why this is a
 // `var` reached through an arrow.
 var mockCreate = jest.fn()
 

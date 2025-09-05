@@ -13,6 +13,7 @@ import { FormTextarea } from '@/components/core/molecules/FormTextarea'
 import { asLocale } from '@/i18n/locales'
 import type { GroupFormValues } from '@/lib/schemas'
 import { useLocale, useTranslations } from 'next-intl'
+import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
 
 type GroupDetailsFieldsProps = {
@@ -29,6 +30,7 @@ export function GroupDetailsFields({
   const t = useTranslations('GroupForm')
   const locale = asLocale(useLocale())
   const { errors } = form.formState
+  const currencyCode = useWatch({ control: form.control, name: 'currencyCode' })
 
   return (
     <Card>
@@ -58,7 +60,7 @@ export function GroupDetailsFields({
               id={id}
               aria-describedby={describedBy}
               locale={locale}
-              value={form.watch('currencyCode') ?? ''}
+              value={currencyCode ?? ''}
               onValueChange={onCurrencyCodeChange}
             />
           )}
