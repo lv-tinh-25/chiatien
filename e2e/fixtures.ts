@@ -47,12 +47,18 @@ export const test = base.extend<Options>({
     }
 
     if (seedActiveUser) {
+      // ChiaTien records the answer per group, and the group does not exist
+      // yet when this runs, so the prompt is suppressed wholesale instead.
       await page.addInitScript(() => {
         try {
-          if (!window.localStorage.getItem('newGroup-activeUser')) {
-            window.localStorage.setItem('newGroup-activeUser', 'None')
-          }
-        } catch (err) {
+          window.localStorage.setItem(
+            'chiatien.active-users',
+            JSON.stringify({
+              state: { activeUsers: {}, suppressPrompt: true },
+              version: 0,
+            }),
+          )
+        } catch {
           // localStorage is unavailable on about:blank; nothing to seed there.
         }
       })
