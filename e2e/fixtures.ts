@@ -91,6 +91,13 @@ export const test = base.extend<Options>({
     // asserted on them and they only add latency, so keep the run hermetic.
     await page.route('https://flagcdn.com/**', (route) => route.abort())
 
+    // The document upload is a browser-side PUT to the presigned URL the app
+    // signed with the harness's fake credentials. Accepting it here is what
+    // lets the attachment flow run without a bucket.
+    await page.route('https://chiatien-e2e.s3.*.amazonaws.com/**', (route) =>
+      route.fulfill({ status: 200, body: '' }),
+    )
+
     await runTest(page)
   },
 })
