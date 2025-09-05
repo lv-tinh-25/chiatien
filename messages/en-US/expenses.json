@@ -123,8 +123,7 @@
       "noDate": "Enter the expense date to get a conversion rate.",
       "dateMismatch": "Rates from date: {date}",
       "refresh": "Refresh",
-      "customRate": "Using custom rate",
-      "useCustomRate": "Use custom rate"
+      "customRate": "Using custom rate"
     },
     "isReimbursementField": {
       "label": "This is a reimbursement"

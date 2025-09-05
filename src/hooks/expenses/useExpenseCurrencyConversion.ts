@@ -1,5 +1,6 @@
 'use client'
 
+import { conversionRateNotice } from '@/lib/conversion-rate-notice'
 import type { Currency } from '@/lib/currency'
 import { enforceCurrencyPattern } from '@/lib/currency-input'
 import {
@@ -125,10 +126,21 @@ export function useExpenseCurrencyConversion({
     form,
   ])
 
+  const notice = conversionRateNotice({
+    isLoading: exchangeRate.isLoading,
+    hasDate: !Number.isNaN(rateDate.getTime()),
+    usingCustomRate,
+    rate: exchangeRate.data,
+    error: exchangeRate.error,
+    originalCode: originalCurrency.code,
+    groupCode: groupCurrency.code,
+  })
+
   return {
     conversionRequired,
     exchangeRate,
     usingCustomRate,
     setUsingCustomRate,
+    notice,
   }
 }

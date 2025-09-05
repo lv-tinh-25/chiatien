@@ -1,10 +1,12 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
+import { Input } from '@/components/core/atoms/Input'
 import { CurrencySelect } from '@/components/core/molecules/CurrencySelect'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import type { Locale } from '@/i18n/locales'
+import type { ConversionRateNotice } from '@/lib/conversion-rate-notice'
 import type { Currency } from '@/lib/currency'
 import { enforceCurrencyPattern } from '@/lib/currency-input'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
@@ -21,6 +23,8 @@ type Props = {
   isIncome: boolean
   conversionRequired: boolean
   usingCustomRate: boolean
+  notice: ConversionRateNotice
+  isLoadingRate: boolean
   onUseCustomRate: (custom: boolean) => void
   onRefreshRate: () => void
 }
@@ -33,37 +37,55 @@ export function ExpenseCurrencyBlock({
   isIncome,
   conversionRequired,
   usingCustomRate,
+  notice,
+  isLoadingRate,
   onUseCustomRate,
   onRefreshRate,
 }: Props) {
   const t = useTranslations('ExpenseForm')
+  const tRate = useTranslations('ExpenseForm.conversionRateState')
   const scope = isIncome ? 'Income' : 'Expense'
   const currencyCode = useWatch({ control: form.control, name: 'originalCurrency' })
   const isReimbursement = useWatch({
     control: form.control,
     name: 'isReimbursement',
   })
-  const rate = useWatch({ control: form.control, name: 'conversionRate' })
   const originalAmount = form.register('originalAmount')
+
+  // A group on a custom currency has no ISO code, so there is no rate to look
+  // up and nothing to convert into.
+  const groupHasCode = groupCurrency.code !== ''
 
   return (
     <div className="flex flex-col gap-4">
       <FormField
         label={t(`${scope}.currencyField.label`)}
-        description={t(`${scope}.currencyField.description`)}
+        description={`${t(`${scope}.currencyField.description`)}${
+          groupHasCode ? '' : ` ${t('conversionUnavailable')}`
+        }`}
         errorKey={form.formState.errors.originalCurrency?.message}
       >
-        {({ id, describedBy }) => (
-          <CurrencySelect
-            id={id}
-            aria-describedby={describedBy}
-            locale={locale}
-            value={currencyCode ?? ''}
-            onValueChange={(value) =>
-              form.setValue('originalCurrency', value, { shouldDirty: true })
-            }
-          />
-        )}
+        {({ id, describedBy }) =>
+          groupHasCode ? (
+            <CurrencySelect
+              id={id}
+              aria-describedby={describedBy}
+              locale={locale}
+              value={currencyCode ?? ''}
+              onValueChange={(value) =>
+                form.setValue('originalCurrency', value, { shouldDirty: true })
+              }
+            />
+          ) : (
+            <Input
+              id={id}
+              aria-describedby={describedBy}
+              disabled
+              value={groupCurrency.symbol_native}
+              readOnly
+            />
+          )
+        }
       </FormField>
 
       {conversionRequired && (
@@ -93,23 +115,27 @@ export function ExpenseCurrencyBlock({
             }}
           />
 
-          {/* A formula, not prose: only codes and a number, so nothing to translate. */}
-          <p className="flex items-center gap-2 text-body-sm text-muted-foreground">
+          <p className="flex flex-wrap items-center gap-x-2 text-body-sm text-muted-foreground">
             <span>
-              {originalCurrency.code} 1 = {groupCurrency.code} {String(rate ?? '')}
+              {notice.messages
+                .map((message) => tRate(message.key, message.values))
+                .join(' ')}
             </span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              aria-label={t('conversionRateState.refresh')}
-              onClick={() => {
-                onUseCustomRate(false)
-                onRefreshRate()
-              }}
-            >
-              <RefreshCw aria-hidden />
-            </Button>
+            {notice.display !== null && <span>{notice.display}</span>}
+            {!isLoadingRate && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                aria-label={tRate('refresh')}
+                onClick={() => {
+                  onUseCustomRate(false)
+                  onRefreshRate()
+                }}
+              >
+                <RefreshCw aria-hidden />
+              </Button>
+            )}
           </p>
 
           <Collapsible.Root
@@ -118,12 +144,16 @@ export function ExpenseCurrencyBlock({
           >
             <Collapsible.Trigger asChild>
               <Button type="button" variant="ghost" className="px-0">
-                {t('conversionRateState.useCustomRate')}
+                {t(
+                  usingCustomRate
+                    ? 'conversionRateField.useApi'
+                    : 'conversionRateField.useCustom',
+                )}
               </Button>
             </Collapsible.Trigger>
             <Collapsible.Content className="pt-2">
               <FormInput
-                label={t('conversionRateState.customRate')}
+                label={t('conversionRateField.label')}
                 inputMode="decimal"
                 errorKey={form.formState.errors.conversionRate?.message}
                 {...form.register('conversionRate')}

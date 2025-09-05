@@ -123,8 +123,7 @@
       "noDate": "Nhập ngày phát sinh chi tiêu để lấy tỷ giá quy đổi.",
       "dateMismatch": "Tỷ giá ngày: {date}",
       "refresh": "Làm mới",
-      "customRate": "Đang dùng tỷ giá tự nhập",
-      "useCustomRate": "Dùng tỷ giá tự nhập"
+      "customRate": "Đang dùng tỷ giá tự nhập"
     },
     "isReimbursementField": {
       "label": "Đây là khoản hoàn trả"

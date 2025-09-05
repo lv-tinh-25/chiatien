@@ -151,3 +151,73 @@ test('exports the original currency and rate to CSV', async ({ page }) => {
   expect(csv).toContain('EUR')
   expect(csv).toContain('1.25')
 })
+
+test('names the rate it obtained', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E RateNotice ${uniqueSuffix()}`,
+    participants: PARTICIPANTS,
+  })
+
+  await openExpenseForm(page, groupId)
+  await selectRadixOption(
+    page,
+    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
+    /Euro \(EUR\)/,
+  )
+
+  await expect(page.getByText('Obtained rates:')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Use custom rate' })).toBeVisible()
+  await page.getByRole('button', { name: 'Use custom rate' }).click()
+  await expect(page.getByText('Using custom rate')).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Use rates from Frankfurter' }),
+  ).toBeVisible()
+})
+
+test.describe('with the rate service unreachable', () => {
+  test.use({ exchangeRate: null })
+
+  test('asks for a custom rate', async ({ page }) => {
+    const groupId = await createGroup(page, {
+      name: `E2E RateDown ${uniqueSuffix()}`,
+      participants: PARTICIPANTS,
+    })
+
+    await openExpenseForm(page, groupId)
+    await selectRadixOption(
+      page,
+      fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
+      /Euro \(EUR\)/,
+    )
+
+    await expect(
+      page.getByText('Oops, we could not get the most recent rates.'),
+    ).toBeVisible()
+    await expect(page.getByText('Enter a custom rate below.')).toBeVisible()
+  })
+})
+
+test('explains that a custom group currency cannot be converted', async ({
+  page,
+}) => {
+  await page.goto('/groups/create')
+  await fillStable(
+    page.locator('input[name="name"]'),
+    `E2E NoCode ${uniqueSuffix()}`,
+  )
+  await fieldByLabel(page, 'Main currency').getByRole('combobox').click()
+  await page.getByRole('option', { name: 'Custom', exact: true }).click()
+  await fillStable(page.locator('input[name="currency"]'), 'sats')
+  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+
+  await openExpenseForm(page, page.url().split('/')[4])
+  const currency = fieldByLabel(page, 'Currency of expense')
+  await expect(currency.getByRole('combobox')).toBeHidden()
+  await expect(currency.locator('input')).toBeDisabled()
+  await expect(
+    page.getByText(
+      'To set a different currency per expense and convert amounts, select a non-custom currency for the group.',
+    ),
+  ).toBeVisible()
+})
