@@ -9,6 +9,7 @@ import {
 import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { AdvancedSplitCollapsible } from '@/components/core/templates/ExpenseForm/AdvancedSplitCollapsible'
 import { ExpenseAmountField } from '@/components/core/templates/ExpenseForm/ExpenseAmountField'
+import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/ExpenseCurrencyBlock'
 import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/ExpenseFormFooter'
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
 import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
@@ -44,13 +45,19 @@ function ExpenseFormFields({ expense, categoryExtractEnabled }: ExpenseFormProps
   const {
     form,
     groupId,
+    locale,
     groupCurrency,
+    originalCurrency,
     participants,
     isCreate,
     submit,
     remove,
     markEdited,
     isSubmitting,
+    conversionRequired,
+    exchangeRate,
+    usingCustomRate,
+    setUsingCustomRate,
   } = useExpenseForm(expense)
 
   const amount = useWatch({ control: form.control, name: 'amount' })
@@ -77,6 +84,18 @@ function ExpenseFormFields({ expense, categoryExtractEnabled }: ExpenseFormProps
             categoryExtractEnabled={categoryExtractEnabled}
           />
           <ExpenseAmountField form={form} currency={groupCurrency} />
+
+          <ExpenseCurrencyBlock
+            form={form}
+            locale={locale}
+            groupCurrency={groupCurrency}
+            originalCurrency={originalCurrency}
+            isIncome={isIncome}
+            conversionRequired={conversionRequired}
+            usingCustomRate={usingCustomRate}
+            onUseCustomRate={setUsingCustomRate}
+            onRefreshRate={() => void exchangeRate.refresh()}
+          />
 
           <label className="flex min-h-touch-min items-center gap-3">
             <Checkbox

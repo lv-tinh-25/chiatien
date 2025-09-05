@@ -10,13 +10,10 @@ import {
 import { BalanceRow } from '@/components/core/templates/BalanceList/BalanceRow'
 import { ReimbursementRow } from '@/components/core/templates/BalanceList/ReimbursementRow'
 import { useBalanceList } from '@/hooks/balances/useBalanceList'
-import { amountAsDecimal } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 
 export function BalanceList() {
   const t = useTranslations('Balances')
-  const router = useRouter()
   const {
     groupId,
     locale,
@@ -37,15 +34,8 @@ export function BalanceList() {
    * the payer may want to change the date, attach proof, or split it, and the
    * expense form is where all of that already lives.
    */
-  const settle = (from: string, to: string, amount: number) => {
-    const query = new URLSearchParams({
-      reimbursement: 'true',
-      from,
-      to,
-      amount: String(amountAsDecimal(amount, currency)),
-    })
-    router.push(`/groups/${groupId}/expenses/create?${query.toString()}`)
-  }
+  const settleHref = (from: string, to: string, amount: number) =>
+    `/groups/${groupId}/expenses/create?reimbursement=yes&from=${from}&to=${to}&amount=${amount}`
 
   return (
     <div className="flex flex-col gap-4 py-4">
@@ -85,18 +75,18 @@ export function BalanceList() {
               {reimbursements.map((reimbursement) => (
                 <ReimbursementRow
                   key={`${reimbursement.from}-${reimbursement.to}`}
-                  from={participantName(reimbursement.from)}
-                  to={participantName(reimbursement.to)}
+                  fromId={reimbursement.from}
+                  toId={reimbursement.to}
+                  fromName={participantName(reimbursement.from)}
+                  toName={participantName(reimbursement.to)}
                   amount={reimbursement.amount}
                   currency={currency}
                   locale={locale}
-                  onSettle={() =>
-                    settle(
-                      reimbursement.from,
-                      reimbursement.to,
-                      reimbursement.amount,
-                    )
-                  }
+                  settleHref={settleHref(
+                    reimbursement.from,
+                    reimbursement.to,
+                    reimbursement.amount,
+                  )}
                 />
               ))}
             </ul>

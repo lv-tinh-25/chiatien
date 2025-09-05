@@ -48,6 +48,9 @@ export function useExpenseList() {
     currency,
     activeUserId,
     participantCount: group?.participants.length ?? 0,
+    participantOrder: (group?.participants ?? []).map(
+      (participant) => participant.id,
+    ),
     sections,
     isPending: query.isPending,
     // An empty result while a search is active is "nothing matched", not

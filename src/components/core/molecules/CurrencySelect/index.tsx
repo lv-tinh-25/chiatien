@@ -26,7 +26,8 @@ export function CurrencySelect({
     () =>
       defaultCurrencyList(locale).map((currency) => ({
         value: currency.code,
-        label: `${currency.name} (${currency.symbol_native})`,
+        // The ISO code, not the symbol: several currencies share "$".
+        label: `${currency.name} (${currency.code})`,
       })),
     [locale],
   )
