@@ -17,6 +17,7 @@ export function ExpenseList() {
     locale,
     activeUserId,
     participantCount,
+    participantOrder,
     sections,
     isPending,
     isEmpty,
@@ -68,6 +69,7 @@ export function ExpenseList() {
                 currency={currency}
                 locale={locale}
                 participantCount={participantCount}
+                participantOrder={participantOrder}
                 activeUserId={activeUserId}
               />
             ))}

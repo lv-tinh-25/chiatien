@@ -70,8 +70,11 @@ export function useExpenseCurrencyConversion({
 
   useEffect(() => {
     if (isReimbursement || !conversionRequired) return
-    if (!form.getFieldState('originalAmount').isTouched) return
 
+    // No touched-field gate: an empty or zero original amount is the only
+    // thing that should stop the conversion, and checking the value directly
+    // avoids depending on form state that does not re-render reliably under
+    // the React Compiler.
     const rate = Number(conversionRate)
     const original = Number(originalAmount ?? 0)
     if (!rate || !original) return

@@ -14,17 +14,20 @@ import {
 import { amountAsDecimal } from '@/lib/utils'
 import { useSplittingOptionsStore } from '@/stores/useSplittingOptionsStore'
 import { trpc } from '@/trpc/client'
+import { useTranslations } from 'next-intl'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm, useWatch } from 'react-hook-form'
 
 type Expense = AppRouterOutput['groups']['expenses']['get']['expense']
 
 export function useExpenseForm(expense?: Expense) {
+  const t = useTranslations('ExpenseForm')
   const { groupId, group, locale, currency, activeUserId } = useCurrentGroup()
   const router = useRouter()
   const utils = trpc.useUtils()
+  const searchParams = useSearchParams()
   const remember = useSplittingOptionsStore((state) => state.remember)
   const rememberedOptions = useSplittingOptionsStore(
     (state) => state.byGroup[groupId] ?? null,
@@ -39,6 +42,18 @@ export function useExpenseForm(expense?: Expense) {
 
   const participants = group?.participants ?? []
   const remembered = reconcileSplittingOptions(rememberedOptions, participants)
+
+  // A settlement link from the balances screen arrives prefilled: who pays,
+  // who receives, and how much. Anything absent falls back to the normal
+  // create defaults, so a hand-edited URL cannot produce a broken form.
+  const settlement = isCreate
+    ? {
+        active: searchParams.get('reimbursement') !== null,
+        from: searchParams.get('from'),
+        to: searchParams.get('to'),
+        amount: Number(searchParams.get('amount')) || 0,
+      }
+    : { active: false, from: null, to: null, amount: 0 }
 
   const defaults: ExpenseFormInput = expense
     ? {
@@ -73,17 +88,22 @@ export function useExpenseForm(expense?: Expense) {
       }
     : {
         expenseDate: new Date(),
-        title: '',
+        title: settlement.active ? t('reimbursement') : '',
         category: 0,
-        amount: '',
+        amount: settlement.active
+          ? String(amountAsDecimal(settlement.amount, groupCurrency))
+          : '',
         originalAmount: '',
         originalCurrency: '',
         conversionRate: '',
-        paidBy: activeUserId ?? participants[0]?.id ?? '',
-        paidFor: remembered.paidFor,
-        splitMode: remembered.splitMode,
+        paidBy: settlement.from ?? activeUserId ?? participants[0]?.id ?? '',
+        paidFor:
+          settlement.active && settlement.to !== null
+            ? [{ participant: settlement.to, shares: '1' }]
+            : remembered.paidFor,
+        splitMode: settlement.active ? 'EVENLY' : remembered.splitMode,
         saveDefaultSplittingOptions: false,
-        isReimbursement: false,
+        isReimbursement: settlement.active,
         documents: [],
         notes: '',
         recurrenceRule: 'NONE',
