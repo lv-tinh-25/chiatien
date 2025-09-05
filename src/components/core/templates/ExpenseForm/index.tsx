@@ -58,6 +58,7 @@ function ExpenseFormFields({ expense, categoryExtractEnabled }: ExpenseFormProps
     exchangeRate,
     usingCustomRate,
     setUsingCustomRate,
+    notice,
   } = useExpenseForm(expense)
 
   const amount = useWatch({ control: form.control, name: 'amount' })
@@ -93,6 +94,8 @@ function ExpenseFormFields({ expense, categoryExtractEnabled }: ExpenseFormProps
             isIncome={isIncome}
             conversionRequired={conversionRequired}
             usingCustomRate={usingCustomRate}
+            notice={notice}
+            isLoadingRate={exchangeRate.isLoading}
             onUseCustomRate={setUsingCustomRate}
             onRefreshRate={() => void exchangeRate.refresh()}
           />
