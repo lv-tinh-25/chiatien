@@ -8,6 +8,7 @@ import { getCurrency } from '@/lib/currency'
 import { getParticipantShare } from '@/lib/shares'
 import { cn, formatDateOnly } from '@/lib/utils'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
+import { Paperclip } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -97,7 +98,7 @@ export function ExpenseCard({
 
   const paid = activeUserId === expense.paidBy.id ? expense.amount : 0
   const balance = paid - share
-  const involved = activeUserId !== null && (share !== 0 || paid !== 0)
+  const involved = share !== 0 || paid !== 0
 
   return (
     <Link
@@ -151,18 +152,29 @@ export function ExpenseCard({
             className="text-body-sm text-muted-foreground"
           />
         )}
-        {involved && (
-          <span className="flex items-baseline gap-1 text-body-sm">
-            <span className="text-muted-foreground">{t('yourBalance')}</span>
-            <Money
-              amount={balance}
-              currency={currency}
-              locale={locale}
-              tone={balance >= 0 ? 'credit' : 'debit'}
-            />
-          </span>
-        )}
-        <span className="text-body-sm text-muted-foreground">
+        {activeUserId !== null &&
+          (involved ? (
+            <span className="flex items-baseline gap-1 text-body-sm">
+              <span className="text-muted-foreground">{t('yourBalance')}</span>
+              <Money
+                amount={balance}
+                currency={currency}
+                locale={locale}
+                tone={balance >= 0 ? 'credit' : 'debit'}
+              />
+            </span>
+          ) : (
+            <span className="text-body-sm text-muted-foreground">
+              {t('notInvolved')}
+            </span>
+          ))}
+        <span className="flex items-center gap-2 text-body-sm text-muted-foreground">
+          {expense._count.documents > 0 && (
+            <span className="flex items-center gap-1">
+              <Paperclip className="size-3.5" aria-hidden />
+              {expense._count.documents}
+            </span>
+          )}
           {formatDateOnly(expense.expenseDate, locale, { dateStyle: 'medium' })}
         </span>
       </span>
