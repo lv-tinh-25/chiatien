@@ -16,7 +16,7 @@ const config: Config = {
 // set in the config above.
 const withNextJest = createJestConfig(config)
 
-export default async (): Promise<Config> => {
+const buildConfig = async (): Promise<Config> => {
   const resolved = await withNextJest()
   return {
     ...resolved,
@@ -25,3 +25,5 @@ export default async (): Promise<Config> => {
     ),
   }
 }
+
+export default buildConfig
