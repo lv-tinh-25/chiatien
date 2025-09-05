@@ -3,13 +3,18 @@
 import { Button } from '@/components/core/atoms/Button'
 import { EmptyState } from '@/components/core/molecules/EmptyState'
 import { SearchBar } from '@/components/core/molecules/SearchBar'
+import { CreateFromReceipt } from '@/components/core/templates/ExpenseList/CreateFromReceipt'
 import { ExpenseCard } from '@/components/core/templates/ExpenseList/ExpenseCard'
 import { useExpenseList } from '@/hooks/expenses/useExpenseList'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
-export function ExpenseList() {
+export function ExpenseList({
+  receiptExtractEnabled,
+}: {
+  receiptExtractEnabled: boolean
+}) {
   const t = useTranslations('Expenses')
   const {
     groupId,
@@ -29,12 +34,19 @@ export function ExpenseList() {
 
   return (
     <div className="flex flex-col gap-4 py-4">
-      <SearchBar
-        label={t('searchPlaceholder')}
-        placeholder={t('searchPlaceholder')}
-        clearLabel={t('searchPlaceholder')}
-        onValueChange={setSearch}
-      />
+      <div className="flex items-center gap-2">
+        <div className="flex-1">
+          <SearchBar
+            label={t('searchPlaceholder')}
+            placeholder={t('searchPlaceholder')}
+            clearLabel={t('searchPlaceholder')}
+            onValueChange={setSearch}
+          />
+        </div>
+        {receiptExtractEnabled && currency && (
+          <CreateFromReceipt currency={currency} locale={locale} />
+        )}
+      </div>
 
       {isPending && (
         <p className="text-body-md text-muted-foreground">{t('title')}…</p>

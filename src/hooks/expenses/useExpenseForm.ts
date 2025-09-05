@@ -6,6 +6,8 @@ import { useExpenseSplitBalancing } from '@/hooks/expenses/useExpenseSplitBalanc
 import { getCurrency } from '@/lib/currency'
 import { reconcileSplittingOptions } from '@/lib/expense-defaults'
 import { toExpensePayload } from '@/lib/expense-payload'
+import { randomId } from '@/lib/random'
+import { parseReceiptParams } from '@/lib/receipt-params'
 import {
   expenseFormSchema,
   type ExpenseFormInput,
@@ -55,6 +57,12 @@ export function useExpenseForm(expense?: Expense) {
       }
     : { active: false, from: null, to: null, amount: 0 }
 
+  // A scanned receipt arrives the same way, carrying what the model read off
+  // the photo plus the image it read it from.
+  const receipt = isCreate
+    ? parseReceiptParams(new URLSearchParams(searchParams.toString()))
+    : null
+
   const defaults: ExpenseFormInput = expense
     ? {
         expenseDate: expense.expenseDate,
@@ -87,12 +95,14 @@ export function useExpenseForm(expense?: Expense) {
         recurrenceRule: expense.recurrenceRule ?? 'NONE',
       }
     : {
-        expenseDate: new Date(),
-        title: settlement.active ? t('reimbursement') : '',
-        category: 0,
+        expenseDate: receipt?.date ?? new Date(),
+        title: settlement.active
+          ? t('reimbursement')
+          : (receipt?.title ?? ''),
+        category: receipt?.categoryId ?? 0,
         amount: settlement.active
           ? String(amountAsDecimal(settlement.amount, groupCurrency))
-          : '',
+          : (receipt?.amount ?? ''),
         originalAmount: '',
         originalCurrency: '',
         conversionRate: '',
@@ -104,7 +114,10 @@ export function useExpenseForm(expense?: Expense) {
         splitMode: settlement.active ? 'EVENLY' : remembered.splitMode,
         saveDefaultSplittingOptions: false,
         isReimbursement: settlement.active,
-        documents: [],
+        documents:
+          receipt?.document === undefined || receipt?.document === null
+            ? []
+            : [{ id: randomId(), ...receipt.document }],
         notes: '',
         recurrenceRule: 'NONE',
       }

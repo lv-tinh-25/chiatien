@@ -6,6 +6,8 @@ type MoneyProps = {
   currency: Currency
   locale: string
   tone?: 'neutral' | 'credit' | 'debit'
+  /** Set when `amount` is a decimal rather than the minor units used elsewhere. */
+  fractions?: boolean
   className?: string
 }
 
@@ -24,11 +26,12 @@ export function Money({
   currency,
   locale,
   tone = 'neutral',
+  fractions = false,
   className,
 }: MoneyProps) {
   return (
     <span className={cn('tabular', TONES[tone], className)}>
-      {formatCurrency(currency, amount, locale)}
+      {formatCurrency(currency, amount, locale, fractions)}
     </span>
   )
 }
