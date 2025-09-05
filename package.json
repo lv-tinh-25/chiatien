@@ -18,7 +18,8 @@
     "e2e:report": "playwright show-report",
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma generate",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "generate-currency-data": "node scripts/generate-currency-data.mjs"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.8.13",
