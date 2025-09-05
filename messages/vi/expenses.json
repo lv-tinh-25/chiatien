@@ -162,6 +162,13 @@
     "reimbursement": "Hoàn trả"
   },
   "ExpenseDocumentsInput": {
+    "add": "Đính kèm chứng từ",
+    "remove": "Xóa chứng từ này",
+    "Viewer": {
+      "title": "Chứng từ",
+      "close": "Đóng",
+      "delete": "Xóa chứng từ"
+    },
     "TooBigToast": {
       "title": "Tệp quá lớn",
       "description": "Dung lượng tối đa là {maxSize}. Tệp của bạn là {size}."

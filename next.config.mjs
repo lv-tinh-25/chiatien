@@ -2,9 +2,28 @@ import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin()
 
+/**
+ * Hosts uploaded expense documents can be served from, derived from the
+ * configured S3 storage. Undefined entries are not supported, so a pattern is
+ * pushed only once its inputs exist. isAllowedUploadUrl in
+ * src/lib/uploaded-image-url.ts mirrors this logic and must stay in step.
+ * @type {import('next/dist/shared/lib/image-config').RemotePattern[]}
+ */
+const remotePatterns = []
+
+if (process.env.S3_UPLOAD_ENDPOINT) {
+  const url = new URL(process.env.S3_UPLOAD_ENDPOINT)
+  remotePatterns.push({ hostname: url.hostname })
+} else if (process.env.S3_UPLOAD_BUCKET && process.env.S3_UPLOAD_REGION) {
+  remotePatterns.push({
+    hostname: `${process.env.S3_UPLOAD_BUCKET}.s3.${process.env.S3_UPLOAD_REGION}.amazonaws.com`,
+  })
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
+  images: { remotePatterns },
   async headers() {
     return [
       {

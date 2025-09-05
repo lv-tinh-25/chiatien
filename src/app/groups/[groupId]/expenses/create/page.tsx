@@ -10,6 +10,12 @@ export async function generateMetadata() {
 }
 
 export default async function CreateExpensePage() {
-  const { enableCategoryExtract } = await getRuntimeFeatureFlags()
-  return <CreateExpensePageClient categoryExtractEnabled={enableCategoryExtract} />
+  const { enableCategoryExtract, enableExpenseDocuments } =
+    await getRuntimeFeatureFlags()
+  return (
+    <CreateExpensePageClient
+      categoryExtractEnabled={enableCategoryExtract}
+      documentsEnabled={enableExpenseDocuments}
+    />
+  )
 }

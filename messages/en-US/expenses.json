@@ -162,6 +162,13 @@
     "reimbursement": "Reimbursement"
   },
   "ExpenseDocumentsInput": {
+    "add": "Attach a document",
+    "remove": "Remove this document",
+    "Viewer": {
+      "title": "Document",
+      "close": "Close",
+      "delete": "Delete document"
+    },
     "TooBigToast": {
       "title": "The file is too big",
       "description": "The maximum file size you can upload is {maxSize}. Yours is {size}."

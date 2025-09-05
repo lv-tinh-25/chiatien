@@ -7,10 +7,12 @@ export function EditExpensePageClient({
   groupId,
   expenseId,
   categoryExtractEnabled,
+  documentsEnabled,
 }: {
   groupId: string
   expenseId: string
   categoryExtractEnabled: boolean
+  documentsEnabled: boolean
 }) {
   const { data } = trpc.groups.expenses.get.useQuery({ groupId, expenseId })
   if (!data) return null
@@ -19,6 +21,7 @@ export function EditExpensePageClient({
     <ExpenseForm
       expense={data.expense}
       categoryExtractEnabled={categoryExtractEnabled}
+      documentsEnabled={documentsEnabled}
     />
   )
 }

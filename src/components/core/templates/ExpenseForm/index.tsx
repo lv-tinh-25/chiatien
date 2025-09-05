@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { AdvancedSplitCollapsible } from '@/components/core/templates/ExpenseForm/AdvancedSplitCollapsible'
 import { ExpenseAmountField } from '@/components/core/templates/ExpenseForm/ExpenseAmountField'
 import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/ExpenseCurrencyBlock'
+import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/ExpenseDocumentsField'
 import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/ExpenseFormFooter'
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
 import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
@@ -26,6 +27,7 @@ type Expense = AppRouterOutput['groups']['expenses']['get']['expense']
 type ExpenseFormProps = {
   expense?: Expense
   categoryExtractEnabled: boolean
+  documentsEnabled: boolean
 }
 
 /**
@@ -40,7 +42,11 @@ export function ExpenseForm(props: ExpenseFormProps) {
   return <ExpenseFormFields {...props} />
 }
 
-function ExpenseFormFields({ expense, categoryExtractEnabled }: ExpenseFormProps) {
+function ExpenseFormFields({
+  expense,
+  categoryExtractEnabled,
+  documentsEnabled,
+}: ExpenseFormProps) {
   const t = useTranslations('ExpenseForm')
   const {
     form,
@@ -130,6 +136,14 @@ function ExpenseFormFields({ expense, categoryExtractEnabled }: ExpenseFormProps
       />
 
       <AdvancedSplitCollapsible form={form} isIncome={isIncome} />
+
+      {documentsEnabled && (
+        <Card>
+          <CardContent className="pt-6">
+            <ExpenseDocumentsField form={form} isIncome={isIncome} />
+          </CardContent>
+        </Card>
+      )}
 
       <ExpenseFormFooter
         isCreate={isCreate}

@@ -15,13 +15,15 @@ export default async function EditExpensePage({
   params: Promise<{ groupId: string; expenseId: string }>
 }) {
   const { groupId, expenseId } = await params
-  const { enableCategoryExtract } = await getRuntimeFeatureFlags()
+  const { enableCategoryExtract, enableExpenseDocuments } =
+    await getRuntimeFeatureFlags()
 
   return (
     <EditExpensePageClient
       groupId={groupId}
       expenseId={expenseId}
       categoryExtractEnabled={enableCategoryExtract}
+      documentsEnabled={enableExpenseDocuments}
     />
   )
 }
