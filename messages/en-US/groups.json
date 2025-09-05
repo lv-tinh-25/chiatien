@@ -1,0 +1,126 @@
+{
+  "Groups": {
+    "myGroups": "My groups",
+    "create": "Create",
+    "createGroup": "Create group",
+    "loadingRecent": "Loading recent groups…",
+    "NoRecent": {
+      "description": "You have not visited any group recently.",
+      "create": "Create one",
+      "orAsk": "or ask a friend to send you the link to an existing one."
+    },
+    "GlobalBalance": {
+      "title": "Your total balance",
+      "description": "Your combined balance across all your groups.",
+      "owedToYou": "You are owed",
+      "youOwe": "You owe",
+      "settledUp": "You are all settled up across your groups."
+    },
+    "recent": "Recent groups",
+    "starred": "Starred groups",
+    "archived": "Archived groups",
+    "archive": "Archive group",
+    "unarchive": "Unarchive group",
+    "removeRecent": "Remove from recent groups",
+    "RecentRemovedToast": {
+      "title": "Group has been removed",
+      "description": "The group was removed from your recent groups list.",
+      "undoAlt": "Undo group removal",
+      "undo": "Undo"
+    },
+    "AddByURL": {
+      "button": "Add by URL",
+      "title": "Add a group by URL",
+      "description": "If a group was shared with you, you can paste its URL here to add it to your list.",
+      "error": "Oops, we are not able to find the group from the URL you provided…",
+      "urlMode": "Enter URL",
+      "qrMode": "Scan QR",
+      "scanner": {
+        "startCamera": "Start Camera",
+        "stopScanning": "Stop Scanning",
+        "permissionDenied": "Camera permission denied. Please allow camera access to scan QR codes.",
+        "noCamera": "No camera found on this device.",
+        "cameraError": "Failed to start camera. Please try again.",
+        "permissionError": "Unable to access camera. Please check permissions."
+      }
+    },
+    "NotFound": {
+      "text": "This group does not exist.",
+      "link": "Go to recently visited groups"
+    }
+  },
+  "GroupForm": {
+    "title": "Group information",
+    "NameField": {
+      "label": "Group name",
+      "placeholder": "Summer vacations",
+      "description": "Enter a name for your group."
+    },
+    "InformationField": {
+      "label": "Group information",
+      "placeholder": "What information is relevant to group participants?"
+    },
+    "CurrencyField": {
+      "label": "Currency symbol",
+      "placeholder": "$, €, £…",
+      "description": "We’ll use it to display amounts."
+    },
+    "CurrencyCodeField": {
+      "label": "Main currency",
+      "createDescription": "All amounts and balances will be in this currency.",
+      "editDescription": "All amounts and balances will be in this currency. Changing this will NOT convert expenses already entered, except when the currency has different \"minor units\" than the current one (e.g. changing from US Dollar to Japanese Yen)",
+      "customOption": "Custom"
+    },
+    "Participants": {
+      "title": "Participants",
+      "description": "Enter the name for each participant.",
+      "protectedParticipant": "This participant is part of expenses, and can not be removed.",
+      "new": "New",
+      "add": "Add participant",
+      "John": "John",
+      "Jane": "Jane",
+      "Jack": "Jack"
+    },
+    "Settings": {
+      "title": "Local settings",
+      "description": "These settings are set per-device, and are used to customize your experience.",
+      "ActiveUserField": {
+        "label": "Active user",
+        "placeholder": "Select a participant",
+        "none": "None",
+        "description": "User used as default for paying expenses."
+      },
+      "save": "Save",
+      "saving": "Saving…",
+      "create": "Create",
+      "creating": "Creating…",
+      "cancel": "Cancel"
+    }
+  },
+  "Information": {
+    "title": "Information",
+    "description": "Use this place to add any information that can be relevant to the group participants.",
+    "empty": "No group information yet."
+  },
+  "Activity": {
+    "title": "Activity",
+    "description": "Overview of all activity in this group.",
+    "noActivity": "There is not yet any activity in your group.",
+    "someone": "Someone",
+    "settingsModified": "Group settings were modified by <strong>{participant}</strong>.",
+    "expenseCreated": "Expense <em>{expense}</em> created by <strong>{participant}</strong>.",
+    "expenseUpdated": "Expense <em>{expense}</em> updated by <strong>{participant}</strong>.",
+    "expenseDeleted": "Expense <em>{expense}</em> deleted by <strong>{participant}</strong>.",
+    "Groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "earlierThisWeek": "Earlier this week",
+      "lastWeek": "Last week",
+      "earlierThisMonth": "Earlier this month",
+      "lastMonth": "Last month",
+      "earlierThisYear": "Earlier this year",
+      "lastYear": "Last year",
+      "older": "Older"
+    }
+  }
+}

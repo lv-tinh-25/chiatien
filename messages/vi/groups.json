@@ -1,0 +1,82 @@
+{
+  "Groups": {
+    "myGroups": "Nhóm của tôi",
+    "create": "Tạo",
+    "loadingRecent": "Đang tải các nhóm gần đây…",
+    "NoRecent": {
+      "description": "Bạn chưa xem nhóm nào gần đây.",
+      "create": "Tạo nhóm",
+      "orAsk": "hoặc nhờ một người bạn gửi đường dẫn đến nhóm có sẵn."
+    },
+    "recent": "Nhóm gần đây",
+    "starred": "Nhóm đánh dấu",
+    "archived": "Nhóm đã lưu trữ",
+    "archive": "Lưu trữ nhóm",
+    "unarchive": "Bỏ lưu trữ nhóm",
+    "removeRecent": "Bỏ khỏi nhóm gần đây",
+    "RecentRemovedToast": {
+      "title": "Nhóm đã loại bỏ",
+      "description": "Nhóm đã loại bỏ khoải danh sách nhóm gần đây của bạn.",
+      "undoAlt": "Hoàn tác việc loại bỏ nhóm",
+      "undo": "Hoàn tác"
+    },
+    "AddByURL": {
+      "button": "Thêm bằng URL",
+      "title": "Thêm nhóm bằng URL",
+      "description": "Nếu nhóm được chia sẻ với bạn, bạn có thể dán URL vào đây để thêm vào danh sách của bạn.",
+      "error": "Rất tiếc, chúng tôi không thể tìm thấy nhóm từ URL bạn cung cấp…"
+    },
+    "NotFound": {
+      "text": "Nhóm này không tồn tại.",
+      "link": "Xem các nhóm bạn đã truy cập gần đây"
+    }
+  },
+  "GroupForm": {
+    "title": "Thông tin nhóm",
+    "NameField": {
+      "label": "Tên nhóm",
+      "placeholder": "Kì nghỉ hè",
+      "description": "Đặt tên nhóm của bạn."
+    },
+    "InformationField": {
+      "label": "Thông tin nhóm",
+      "placeholder": "Những thông tin nào cần thiết cho các thành viên tham gia nhóm?"
+    },
+    "CurrencyField": {
+      "label": "Biểu tượng tiền tệ",
+      "placeholder": "$, €, £…",
+      "description": "Dùng để hiển thị các khoản tiền."
+    },
+    "CurrencyCodeField": {
+      "label": "Đơn vị tiền tệ chính",
+      "createDescription": "Tất cả các khoản tiền và số dư sẽ được thể hiện bằng loại tiền này.",
+      "editDescription": "Tất cả các khoản tiền và số dư sẽ được hiển thị bằng loại tiền tệ này. Việc thay đổi loại tiền tệ sẽ KHÔNG chuyển đổi các khoản chi phí đã nhập, trừ trường hợp loại tiền tệ đó có \"đơn vị nhỏ\" khác với loại tiền tệ hiện tại (ví dụ: chuyển đổi từ Đô la Mỹ sang Yên Nhật)",
+      "customOption": "Tùy chỉnh"
+    },
+    "Participants": {
+      "title": "Thành viên",
+      "description": "Điền tên các thành viên.",
+      "protectedParticipant": "Thành viên này đã tham gia chi tiêu, không thể xóa.",
+      "new": "Thêm",
+      "add": "Thêm thành viên",
+      "John": "An",
+      "Jane": "Bình",
+      "Jack": "Cường"
+    },
+    "Settings": {
+      "title": "Cài đặt cục bộ",
+      "description": "Các thiết lập này được áp dụng cho từng thiết bị và được sử dụng để tùy chỉnh trải nghiệm của bạn.",
+      "ActiveUserField": {
+        "label": "Người dùng hiện tại",
+        "placeholder": "Chọn thành viên",
+        "none": "Không có",
+        "description": "Người dùng này được sử dụng làm mặc định để thanh toán chi phí."
+      },
+      "save": "Lưu",
+      "saving": "Đang lưu…",
+      "create": "Tạo",
+      "creating": "Đang tạo…",
+      "cancel": "Hủy bỏ"
+    }
+  }
+}

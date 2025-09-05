@@ -1,0 +1,17 @@
+{
+  "Homepage": {
+    "description": "Chào mừng bạn đến với phiên bản <strong>Spliit</strong> mới của bạn!",
+    "title": "Chia sẻ <strong>Chi tiêu</strong> với <strong>Bạn bè & Gia đình</strong>",
+    "button": {
+      "groups": "Xem các nhóm",
+      "github": "GitHub"
+    }
+  },
+  "Header": {
+    "groups": "Nhóm"
+  },
+  "Footer": {
+    "madeIn": "Made in Montréal, Québec 🇨🇦",
+    "builtBy": "Xây dựng bởi <author>Sebastien Castiel</author> và <source>các cộng sự</source>"
+  }
+}
