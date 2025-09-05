@@ -10,12 +10,13 @@ import {
 import { Money } from '@/components/core/atoms/Money'
 import { CategoryDrilldown } from '@/components/core/templates/GroupStats/CategoryDrilldown'
 import { MonthDrilldown } from '@/components/core/templates/GroupStats/MonthDrilldown'
+import { ParticipantTable } from '@/components/core/templates/GroupStats/ParticipantTable'
 import { StatBar } from '@/components/core/templates/GroupStats/StatBar'
 import { StatsRangeSelector } from '@/components/core/templates/GroupStats/StatsRangeSelector'
 import { TotalsCard } from '@/components/core/templates/GroupStats/TotalsCard'
 import { useGroupStats } from '@/hooks/stats/useGroupStats'
 import { formatMonth } from '@/lib/format-month'
-import { formatDateOnly } from '@/lib/utils'
+import { formatCurrency, formatDateOnly } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 export function GroupStats() {
@@ -43,7 +44,6 @@ export function GroupStats() {
 
   const widest = (values: number[]) => Math.max(0, ...values.map(Math.abs))
   const monthMax = widest(stats.months.map((month) => month.total))
-  const participantMax = widest(stats.participants.map((row) => row.paid))
   const categoryMax = widest(stats.categories.map((row) => row.total))
 
   return (
@@ -175,17 +175,11 @@ export function GroupStats() {
               {t('ByParticipant.empty')}
             </p>
           ) : (
-            <ul>
-              {stats.participants.map((row) => (
-                <StatBar
-                  key={row.participantId}
-                  label={row.name}
-                  value={money(row.paid)}
-                  fill={participantMax === 0 ? 0 : row.paid / participantMax}
-                  tone="secondary"
-                />
-              ))}
-            </ul>
+            <ParticipantTable
+              participants={stats.participants}
+              currency={currency}
+              locale={locale}
+            />
           )}
         </CardContent>
       </Card>
@@ -246,13 +240,30 @@ export function GroupStats() {
               <div className="text-numeric-table-lg">
                 {money(stats.recurring.estimatedMonthly)}
               </div>
+              <div className="text-body-sm text-muted-foreground">
+                {t('Recurring.estimatedYearly', {
+                  amount: formatCurrency(
+                    currency,
+                    stats.recurring.estimatedYearly,
+                    locale,
+                  ),
+                })}
+              </div>
             </div>
             <ul className="flex flex-col gap-1">
               {stats.recurring.byPeriod
                 .filter((entry) => entry.count > 0)
                 .map((entry) => (
-                  <li key={entry.period} className="text-body-md text-muted-foreground">
-                    {t(`Recurring.period.${entry.period}`, { count: entry.count })}
+                  <li
+                    key={entry.period}
+                    className="flex items-baseline justify-between gap-2 text-body-md text-muted-foreground"
+                  >
+                    <span>
+                      {t(`Recurring.period.${entry.period}`, {
+                        count: entry.count,
+                      })}
+                    </span>
+                    {money(entry.total)}
                   </li>
                 ))}
             </ul>

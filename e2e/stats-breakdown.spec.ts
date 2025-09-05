@@ -27,12 +27,20 @@ test('breaks spending down by participant and by category', async ({
 
   await openTab(page, 'Stats')
 
-  // Paid, not share: Alice paid 90 and Bob 30, while all three share both.
+  // Alice paid 90 and Bob 30, while all three share both, so every share is
+  // 40 and only Carol paid nothing.
   const byParticipant = cardByTitle(page, 'Spending by participant')
-  await expect(byParticipant).toContainText('Alice')
-  await expect(byParticipant).toContainText(money(90))
-  await expect(byParticipant).toContainText('Bob')
-  await expect(byParticipant).toContainText(money(30))
+  for (const heading of ['Participant', 'Paid', 'Count', 'Share']) {
+    await expect(
+      byParticipant.getByRole('columnheader', { name: heading }),
+    ).toBeVisible()
+  }
+  const alice = byParticipant.getByRole('row').filter({ hasText: 'Alice' })
+  await expect(alice).toContainText(money(90))
+  await expect(alice).toContainText(money(40))
+  const carol = byParticipant.getByRole('row').filter({ hasText: 'Carol' })
+  await expect(carol).toContainText(money(0))
+  await expect(carol).toContainText(money(40))
 
   const byCategory = cardByTitle(page, 'Spending by category')
   await expect(byCategory).toContainText('Groceries')
@@ -202,4 +210,26 @@ test('scopes the stats to a custom date range', async ({ page }) => {
 
   await expect(totals).toContainText(money(80))
   await expect(totals).not.toContainText(money(125))
+})
+
+test('estimates the cost of the recurring expenses', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Recurring ${uniqueSuffix()}`,
+    participants: PARTICIPANTS,
+  })
+
+  await addExpense(page, groupId, {
+    title: 'Streaming',
+    amount: '30',
+    paidBy: 'Alice',
+    recurrence: 'Monthly',
+  })
+
+  await openTab(page, 'Stats')
+
+  const recurring = cardByTitle(page, 'Recurring expenses')
+  await expect(recurring).toContainText('Estimated monthly cost')
+  await expect(recurring).toContainText(money(30))
+  await expect(recurring).toContainText(`${money(360)} per year`)
+  await expect(recurring).toContainText('1 monthly expense')
 })
