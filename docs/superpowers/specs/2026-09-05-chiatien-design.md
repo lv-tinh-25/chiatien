@@ -237,6 +237,15 @@ English — `vi` is added to the generator and the data regenerated.
 Each vertical slice translates its own namespace. A final pass scripts a diff of key sets
 between locales, because the merge fallback reports nothing.
 
+Two meanings of "default" are kept apart. `defaultLocale` is `en-US`: the language every
+key is guaranteed to exist in, and therefore the one every other locale is merged on top
+of. `displayLocale` is `vi`: what a browser sees when its `Accept-Language` names nothing
+this app supports. A browser asking for English still gets English.
+
+The same key audit that closed the gaps in §11 is the standing check that a translated
+string is actually rendered somewhere: a key no component references is either a missing
+screen or dead weight, and both are defects.
+
 ## 8. Testing
 
 **Jest** covers `src/lib` only. The seven existing test files port unchanged; three new
@@ -307,3 +316,40 @@ proposes replacing it with `rrule`.
 `getGroupExpenses` calls `createRecurringExpenses()` on every read, placing write cost on
 the read path; a group left idle for a long time pays for the whole catch-up on its next
 page load.
+
+## 11. Conformance audit
+
+The implementation was audited against this document after the eight slices closed. The
+method: match every message key against every `.ts`/`.tsx` file in `src` and `e2e`. 43 of
+381 keys were never referenced, and each one marked an affordance spliit has that had not
+been rebuilt — the translations doubled as a feature inventory. The plan that closed them
+is `docs/superpowers/plans/2026-09-05-spec-conformance-update.md`.
+
+What was missing, and where the authority came from:
+
+| Gap | Authority |
+| --- | --------- |
+| `/settings` reachable only from the desktop sidebar, itself only rendered inside a group — so the language switcher was unreachable on a phone | §5 |
+| Negotiation fell back to English rather than Vietnamese | §1 |
+| A negative total read as negative spending instead of earnings | §1 parity |
+| The activity log was a flat list, with `lib/date-groups.ts` ported, tested and unused | §1 parity |
+| No toast surface, so forgetting a group could not be undone | §1 parity |
+| The currency and category pickers had no search and no custom-currency option | §1 parity |
+| No exchange-rate feedback: stale, mismatched and failed lookups all looked correct | §6 |
+| Expense documents absent entirely, with the flag, `/api/s3-upload` and `next-s3-upload` unused | §1 |
+| Create-from-receipt absent entirely, with `lib/receipt-extract.ts` unused | §1 |
+| No QR scanner, no QR download, no native share | §1 parity |
+| The expense card said nothing when the viewer had no stake in an expense | §1 parity |
+| By-participant stats showed what was paid and not the count or the share; recurring stats dropped the yearly estimate and each period's total | §1 parity |
+| No document title or description anywhere; `offline.html` English-only; service-worker caches still named `spliit-*`; the footer still credited spliit's author | §1, working rules |
+
+Every dependency the missing features needed was already installed and unused:
+`@radix-ui/react-toast`, `next-s3-upload`, `html5-qrcode`, `cmdk`,
+`@radix-ui/react-popover`. That is the clearest signal that these were omissions rather
+than decisions.
+
+Two deliberate departures from spliit remain. Its currency and category pickers load flag
+images from `flagcdn.com`; a self-hosted instance should not reach a third party to draw a
+list, so the pickers show the ISO code and the category icon instead. And its document
+viewer is an embla carousel; ours opens one image at a time, which covers attach, view and
+delete without a second carousel dependency.

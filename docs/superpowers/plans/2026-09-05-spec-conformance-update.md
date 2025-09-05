@@ -405,3 +405,87 @@ export function ToastViewport(): ReactNode
 - [ ] Append an execution record to this file listing every deviation from the plan.
 - [ ] Update the spec's §7 to record that the audit ran and what it found, and CLAUDE.md if
   any rule changed.
+
+---
+
+## Execution record
+
+Every task landed. Fourteen branches were merged rather than the twelve planned; the
+deviations are below.
+
+**Task order changed.** Tasks ran 1, 3, 4, 5, 6, 7, 11, 8, 9, 10, 2, 12 rather than in
+number order, because the toast surface (task 5) had to exist before the two upload
+features (8 and 9) could report a failure.
+
+**Task 5 moved the toast out of the template.** The plan raised the undo toast from
+`GroupList`, which would have put a branch and a side effect in a template. It lives in
+`useGroupList` instead, whose `forget` now takes the whole group so the undo can put it
+back.
+
+**Task 6 added VND to the "most common" group.** Spliit's list is USD, EUR, JPY, GBP and
+CNY. A Vietnamese-first product puts đồng in that group.
+
+**Task 7 split differently than planned.** The plan had the hook return a `rateState`
+key. The composition rules turned out to be worth their own tested module, so
+`lib/conversion-rate-notice.ts` derives the whole notice — the ordered message keys plus
+the rate formula — and the field only renders it. `conversionRateState.useCustomRate` was
+deleted: it duplicated `conversionRateField.useCustom`, which is the key spliit uses.
+
+**Task 8 also carried the document count.** The plan put the paperclip badge in task 8
+and `notInvolved` in task 11, but both are the same twenty lines of `ExpenseCard`, so
+task 11 shipped them together. Task 8 additionally ported the `images.remotePatterns`
+block from spliit's `next.config.mjs`, without which `next/image` refuses the bucket the
+documents live in.
+
+**Task 8 simplified the viewer.** Spliit browses attachments in an embla carousel. Ours
+opens one image at a time; attach, view and delete are all covered, and
+`embla-carousel-react` stays unused.
+
+**Task 9's happy path cannot be end-to-end tested.** Extraction runs in a server action,
+so `page.route` cannot stub it. The harness points `OPENAI_BASE_URL` at the discard port
+and the spec asserts the failure toast; the other half — the create form reading the
+scanned draft out of the URL — is tested directly and covered by six unit tests on
+`lib/receipt-params.ts`.
+
+**Tasks 8 and 9 changed the harness.** `playwright.config.ts` now switches both flags on
+with deliberately fake S3 credentials (`env.ts` refuses to boot with the flag set and no
+bucket) and `e2e/fixtures.ts` fulfils the browser-side upload, so no request leaves the
+machine.
+
+**Task 10 dropped the flag images.** Spliit's pickers fetch flags from `flagcdn.com`. A
+self-hosted instance should not call a third party to draw a list.
+
+**Task 12 localised `offline.html` with a script.** A static file has no access to
+next-intl, so both languages ship in the markup and four lines of inline JavaScript
+reveal the one matching `navigator.language`, defaulting to English.
+
+**Two branches were added.** `feat/category-select-search` closed
+`Categories.search`/`noCategory`, found only after the audit's key matcher was tightened
+— its first pass had accepted a bare leaf name appearing anywhere in the code, which hid
+these two behind unrelated uses of "search". `update/stats-participant-and-recurring-detail`
+closed `Stats.ByParticipant.paid`/`.share` and `Stats.Recurring.estimatedYearly`, hidden
+the same way.
+
+**Two more followed from the audit rather than from the plan.**
+`refactor/remove-type-assertions` removed the last two `as` casts in hand-written code
+(rule 4); the ones left are in ported `src/lib`, which is a stable contract.
+`docs/refresh-screenshots` replaced the hand-captured screenshots with a script, because
+the old set predated the participant table, both comboboxes and the share sheet.
+
+### Known limitation
+
+A toast raised while a modal dialog is open is outside the accessibility tree: Radix's
+Dialog marks everything but itself `aria-hidden`, and the `aria-hidden` package it uses
+offers no opt-out. The toast stays visible and clickable, which is why
+`e2e/receipt-extract.spec.ts` locates it by text rather than by role. Spliit has the same
+behaviour.
+
+### Final state
+
+- 326 unit tests across 29 suites.
+- 79 Playwright tests across 20 spec files.
+- `check-types`, `lint` and `build` clean.
+- 380 message keys, identical key sets in both locales, and no key that no component
+  renders.
+- No `any`, no type assertion, no error suppression in hand-written code.
+- No git remote.
