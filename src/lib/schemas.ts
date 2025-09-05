@@ -214,8 +214,11 @@ export type ExpenseFormValues = z.output<typeof expenseFormSchema>
 // operates on these values; the resolver produces ExpenseFormValues on submit.
 export type ExpenseFormInput = z.input<typeof expenseFormSchema>
 
+/**
+ * Remembered splitting preferences. `paidFor` is typed from the form *input*
+ * rather than its output: shares are still raw strings at this point.
+ */
 export type SplittingOptions = {
-  // Used for saving default splitting options in localStorage
   splitMode: SplitMode
-  paidFor: ExpenseFormValues['paidFor'] | null
+  paidFor: ExpenseFormInput['paidFor'] | null
 }
