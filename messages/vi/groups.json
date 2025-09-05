@@ -62,7 +62,7 @@
     },
     "CurrencyField": {
       "label": "Biểu tượng tiền tệ",
-      "placeholder": "$, €, £…",
+      "placeholder": "₫, $, €…",
       "description": "Dùng để hiển thị các khoản tiền."
     },
     "CurrencyCodeField": {
