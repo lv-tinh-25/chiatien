@@ -59,6 +59,7 @@
     "groups": "Groups",
     "settings": "Settings",
     "backToGroups": "Back to groups",
-    "more": "More"
+    "more": "More",
+    "groupSettings": "Group settings"
   }
 }
