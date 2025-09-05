@@ -95,3 +95,31 @@ test('lets you decline to pick anyone', async ({ page }) => {
   await page.reload()
   await expect(page.getByRole('dialog')).toBeHidden()
 })
+
+test('says so when the active user has no stake in an expense', async ({
+  page,
+}) => {
+  const groupId = await createGroup(page, {
+    name: `E2E NotInvolved ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob', 'Carol'],
+  })
+
+  // Paid by Alice for Alice alone, so Carol has nothing to do with it.
+  await addExpense(page, groupId, {
+    title: 'Solo lunch',
+    amount: '20',
+    paidBy: 'Alice',
+    paidFor: ['Alice'],
+  })
+
+  await forgetActiveUser(page)
+  await page.goto(`/groups/${groupId}/expenses`)
+  const dialog = page.getByRole('dialog')
+  await dialog.getByLabel('Carol', { exact: true }).click()
+  await dialog.getByRole('button', { name: 'Save changes' }).click()
+  await expect(dialog).toBeHidden()
+
+  await expect(expenseCard(page, 'Solo lunch')).toContainText(
+    'You are not involved',
+  )
+})
