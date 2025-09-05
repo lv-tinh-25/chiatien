@@ -55,6 +55,16 @@
 
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
+  /* Four elevation levels: hairline card, raised control, floating sheet,
+     and the primary action bar, which carries a tinted shadow. */
+  --shadow-card: 0 1px 3px 0 hsl(var(--foreground) / 0.04),
+    0 1px 2px -1px hsl(var(--foreground) / 0.02);
+  --shadow-raised: 0 4px 6px -1px hsl(var(--foreground) / 0.06),
+    0 2px 4px -2px hsl(var(--foreground) / 0.04);
+  --shadow-sheet: 0 20px 25px -5px hsl(var(--foreground) / 0.1),
+    0 8px 10px -6px hsl(var(--foreground) / 0.05);
+  --shadow-action: 0 10px 15px -3px hsl(var(--primary) / 0.25);
+
   --radius-card: 1rem;
   --radius-control: 0.75rem;
 
