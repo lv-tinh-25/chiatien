@@ -113,3 +113,19 @@ test('renaming a group updates the list', async ({ page }) => {
   await page.goto('/groups')
   await expect(page.getByRole('link', { name: renamed })).toBeVisible()
 })
+
+test('offers to undo forgetting a group', async ({ page }) => {
+  const name = `E2E Undo ${uniqueSuffix()}`
+  await createGroup(page, { name, participants: ['Alice', 'Bob'] })
+
+  await page.goto('/groups')
+  await expect(page.getByRole('link', { name })).toBeVisible()
+  await page
+    .getByRole('button', { name: 'Remove from recent groups' })
+    .first()
+    .click()
+  await expect(page.getByRole('link', { name })).toBeHidden()
+
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect(page.getByRole('link', { name })).toBeVisible()
+})

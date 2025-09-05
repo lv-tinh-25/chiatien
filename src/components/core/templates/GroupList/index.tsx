@@ -49,7 +49,7 @@ export function GroupList() {
             archived={isArchived(group.id)}
             onToggleStar={() => toggleStar(group.id)}
             onToggleArchive={() => toggleArchive(group.id)}
-            onForget={() => forget(group.id)}
+            onForget={() => forget(group)}
           />
         ))}
       </GroupSection>

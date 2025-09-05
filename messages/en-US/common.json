@@ -18,6 +18,9 @@
   "Settings": {
     "title": "Settings"
   },
+  "Toast": {
+    "dismiss": "Dismiss"
+  },
   "Share": {
     "title": "Share",
     "description": "For other participants to see the group and add expenses, share its URL with them.",
