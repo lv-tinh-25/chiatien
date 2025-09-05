@@ -129,3 +129,21 @@ test('offers to undo forgetting a group', async ({ page }) => {
   await page.getByRole('button', { name: 'Undo' }).click()
   await expect(page.getByRole('link', { name })).toBeVisible()
 })
+
+test('offers a QR scanner as a second way to add a group', async ({ page }) => {
+  await page.goto('/groups')
+  await expect(
+    page.getByRole('textbox', { name: 'Add a group by URL' }),
+  ).toBeVisible()
+
+  await page.getByRole('tab', { name: 'Scan QR' }).click()
+  await expect(
+    page.getByRole('textbox', { name: 'Add a group by URL' }),
+  ).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Start Camera' })).toBeVisible()
+
+  await page.getByRole('tab', { name: 'Enter URL' }).click()
+  await expect(
+    page.getByRole('textbox', { name: 'Add a group by URL' }),
+  ).toBeVisible()
+})
