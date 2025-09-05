@@ -12,6 +12,7 @@ import { CategoryDrilldown } from '@/components/core/templates/GroupStats/Catego
 import { MonthDrilldown } from '@/components/core/templates/GroupStats/MonthDrilldown'
 import { StatBar } from '@/components/core/templates/GroupStats/StatBar'
 import { StatsRangeSelector } from '@/components/core/templates/GroupStats/StatsRangeSelector'
+import { TotalsCard } from '@/components/core/templates/GroupStats/TotalsCard'
 import { useGroupStats } from '@/hooks/stats/useGroupStats'
 import { formatMonth } from '@/lib/format-month'
 import { formatDateOnly } from '@/lib/utils'
@@ -54,43 +55,17 @@ export function GroupStats() {
         onCustomRangeChange={setCustomRange}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('Totals.title')}</CardTitle>
-          <CardDescription>{t('Totals.description')}</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-3 sm:grid-cols-3">
-          <div className="flex flex-col">
-            <span className="text-label-md text-muted-foreground">
-              {t('Totals.groupSpendings')}
-            </span>
-            <span className="text-numeric-table-lg">
-              {money(stats.totalGroupSpendings)}
-            </span>
-          </div>
-          {activeUserId !== null &&
-            stats.totalParticipantSpendings !== undefined && (
-              <div className="flex flex-col">
-                <span className="text-label-md text-muted-foreground">
-                  {t('Totals.yourSpendings')}
-                </span>
-                <span className="text-numeric-table-lg">
-                  {money(stats.totalParticipantSpendings)}
-                </span>
-              </div>
-            )}
-          {activeUserId !== null && stats.totalParticipantShare !== undefined && (
-            <div className="flex flex-col">
-              <span className="text-label-md text-muted-foreground">
-                {t('Totals.yourShare')}
-              </span>
-              <span className="text-numeric-table-lg">
-                {money(stats.totalParticipantShare)}
-              </span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <TotalsCard
+        totalGroupSpendings={stats.totalGroupSpendings}
+        totalParticipantSpendings={
+          activeUserId === null ? undefined : stats.totalParticipantSpendings
+        }
+        totalParticipantShare={
+          activeUserId === null ? undefined : stats.totalParticipantShare
+        }
+        currency={currency}
+        locale={locale}
+      />
 
       <Card>
         <CardHeader>
