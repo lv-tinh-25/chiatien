@@ -95,3 +95,23 @@ test('filters the expense list with the search bar', async ({ page }) => {
   await expect(expenseCard(page, 'Cinema tickets')).toBeVisible()
   await expect(expenseCard(page, 'Train fare')).toHaveCount(0)
 })
+
+test('searches the category list', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E CategorySearch ${uniqueSuffix()}`,
+    participants: PARTICIPANTS,
+  })
+
+  await page.goto(`/groups/${groupId}/expenses/create`)
+  await expect(
+    page.getByRole('button', { name: 'Create', exact: true }),
+  ).toBeVisible({ timeout: 30_000 })
+
+  await fieldByLabel(page, 'Category').getByRole('combobox').click()
+  await page.getByPlaceholder('Search category...').fill('taxi')
+  await expect(page.getByRole('option', { name: 'Taxi' })).toBeVisible()
+  await expect(page.getByRole('option', { name: 'Groceries' })).toBeHidden()
+
+  await page.getByPlaceholder('Search category...').fill('qqqq')
+  await expect(page.getByText('No category found.')).toBeVisible()
+})

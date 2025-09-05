@@ -1,12 +1,12 @@
 'use client'
 
+import { CategorySelect } from '@/components/core/molecules/CategorySelect'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
 import { Select } from '@/components/core/molecules/Select'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
-import { useMemo } from 'react'
 import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
 
@@ -23,21 +23,11 @@ function toDateInputValue(value: unknown): string {
 
 export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
   const t = useTranslations('ExpenseForm')
-  const tCategories = useTranslations('Categories')
   const scope = isIncome ? 'Income' : 'Expense'
   const { data } = trpc.categories.list.useQuery()
   const expenseDate = useWatch({ control: form.control, name: 'expenseDate' })
   const category = useWatch({ control: form.control, name: 'category' })
   const paidBy = useWatch({ control: form.control, name: 'paidBy' })
-
-  const categoryOptions = useMemo(
-    () =>
-      (data?.categories ?? []).map((category) => ({
-        value: String(category.id),
-        label: tCategories(`${category.grouping}.${category.name}`),
-      })),
-    [data, tCategories],
-  )
 
   return (
     <div className="flex flex-col gap-4">
@@ -67,12 +57,12 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
         description={t(`${scope}.categoryFieldDescription`)}
       >
         {({ id, describedBy }) => (
-          <Select
+          <CategorySelect
             id={id}
             aria-describedby={describedBy}
-            value={String(category ?? 0)}
-            onValueChange={(value) => form.setValue('category', Number(value))}
-            options={categoryOptions}
+            value={Number(category ?? 0)}
+            onValueChange={(value) => form.setValue('category', value)}
+            categories={data?.categories ?? []}
           />
         )}
       </FormField>
