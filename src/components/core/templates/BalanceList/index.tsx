@@ -27,7 +27,10 @@ export function BalanceList() {
 
   if (isPending || !currency) return null
 
-  const scale = Math.max(0, ...balances.map((balance) => Math.abs(balance.total)))
+  const scale = Math.max(
+    0,
+    ...balances.map((balance) => Math.abs(balance.total)),
+  )
 
   /**
    * Settling opens a prefilled reimbursement rather than writing one directly:

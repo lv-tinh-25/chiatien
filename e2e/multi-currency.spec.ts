@@ -166,7 +166,9 @@ test('names the rate it obtained', async ({ page }) => {
   )
 
   await expect(page.getByText('Obtained rates:')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Use custom rate' })).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Use custom rate' }),
+  ).toBeVisible()
   await page.getByRole('button', { name: 'Use custom rate' }).click()
   await expect(page.getByText('Using custom rate')).toBeVisible()
   await expect(

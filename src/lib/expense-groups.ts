@@ -40,7 +40,11 @@ export function groupExpensesByDate<T extends { expenseDate: Date }>(
   const buckets = new Map<ExpenseDateGroup, T[]>()
 
   for (const expense of expenses) {
-    const group = expenseDateGroup(dayjs(expense.expenseDate), today, weekStartsOn)
+    const group = expenseDateGroup(
+      dayjs(expense.expenseDate),
+      today,
+      weekStartsOn,
+    )
     const bucket = buckets.get(group) ?? []
     bucket.push(expense)
     buckets.set(group, bucket)
@@ -48,6 +52,8 @@ export function groupExpensesByDate<T extends { expenseDate: Date }>(
 
   return EXPENSE_DATE_GROUPS.flatMap((group) => {
     const expensesInGroup = buckets.get(group)
-    return expensesInGroup === undefined ? [] : [{ group, expenses: expensesInGroup }]
+    return expensesInGroup === undefined
+      ? []
+      : [{ group, expenses: expensesInGroup }]
   })
 }

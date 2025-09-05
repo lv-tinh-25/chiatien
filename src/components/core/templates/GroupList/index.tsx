@@ -80,7 +80,9 @@ export function GroupList() {
       <GlobalBalanceCard balances={balances} />
 
       {status === 'pending' && (
-        <p className="text-body-md text-muted-foreground">{t('loadingRecent')}</p>
+        <p className="text-body-md text-muted-foreground">
+          {t('loadingRecent')}
+        </p>
       )}
 
       {status === 'empty' && (

@@ -54,7 +54,11 @@ export function CreateFromReceipt({
   return (
     <DialogPrimitive.Root>
       <DialogPrimitive.Trigger asChild>
-        <Button variant="outline" size="icon" aria-label={t('Dialog.triggerTitle')}>
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label={t('Dialog.triggerTitle')}
+        >
           <Receipt aria-hidden />
         </Button>
       </DialogPrimitive.Trigger>
@@ -149,7 +153,11 @@ export function CreateFromReceipt({
 
           <div className="mt-4 flex justify-end gap-2">
             <DialogPrimitive.Close asChild>
-              <Button type="button" disabled={isScanning || scan === null} onClick={editNext}>
+              <Button
+                type="button"
+                disabled={isScanning || scan === null}
+                onClick={editNext}
+              >
                 {t('Dialog.continue')}
               </Button>
             </DialogPrimitive.Close>

@@ -54,7 +54,9 @@ describe('toExpensePayload', () => {
       splitMode: 'BY_AMOUNT',
       paidFor: [{ participant: 'p1', shares: 100 }],
     })
-    expect(toExpensePayload(values, USD, USD, false).paidFor[0].shares).toBe(10000)
+    expect(toExpensePayload(values, USD, USD, false).paidFor[0].shares).toBe(
+      10000,
+    )
   })
 
   it('leaves shares alone for every other split mode', () => {
@@ -62,7 +64,9 @@ describe('toExpensePayload', () => {
       splitMode: 'BY_SHARES',
       paidFor: [{ participant: 'p1', shares: 200 }],
     })
-    expect(toExpensePayload(values, USD, USD, false).paidFor[0].shares).toBe(200)
+    expect(toExpensePayload(values, USD, USD, false).paidFor[0].shares).toBe(
+      200,
+    )
   })
 
   it('drops the conversion fields when no conversion took place', () => {

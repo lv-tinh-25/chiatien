@@ -55,8 +55,10 @@ export function useExpenseList() {
     isPending: query.isPending,
     // An empty result while a search is active is "nothing matched", not
     // "no expenses yet", and the two need different copy.
-    isEmpty: !query.isPending && expenses.length === 0 && debouncedSearch === '',
-    isSearchMiss: !query.isPending && expenses.length === 0 && debouncedSearch !== '',
+    isEmpty:
+      !query.isPending && expenses.length === 0 && debouncedSearch === '',
+    isSearchMiss:
+      !query.isPending && expenses.length === 0 && debouncedSearch !== '',
     search,
     setSearch,
     sentinelRef,

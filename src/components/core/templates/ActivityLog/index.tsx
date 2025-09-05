@@ -47,7 +47,9 @@ export function ActivityLog() {
       </CardHeader>
       <CardContent>
         {isEmpty ? (
-          <p className="text-body-md text-muted-foreground">{t('noActivity')}</p>
+          <p className="text-body-md text-muted-foreground">
+            {t('noActivity')}
+          </p>
         ) : (
           sections.map(({ group, activities }) => (
             <section key={group} className="flex flex-col">

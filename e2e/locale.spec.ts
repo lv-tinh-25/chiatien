@@ -45,5 +45,7 @@ test('remembers the language picked in settings', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'Cài đặt' })).toBeVisible()
   await page.goto('/groups')
-  await expect(page.getByRole('heading', { name: 'Nhóm của tôi' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Nhóm của tôi' }),
+  ).toBeVisible()
 })

@@ -13,7 +13,9 @@ test('a group shows four destinations in the sidebar', async ({ page }) => {
   const nav = page.getByRole('navigation', { name: 'Group sections' })
   await expect(nav).toBeVisible()
   for (const label of ['Expenses', 'Balances', 'Stats', 'Activity']) {
-    await expect(nav.getByRole('link', { name: label, exact: true })).toBeVisible()
+    await expect(
+      nav.getByRole('link', { name: label, exact: true }),
+    ).toBeVisible()
   }
 })
 
@@ -22,10 +24,9 @@ test('the current destination is marked for assistive technology', async ({
 }) => {
   await page.goto('/groups/seeded/balances')
   const nav = page.getByRole('navigation', { name: 'Group sections' })
-  await expect(nav.getByRole('link', { name: 'Balances', exact: true })).toHaveAttribute(
-    'aria-current',
-    'page',
-  )
+  await expect(
+    nav.getByRole('link', { name: 'Balances', exact: true }),
+  ).toHaveAttribute('aria-current', 'page')
 })
 
 test('the group root redirects to expenses', async ({ page }) => {

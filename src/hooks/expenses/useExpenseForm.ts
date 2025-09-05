@@ -1,8 +1,8 @@
 'use client'
 
-import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import { useExpenseCurrencyConversion } from '@/hooks/expenses/useExpenseCurrencyConversion'
 import { useExpenseSplitBalancing } from '@/hooks/expenses/useExpenseSplitBalancing'
+import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import { getCurrency } from '@/lib/currency'
 import { reconcileSplittingOptions } from '@/lib/expense-defaults'
 import { toExpensePayload } from '@/lib/expense-payload'
@@ -16,9 +16,9 @@ import {
 import { amountAsDecimal } from '@/lib/utils'
 import { useSplittingOptionsStore } from '@/stores/useSplittingOptionsStore'
 import { trpc } from '@/trpc/client'
-import { useTranslations } from 'next-intl'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm, useWatch } from 'react-hook-form'
 
@@ -96,9 +96,7 @@ export function useExpenseForm(expense?: Expense) {
       }
     : {
         expenseDate: receipt?.date ?? new Date(),
-        title: settlement.active
-          ? t('reimbursement')
-          : (receipt?.title ?? ''),
+        title: settlement.active ? t('reimbursement') : (receipt?.title ?? ''),
         category: receipt?.categoryId ?? 0,
         amount: settlement.active
           ? String(amountAsDecimal(settlement.amount, groupCurrency))
@@ -203,7 +201,9 @@ export function useExpenseForm(expense?: Expense) {
     remove,
     markEdited,
     isSubmitting:
-      createExpense.isPending || updateExpense.isPending || deleteExpense.isPending,
+      createExpense.isPending ||
+      updateExpense.isPending ||
+      deleteExpense.isPending,
     ...conversion,
   }
 }

@@ -11,11 +11,17 @@ export const groupIdsSchema = z.array(z.string().min(1))
 export type RecentGroup = z.infer<typeof recentGroupSchema>
 export type RecentGroups = RecentGroup[]
 
-export function addRecent(groups: RecentGroups, group: RecentGroup): RecentGroups {
+export function addRecent(
+  groups: RecentGroups,
+  group: RecentGroup,
+): RecentGroups {
   return [group, ...groups.filter((known) => known.id !== group.id)]
 }
 
-export function removeRecent(groups: RecentGroups, groupId: string): RecentGroups {
+export function removeRecent(
+  groups: RecentGroups,
+  groupId: string,
+): RecentGroups {
   return groups.filter((group) => group.id !== groupId)
 }
 
@@ -38,7 +44,11 @@ export function partitionGroups(
   starredIds: string[],
   archivedIds: string[],
 ): PartitionedGroups {
-  const partitioned: PartitionedGroups = { starred: [], recent: [], archived: [] }
+  const partitioned: PartitionedGroups = {
+    starred: [],
+    recent: [],
+    archived: [],
+  }
 
   for (const group of groups) {
     if (starredIds.includes(group.id)) partitioned.starred.push(group)

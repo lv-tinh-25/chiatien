@@ -2,7 +2,11 @@
 
 import { FormField } from '@/components/core/molecules/FormField'
 import { Select } from '@/components/core/molecules/Select'
-import { STATS_PERIODS, type StatsPeriod, type StatsRange } from '@/lib/stats-range'
+import {
+  STATS_PERIODS,
+  type StatsPeriod,
+  type StatsRange,
+} from '@/lib/stats-range'
 import { useTranslations } from 'next-intl'
 
 type Props = {
@@ -31,7 +35,9 @@ export function StatsRangeSelector({
             id={id}
             value={period}
             onValueChange={(value) => {
-              const next = STATS_PERIODS.find((candidate) => candidate === value)
+              const next = STATS_PERIODS.find(
+                (candidate) => candidate === value,
+              )
               if (next) onPeriodChange(next)
             }}
             options={STATS_PERIODS.map((candidate) => ({
@@ -53,7 +59,10 @@ export function StatsRangeSelector({
               className={DATE_INPUT}
               value={customRange.from ?? ''}
               onChange={(event) =>
-                onCustomRangeChange({ ...customRange, from: event.target.value })
+                onCustomRangeChange({
+                  ...customRange,
+                  from: event.target.value,
+                })
               }
             />
           </label>

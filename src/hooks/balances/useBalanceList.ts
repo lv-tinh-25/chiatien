@@ -9,7 +9,9 @@ export function useBalanceList() {
   const { data, isPending } = trpc.groups.balances.list.useQuery({ groupId })
 
   const participantName = useMemo(() => {
-    const names = new Map((group?.participants ?? []).map((p) => [p.id, p.name]))
+    const names = new Map(
+      (group?.participants ?? []).map((p) => [p.id, p.name]),
+    )
     return (participantId: string) => names.get(participantId) ?? participantId
   }, [group])
 

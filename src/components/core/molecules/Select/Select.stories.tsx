@@ -2,7 +2,10 @@ import { Select } from '@/components/core/molecules/Select'
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 
-const meta: Meta<typeof Select> = { title: 'Molecules/Select', component: Select }
+const meta: Meta<typeof Select> = {
+  title: 'Molecules/Select',
+  component: Select,
+}
 export default meta
 
 type Story = StoryObj<typeof Select>

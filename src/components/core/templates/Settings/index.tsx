@@ -8,7 +8,7 @@ import {
 } from '@/components/core/atoms/Card'
 import { FormField } from '@/components/core/molecules/FormField'
 import { Select } from '@/components/core/molecules/Select'
-import { localeLabels, locales, asLocale } from '@/i18n/locales'
+import { asLocale, localeLabels, locales } from '@/i18n/locales'
 import { setUserLocale } from '@/lib/locale'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'

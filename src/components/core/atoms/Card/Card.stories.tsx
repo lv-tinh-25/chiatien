@@ -17,7 +17,9 @@ export const Default: Story = {
     <Card className="w-80">
       <CardHeader>
         <CardTitle>Chuyến đi Đà Nẵng</CardTitle>
-        <CardDescription>6 thành viên · hoạt động 10 phút trước</CardDescription>
+        <CardDescription>
+          6 thành viên · hoạt động 10 phút trước
+        </CardDescription>
       </CardHeader>
       <CardContent className="text-body-md">Tổng chi 5.190.000₫</CardContent>
     </Card>

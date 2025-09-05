@@ -1,7 +1,7 @@
 'use client'
 
-import { CategoryIcon } from '@/components/core/atoms/CategoryIcon'
 import { Button } from '@/components/core/atoms/Button'
+import { CategoryIcon } from '@/components/core/atoms/CategoryIcon'
 import type { Category } from '@/generated/prisma/browser'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { Command } from 'cmdk'

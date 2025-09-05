@@ -23,7 +23,8 @@ export function activityDateGroup(
   if (today.isSame(time, 'day')) return 'today'
   if (today.subtract(1, 'day').isSame(time, 'day')) return 'yesterday'
   if (isSameWeek(today, time, weekStartsOn)) return 'earlierThisWeek'
-  if (isSameWeek(today.subtract(1, 'week'), time, weekStartsOn)) return 'lastWeek'
+  if (isSameWeek(today.subtract(1, 'week'), time, weekStartsOn))
+    return 'lastWeek'
   if (today.isSame(time, 'month')) return 'earlierThisMonth'
   if (today.subtract(1, 'month').isSame(time, 'month')) return 'lastMonth'
   if (today.isSame(time, 'year')) return 'earlierThisYear'

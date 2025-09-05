@@ -203,10 +203,9 @@ export async function openTab(page: Page, tab: GroupTab): Promise<void> {
   const match = /\/groups\/([^/]+)/.exec(page.url())
   if (!match) throw new Error(`Not on a group page: ${page.url()}`)
   await page.goto(`/groups/${match[1]}/${TAB_PATHS[tab]}`)
-  await page.waitForURL(
-    new RegExp(`/groups/[^/]+/${TAB_PATHS[tab]}(\\?|$)`),
-    { timeout: 30_000 },
-  )
+  await page.waitForURL(new RegExp(`/groups/[^/]+/${TAB_PATHS[tab]}(\\?|$)`), {
+    timeout: 30_000,
+  })
 }
 
 export async function openExpense(page: Page, title: string): Promise<void> {
@@ -247,9 +246,7 @@ export async function setActiveUser(
   name: string,
 ): Promise<void> {
   const input = encodeURIComponent(JSON.stringify({ json: { groupId } }))
-  const response = await page.request.get(
-    `/api/trpc/groups.get?input=${input}`,
-  )
+  const response = await page.request.get(`/api/trpc/groups.get?input=${input}`)
   const body = await response.json()
   const participants: { id: string; name: string }[] =
     body?.result?.data?.json?.group?.participants ?? []
@@ -269,7 +266,11 @@ export async function setActiveUser(
       const activeUsers: Record<string, string> = {}
       if (parsed !== null && typeof parsed === 'object' && 'state' in parsed) {
         const state = parsed.state
-        if (state !== null && typeof state === 'object' && 'activeUsers' in state) {
+        if (
+          state !== null &&
+          typeof state === 'object' &&
+          'activeUsers' in state
+        ) {
           const stored = state.activeUsers
           if (stored !== null && typeof stored === 'object') {
             for (const [key, value] of Object.entries(stored)) {

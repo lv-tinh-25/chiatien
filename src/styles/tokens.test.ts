@@ -46,9 +46,7 @@ describe('semantic tokens', () => {
   })
 
   it('exposes every token to tailwind as a colour', () => {
-    const colourTokens = REQUIRED.filter(
-      (token) => !token.endsWith('-active'),
-    )
+    const colourTokens = REQUIRED.filter((token) => !token.endsWith('-active'))
     for (const token of colourTokens) {
       expect(css).toContain(`--color-${token.slice(2)}: hsl(var(${token}))`)
     }

@@ -31,7 +31,11 @@ export function Select({
   ...aria
 }: SelectProps) {
   return (
-    <SelectPrimitive.Root value={value} onValueChange={onValueChange} name={name}>
+    <SelectPrimitive.Root
+      value={value}
+      onValueChange={onValueChange}
+      name={name}
+    >
       <SelectPrimitive.Trigger
         id={id}
         data-testid={testId}
@@ -62,7 +66,9 @@ export function Select({
                 value={option.value}
                 className="flex min-h-touch-min cursor-default items-center justify-between rounded-control px-3 text-body-lg text-foreground outline-none data-[highlighted]:bg-muted"
               >
-                <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
+                <SelectPrimitive.ItemText>
+                  {option.label}
+                </SelectPrimitive.ItemText>
                 <SelectPrimitive.ItemIndicator>
                   <Check className="size-4 text-primary" aria-hidden />
                 </SelectPrimitive.ItemIndicator>
