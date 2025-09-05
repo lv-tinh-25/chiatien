@@ -1,19 +1,7 @@
 {
-  "Homepage": {
-    "title": "Share <strong>Expenses</strong> with <strong>Friends & Family</strong>",
-    "metaTitle": "ChiaTien · Split expenses with friends and family",
-    "description": "Welcome to your new <strong>ChiaTien</strong> instance !",
-    "button": {
-      "groups": "Go to groups",
-      "github": "GitHub"
-    }
-  },
-  "Header": {
-    "groups": "Groups"
-  },
-  "Footer": {
-    "madeIn": "Made in Montréal, Québec 🇨🇦",
-    "builtBy": "Built by <author>Sebastien Castiel</author> and <source>contributors</source>"
+  "App": {
+    "name": "ChiaTien",
+    "description": "Split expenses with friends and family. No ads, no account needed."
   },
   "Settings": {
     "title": "Settings"

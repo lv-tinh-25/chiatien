@@ -17,10 +17,10 @@
  * Bump CACHE_VERSION to invalidate all previously cached content on deploy.
  */
 
-const CACHE_VERSION = 'v1'
-const PRECACHE = `spliit-precache-${CACHE_VERSION}`
-const RUNTIME = `spliit-runtime-${CACHE_VERSION}`
-const IMAGE_CACHE = `spliit-images-${CACHE_VERSION}`
+const CACHE_VERSION = 'v2'
+const PRECACHE = `chiatien-precache-${CACHE_VERSION}`
+const RUNTIME = `chiatien-runtime-${CACHE_VERSION}`
+const IMAGE_CACHE = `chiatien-images-${CACHE_VERSION}`
 
 const OFFLINE_URL = '/offline.html'
 

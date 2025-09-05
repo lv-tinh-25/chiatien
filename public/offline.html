@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" id="page">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -62,14 +62,44 @@
       button:hover {
         background: #036249;
       }
+      [data-lang] {
+        display: none;
+      }
+      [data-lang].is-active {
+        display: revert;
+      }
     </style>
   </head>
   <body>
-    <h1>You're offline</h1>
-    <p>
+    <h1 data-lang="vi" lang="vi">Bạn đang ngoại tuyến</h1>
+    <p data-lang="vi" lang="vi">
+      Trang này không dùng được khi không có kết nối. Những trang và dữ liệu bạn
+      đã xem có thể vẫn hoạt động. Hãy kết nối lại và thử lần nữa.
+    </p>
+    <button data-lang="vi" lang="vi" onclick="location.reload()">
+      Thử lại
+    </button>
+
+    <h1 data-lang="en" lang="en">You're offline</h1>
+    <p data-lang="en" lang="en">
       This page isn't available without a connection. Pages and data you've
       already visited may still work. Reconnect and try again.
     </p>
-    <button onclick="location.reload()">Try again</button>
+    <button data-lang="en" lang="en" onclick="location.reload()">
+      Try again
+    </button>
+
+    <script>
+      // A static file cannot go through next-intl, so both languages ship in
+      // the markup and the browser's own preference picks one.
+      var lang = (navigator.language || 'en').toLowerCase().startsWith('vi')
+        ? 'vi'
+        : 'en'
+      document.getElementById('page').setAttribute('lang', lang)
+      document.title = lang === 'vi' ? 'Ngoại tuyến · ChiaTien' : 'Offline · ChiaTien'
+      document.querySelectorAll('[data-lang="' + lang + '"]').forEach(function (el) {
+        el.classList.add('is-active')
+      })
+    </script>
   </body>
 </html>
