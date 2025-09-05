@@ -1,4 +1,4 @@
-import { defaultLocale, locales, type Locale } from '@/i18n/locales'
+import { defaultLocale, isLocale, type Locale } from '@/i18n/locales'
 import { getUserLocale } from '@/lib/locale'
 import deepmerge from 'deepmerge'
 import { getRequestConfig } from 'next-intl/server'
@@ -20,10 +20,6 @@ async function load(locale: Locale) {
     ),
   )
   return Object.assign({}, ...namespaces)
-}
-
-function isLocale(value: string): value is Locale {
-  return locales.some((locale) => locale === value)
 }
 
 export default getRequestConfig(async () => {
