@@ -1,11 +1,12 @@
 {
   "Homepage": {
-    "description": "Chào mừng bạn đến với phiên bản <strong>Spliit</strong> mới của bạn!",
+    "description": "Chào mừng bạn đến với phiên bản <strong>ChiaTien</strong> mới của bạn!",
     "title": "Chia sẻ <strong>Chi tiêu</strong> với <strong>Bạn bè & Gia đình</strong>",
     "button": {
       "groups": "Xem các nhóm",
       "github": "GitHub"
-    }
+    },
+    "metaTitle": "ChiaTien · Chia tiền với bạn bè và gia đình"
   },
   "Header": {
     "groups": "Nhóm"
@@ -13,5 +14,39 @@
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
     "builtBy": "Xây dựng bởi <author>Sebastien Castiel</author> và <source>các cộng sự</source>"
+  },
+  "Settings": {
+    "title": "Cài đặt"
+  },
+  "Share": {
+    "title": "Chia sẻ",
+    "description": "Gửi đường dẫn này cho người khác để họ xem nhóm và thêm khoản chi.",
+    "copyLink": "Sao chép link",
+    "shareLink": "Chia sẻ link",
+    "warning": "Lưu ý!",
+    "warningHelp": "Ai có link nhóm đều xem và sửa được khoản chi. Hãy cân nhắc trước khi chia sẻ!",
+    "qrCode": {
+      "title": "Chia sẻ bằng mã QR",
+      "description": "Quét mã QR này để mở nhóm trên thiết bị bất kỳ.",
+      "download": "Tải mã QR"
+    }
+  },
+  "Currencies": {
+    "search": "Tìm tiền tệ...",
+    "noCurrency": "Không tìm thấy tiền tệ nào.",
+    "custom": {
+      "heading": "Tùy chỉnh"
+    },
+    "common": {
+      "heading": "Phổ biến nhất"
+    },
+    "other": {
+      "heading": "Tiền tệ khác"
+    }
+  },
+  "Pwa": {
+    "updateTitle": "Đã có bản cập nhật",
+    "updateDescription": "Đã có phiên bản ChiaTien mới.",
+    "reload": "Tải lại"
   }
 }

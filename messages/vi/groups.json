@@ -24,11 +24,29 @@
       "button": "Thêm bằng URL",
       "title": "Thêm nhóm bằng URL",
       "description": "Nếu nhóm được chia sẻ với bạn, bạn có thể dán URL vào đây để thêm vào danh sách của bạn.",
-      "error": "Rất tiếc, chúng tôi không thể tìm thấy nhóm từ URL bạn cung cấp…"
+      "error": "Rất tiếc, chúng tôi không thể tìm thấy nhóm từ URL bạn cung cấp…",
+      "urlMode": "Nhập link",
+      "qrMode": "Quét QR",
+      "scanner": {
+        "startCamera": "Bật camera",
+        "stopScanning": "Dừng quét",
+        "permissionDenied": "Camera bị từ chối. Hãy cho phép truy cập camera để quét mã QR.",
+        "noCamera": "Không tìm thấy camera trên thiết bị này.",
+        "cameraError": "Không bật được camera. Vui lòng thử lại.",
+        "permissionError": "Không truy cập được camera. Hãy kiểm tra lại quyền."
+      }
     },
     "NotFound": {
       "text": "Nhóm này không tồn tại.",
       "link": "Xem các nhóm bạn đã truy cập gần đây"
+    },
+    "createGroup": "Tạo nhóm",
+    "GlobalBalance": {
+      "title": "Tổng số dư của bạn",
+      "description": "Số dư cộng gộp trên tất cả các nhóm của bạn.",
+      "owedToYou": "Bạn được nhận",
+      "youOwe": "Bạn nợ",
+      "settledUp": "Bạn đã tất toán xong ở mọi nhóm."
     }
   },
   "GroupForm": {
@@ -77,6 +95,32 @@
       "create": "Tạo",
       "creating": "Đang tạo…",
       "cancel": "Hủy bỏ"
+    }
+  },
+  "Information": {
+    "title": "Thông tin",
+    "description": "Ghi ở đây bất kỳ thông tin nào các thành viên trong nhóm cần biết.",
+    "empty": "Nhóm chưa có thông tin nào."
+  },
+  "Activity": {
+    "title": "Hoạt động",
+    "description": "Toàn bộ hoạt động trong nhóm này.",
+    "noActivity": "Nhóm của bạn chưa có hoạt động nào.",
+    "someone": "Ai đó",
+    "settingsModified": "<strong>{participant}</strong> đã đổi cài đặt nhóm.",
+    "expenseCreated": "<strong>{participant}</strong> đã tạo khoản chi <em>{expense}</em>.",
+    "expenseUpdated": "<strong>{participant}</strong> đã sửa khoản chi <em>{expense}</em>.",
+    "expenseDeleted": "<strong>{participant}</strong> đã xoá khoản chi <em>{expense}</em>.",
+    "Groups": {
+      "today": "Hôm nay",
+      "yesterday": "Hôm qua",
+      "earlierThisWeek": "Đầu tuần này",
+      "lastWeek": "Tuần trước",
+      "earlierThisMonth": "Đầu tháng này",
+      "lastMonth": "Tháng trước",
+      "earlierThisYear": "Đầu năm nay",
+      "lastYear": "Năm ngoái",
+      "older": "Cũ hơn"
     }
   }
 }

@@ -104,7 +104,9 @@
     },
     "conversionUnavailable": "Để thiết lập đơn vị tiền tệ khác nhau cho từng khoản chi và quy đổi đơn vị tiền tệ, hãy chọn một đơn vị tiền tệ không tùy chỉnh cho nhóm.",
     "originalAmountField": {
-      "label": "Số tiền quy đổi"
+      "label": "Số tiền quy đổi",
+      "repaymentLabel": "Số tiền cần chuyển",
+      "repaymentDescription": "Quy đổi từ số tiền phía trên — đó mới là số dư được tất toán."
     },
     "conversionRateField": {
       "useApi": "Sử dụng tỷ giá từ Frankfurter",
@@ -118,7 +120,150 @@
       "staleRate": "Sử dụng tỷ giá:",
       "noRate": "Nhập tỷ giá tùy chỉnh bên dưới.",
       "currencyNotFound": "Rất tiếc, Frankfurter hiện không có tỷ giá hối đoái cho loại tiền tệ này.",
-      "noDate": "Nhập ngày phát sinh chi tiêu để lấy tỷ giá quy đổi."
+      "noDate": "Nhập ngày phát sinh chi tiêu để lấy tỷ giá quy đổi.",
+      "dateMismatch": "Tỷ giá ngày: {date}",
+      "refresh": "Làm mới",
+      "customRate": "Đang dùng tỷ giá tự nhập"
+    },
+    "isReimbursementField": {
+      "label": "Đây là khoản hoàn trả"
+    },
+    "categoryField": {
+      "label": "Danh mục"
+    },
+    "notesField": {
+      "label": "Ghi chú"
+    },
+    "selectNone": "Bỏ chọn hết",
+    "selectAll": "Chọn tất cả",
+    "shares": "phần",
+    "advancedOptions": "Tùy chọn chia nâng cao…",
+    "SplitModeField": {
+      "label": "Cách chia",
+      "evenly": "Chia đều",
+      "byShares": "Không đều – Theo phần",
+      "byPercentage": "Không đều – Theo phần trăm",
+      "byAmount": "Không đều – Theo số tiền",
+      "saveAsDefault": "Lưu làm cách chia mặc định"
+    },
+    "DeletePopup": {
+      "label": "Xoá",
+      "title": "Xoá khoản chi này?",
+      "description": "Bạn có chắc muốn xoá khoản chi này? Thao tác này không thể hoàn tác.",
+      "yes": "Xoá",
+      "cancel": "Huỷ"
+    },
+    "attachDocuments": "Đính kèm chứng từ",
+    "create": "Tạo",
+    "creating": "Đang tạo…",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "cancel": "Huỷ",
+    "reimbursement": "Hoàn trả"
+  },
+  "ExpenseDocumentsInput": {
+    "TooBigToast": {
+      "title": "Tệp quá lớn",
+      "description": "Dung lượng tối đa là {maxSize}. Tệp của bạn là {size}."
+    },
+    "ErrorToast": {
+      "title": "Lỗi khi tải chứng từ lên",
+      "description": "Có lỗi xảy ra khi tải chứng từ lên. Vui lòng thử lại sau hoặc chọn tệp khác.",
+      "retry": "Thử lại"
+    }
+  },
+  "CreateFromReceipt": {
+    "Dialog": {
+      "triggerTitle": "Tạo khoản chi từ hoá đơn",
+      "title": "Tạo từ hoá đơn",
+      "description": "Trích xuất thông tin khoản chi từ ảnh hoá đơn.",
+      "body": "Tải lên ảnh hoá đơn, chúng tôi sẽ quét và cố gắng lấy ra thông tin khoản chi.",
+      "selectImage": "Chọn ảnh…",
+      "titleLabel": "Tên khoản chi:",
+      "categoryLabel": "Danh mục:",
+      "amountLabel": "Số tiền:",
+      "dateLabel": "Ngày:",
+      "editNext": "Bạn có thể chỉnh lại thông tin ở bước sau.",
+      "continue": "Tiếp tục"
+    },
+    "unknown": "Không rõ",
+    "TooBigToast": {
+      "title": "Tệp quá lớn",
+      "description": "Dung lượng tối đa là {maxSize}. Tệp của bạn là {size}."
+    },
+    "ErrorToast": {
+      "title": "Lỗi khi tải chứng từ lên",
+      "description": "Có lỗi xảy ra khi tải chứng từ lên. Vui lòng thử lại sau hoặc chọn tệp khác.",
+      "retry": "Thử lại"
+    }
+  },
+  "Categories": {
+    "search": "Tìm danh mục...",
+    "noCategory": "Không tìm thấy danh mục nào.",
+    "Uncategorized": {
+      "heading": "Chưa phân loại",
+      "General": "Chung",
+      "Payment": "Thanh toán"
+    },
+    "Entertainment": {
+      "heading": "Giải trí",
+      "Entertainment": "Giải trí",
+      "Games": "Trò chơi",
+      "Movies": "Phim ảnh",
+      "Music": "Âm nhạc",
+      "Sports": "Thể thao"
+    },
+    "Food and Drink": {
+      "heading": "Ăn uống",
+      "Food and Drink": "Ăn uống",
+      "Dining Out": "Ăn ngoài",
+      "Groceries": "Đi chợ, siêu thị",
+      "Liquor": "Đồ uống có cồn"
+    },
+    "Home": {
+      "heading": "Nhà cửa",
+      "Home": "Nhà cửa",
+      "Electronics": "Đồ điện tử",
+      "Furniture": "Nội thất",
+      "Household Supplies": "Đồ gia dụng",
+      "Maintenance": "Sửa chữa, bảo trì",
+      "Mortgage": "Trả góp nhà",
+      "Pets": "Thú cưng",
+      "Rent": "Tiền thuê nhà",
+      "Services": "Dịch vụ"
+    },
+    "Life": {
+      "heading": "Đời sống",
+      "Childcare": "Chăm sóc trẻ",
+      "Clothing": "Quần áo",
+      "Donation": "Quyên góp",
+      "Education": "Học hành",
+      "Gifts": "Quà tặng",
+      "Insurance": "Bảo hiểm",
+      "Medical Expenses": "Chi phí y tế",
+      "Taxes": "Thuế"
+    },
+    "Transportation": {
+      "heading": "Đi lại",
+      "Transportation": "Đi lại",
+      "Bicycle": "Xe đạp",
+      "Bus/Train": "Xe buýt, tàu",
+      "Car": "Ô tô",
+      "Gas/Fuel": "Xăng dầu",
+      "Hotel": "Khách sạn",
+      "Parking": "Gửi xe",
+      "Plane": "Máy bay",
+      "Taxi": "Taxi, xe ôm"
+    },
+    "Utilities": {
+      "heading": "Tiện ích",
+      "Utilities": "Tiện ích",
+      "Cleaning": "Dọn dẹp",
+      "Electricity": "Tiền điện",
+      "Heat/Gas": "Gas, sưởi",
+      "Trash": "Tiền rác",
+      "TV/Phone/Internet": "TV, điện thoại, internet",
+      "Water": "Tiền nước"
     }
   }
 }
