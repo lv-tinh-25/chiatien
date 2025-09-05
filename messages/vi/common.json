@@ -48,5 +48,17 @@
     "updateTitle": "Đã có bản cập nhật",
     "updateDescription": "Đã có phiên bản ChiaTien mới.",
     "reload": "Tải lại"
+  },
+  "Nav": {
+    "groupSections": "Mục trong nhóm",
+    "mainSections": "Mục chính",
+    "expenses": "Chi tiêu",
+    "balances": "Số dư",
+    "stats": "Thống kê",
+    "activity": "Hoạt động",
+    "groups": "Nhóm",
+    "settings": "Cài đặt",
+    "backToGroups": "Về danh sách nhóm",
+    "more": "Thêm"
   }
 }
