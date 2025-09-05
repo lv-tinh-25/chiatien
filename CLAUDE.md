@@ -27,6 +27,11 @@ English. Vietnamese exists only as translated strings in `messages/vi/*.json`. N
 hardcode display text in a component — every user-visible string goes through
 `next-intl`.
 
+A message key that no component renders is a defect, not spare capacity: it means either
+a screen was not built or the string is dead. `defaultLocale` (en-US) is the merge base
+every locale falls back to; `displayLocale` (vi) is what a browser with no matching
+`Accept-Language` gets.
+
 ### 3. Comment only non-obvious *why*
 
 A comment earns its place when it explains an invariant, a workaround, or a deliberate
@@ -35,8 +40,9 @@ CSS, HTML or JSX structure. When in doubt, delete it.
 
 ### 4. No `any`, no type assertions, no error suppression
 
-`any`, `as`, `@ts-ignore` and `@ts-expect-error` are forbidden. Narrow with type guards
-and `unknown` instead.
+`any`, `as`, `@ts-ignore` and `@ts-expect-error` are forbidden. Narrow with type guards,
+`unknown`, or a Zod schema at the boundary. This applies to code written here; the ported
+`src/lib` and `src/trpc` keep spliit's assertions because they are not modified.
 
 ### 5. Semantic colors only
 
@@ -62,7 +68,13 @@ npm run e2e            # Playwright; it starts `next start` itself
 npm run storybook      # Component states
 npx prisma migrate dev # Create and apply a migration
 npx prisma studio      # Inspect the database
+
+# Regenerate docs/screenshots after a visual change
+npx playwright test --config playwright.screenshots.config.ts
 ```
+
+`npm run e2e` serves the last `npm run build`, so build first or the run tests stale
+code.
 
 Run heavy TypeScript commands one at a time — this machine has limited free RAM and
 three of them in one shell will crash it.
@@ -135,6 +147,16 @@ pinned in `e2e/fixtures.ts`. Three things must therefore stay stable: the routes
 `data-testid` attributes (`expense-card`, `paid-by`, `split-mode`, `balance-row`,
 `reimbursement-row`), and the English strings in `messages/en-US/`. A red spec means
 behaviour broke, not that the test is outdated.
+
+The harness turns on `ENABLE_EXPENSE_DOCUMENTS` and `ENABLE_RECEIPT_EXTRACT` so those
+screens are covered. Its S3 credentials are fake — `env.ts` refuses to boot with the flag
+set and no bucket — and `e2e/fixtures.ts` fulfils the browser-side upload itself.
+`OPENAI_BASE_URL` points at the discard port, so receipt extraction fails fast without
+reaching the network. Nothing in the suite talks to a third party.
+
+Currency and category pickers are cmdk comboboxes inside a Radix Popover, not Radix
+Selects, but the trigger is still `role="combobox"` and the items still `role="option"`,
+so `selectRadixOption` drives both.
 
 The Playwright viewport is 1280×900. `useMediaQuery` swaps Radix Dialog for Vaul Drawer
 below 768px, so a narrower viewport renders a different component tree.
