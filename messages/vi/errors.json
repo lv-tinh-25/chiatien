@@ -1,1 +1,20 @@
-{}
+{
+  "SchemaErrors": {
+    "min1": "Nhập ít nhất một ký tự.",
+    "min2": "Nhập ít nhất hai ký tự.",
+    "max5": "Nhập tối đa năm ký tự.",
+    "max50": "Nhập tối đa 50 ký tự.",
+    "duplicateParticipantName": "Đã có thành viên khác trùng tên này.",
+    "titleRequired": "Vui lòng nhập tên khoản chi.",
+    "invalidNumber": "Số không hợp lệ.",
+    "amountRequired": "Bạn phải nhập số tiền.",
+    "amountNotZero": "Số tiền không được bằng 0.",
+    "amountTenMillion": "Số tiền phải nhỏ hơn 10.000.000.",
+    "ratePositive": "Tỷ giá phải lớn hơn 0.",
+    "paidByRequired": "Bạn phải chọn một thành viên.",
+    "paidForMin1": "Khoản chi phải tính cho ít nhất một thành viên.",
+    "noZeroShares": "Mọi phần chia đều phải lớn hơn 0.",
+    "amountSum": "Tổng các số tiền phải bằng số tiền của khoản chi.",
+    "percentageSum": "Tổng phần trăm phải bằng 100."
+  }
+}

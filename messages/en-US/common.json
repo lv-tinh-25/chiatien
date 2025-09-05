@@ -1,8 +1,8 @@
 {
   "Homepage": {
     "title": "Share <strong>Expenses</strong> with <strong>Friends & Family</strong>",
-    "metaTitle": "Spliit · Share Expenses with Friends & Family",
-    "description": "Welcome to your new <strong>Spliit</strong> instance !",
+    "metaTitle": "ChiaTien · Split expenses with friends and family",
+    "description": "Welcome to your new <strong>ChiaTien</strong> instance !",
     "button": {
       "groups": "Go to groups",
       "github": "GitHub"
@@ -46,7 +46,7 @@
   },
   "Pwa": {
     "updateTitle": "Update available",
-    "updateDescription": "A new version of Spliit is available.",
+    "updateDescription": "A new version of ChiaTien is available.",
     "reload": "Reload"
   }
 }
