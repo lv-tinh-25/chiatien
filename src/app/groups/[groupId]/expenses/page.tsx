@@ -1,3 +1,4 @@
+import { ExpensesPageClient } from '@/app/groups/[groupId]/expenses/page.client'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
@@ -6,5 +7,5 @@ export async function generateMetadata() {
 }
 
 export default function ExpensesPage() {
-  return <div />
+  return <ExpensesPageClient />
 }
