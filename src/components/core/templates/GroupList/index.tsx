@@ -9,12 +9,13 @@ import { GroupSection } from '@/components/core/templates/GroupList/GroupSection
 import { useGroupList } from '@/hooks/groups/useGroupList'
 import type { RecentGroup } from '@/lib/recent-groups'
 import { trpc } from '@/trpc/client'
-import { Plus } from 'lucide-react'
+import { Plus, Settings } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 export function GroupList() {
   const t = useTranslations('Groups')
+  const tNav = useTranslations('Nav')
   const {
     status,
     starred,
@@ -58,12 +59,22 @@ export function GroupList() {
     <div className="flex flex-col gap-6 py-4">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-headline-lg text-foreground">{t('myGroups')}</h1>
-        <Button asChild>
-          <Link href="/groups/create">
-            <Plus aria-hidden />
-            {t('createGroup')}
-          </Link>
-        </Button>
+        <nav
+          aria-label={tNav('mainSections')}
+          className="flex items-center gap-1"
+        >
+          <Button asChild>
+            <Link href="/groups/create">
+              <Plus aria-hidden />
+              {t('createGroup')}
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/settings" aria-label={tNav('settings')}>
+              <Settings aria-hidden />
+            </Link>
+          </Button>
+        </nav>
       </div>
 
       <GlobalBalanceCard balances={balances} />

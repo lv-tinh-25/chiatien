@@ -46,3 +46,25 @@ test('the bottom bar replaces the sidebar on a phone viewport', async ({
   const navs = page.getByRole('navigation', { name: 'Group sections' })
   await expect(navs.first()).toBeVisible()
 })
+
+test('the language switcher is reachable from the group list', async ({
+  page,
+}) => {
+  await page.goto('/groups')
+  await page
+    .getByRole('navigation', { name: 'Main sections' })
+    .getByRole('link', { name: 'Settings', exact: true })
+    .click()
+  await expect(page).toHaveURL(/\/settings$/)
+  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible()
+})
+
+test('the language switcher is reachable from inside a group on a phone', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/groups/seeded/expenses')
+  await page.getByRole('button', { name: 'More' }).click()
+  await page.getByRole('link', { name: 'Settings', exact: true }).click()
+  await expect(page).toHaveURL(/\/settings$/)
+})
