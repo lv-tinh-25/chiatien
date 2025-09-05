@@ -27,6 +27,7 @@ export function Sidebar({
   groupId: string
 }) {
   const t = useTranslations('Nav')
+  const tForm = useTranslations('GroupForm')
 
   return (
     <nav
@@ -68,7 +69,7 @@ export function Sidebar({
             className="flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-lg text-foreground hover:bg-muted"
           >
             <Info className="size-5" aria-hidden />
-            {t('more')}
+            {tForm('InformationField.label')}
           </Link>
         </li>
       </ul>
