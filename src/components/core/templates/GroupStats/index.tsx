@@ -14,6 +14,7 @@ import { StatBar } from '@/components/core/templates/GroupStats/StatBar'
 import { StatsRangeSelector } from '@/components/core/templates/GroupStats/StatsRangeSelector'
 import { useGroupStats } from '@/hooks/stats/useGroupStats'
 import { formatMonth } from '@/lib/format-month'
+import { formatDateOnly } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 export function GroupStats() {
@@ -134,7 +135,13 @@ export function GroupStats() {
                     {t('Summary.activeSpan')}
                   </dt>
                   <dd className="tabular">
-                    {stats.summary.firstDate} – {stats.summary.lastDate}
+                    {formatDateOnly(new Date(stats.summary.firstDate), locale, {
+                      dateStyle: 'medium',
+                    })}{' '}
+                    –{' '}
+                    {formatDateOnly(new Date(stats.summary.lastDate), locale, {
+                      dateStyle: 'medium',
+                    })}
                   </dd>
                 </div>
               )}
