@@ -31,8 +31,10 @@ describe('atom styling', () => {
     .filter((file) => file.endsWith('index.tsx'))
     .map((file) => join(atomsDir, file))
 
-  it('finds every atom', () => {
-    expect(files).toHaveLength(8)
+  it('finds the atoms to check', () => {
+    // Not an exact count: this only proves the glob resolved, so adding an
+    // atom does not fail an unrelated assertion.
+    expect(files.length).toBeGreaterThan(0)
   })
 
   it.each(files)('%s uses no hardcoded colour', (file) => {
