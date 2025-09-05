@@ -1,3 +1,4 @@
+import { ActivityLogPageClient } from '@/app/groups/[groupId]/activity/page.client'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
@@ -5,6 +6,6 @@ export async function generateMetadata() {
   return { title: t('title') }
 }
 
-export default function ActivityPage() {
-  return <div />
+export default function ActivityLogPage() {
+  return <ActivityLogPageClient />
 }

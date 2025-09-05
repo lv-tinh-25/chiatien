@@ -3,7 +3,7 @@
 import { asLocale } from '@/i18n/locales'
 import { defaultCurrencyList } from '@/lib/currency'
 import { groupFormSchema, type GroupFormValues } from '@/lib/schemas'
-import { useActiveUserStore } from '@/stores/useActiveUserStore'
+import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
 import { trpc } from '@/trpc/client'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -38,9 +38,10 @@ export function useGroupForm({
   const utils = trpc.useUtils()
   const visit = useRecentGroupsStore((state) => state.visit)
   const setActiveUser = useActiveUserStore((state) => state.setActiveUser)
-  const activeUser = useActiveUserStore((state) =>
-    group ? (state.activeUsers[group.id] ?? null) : null,
-  )
+  const activeUser = useActiveUserStore((state) => {
+    const stored = group ? state.activeUsers[group.id] : undefined
+    return stored === undefined || stored === NO_ACTIVE_USER ? null : stored
+  })
 
   const isEdit = group !== undefined
 

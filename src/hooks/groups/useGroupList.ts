@@ -1,7 +1,7 @@
 'use client'
 
 import { partitionGroups, type RecentGroups } from '@/lib/recent-groups'
-import { useActiveUserStore } from '@/stores/useActiveUserStore'
+import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
 import { trpc } from '@/trpc/client'
 import { useMemo } from 'react'
@@ -28,7 +28,11 @@ export function useGroupList() {
   const balanceInput = useMemo(
     () =>
       groupIds
-        .filter((groupId) => activeUsers[groupId] !== undefined)
+        .filter(
+          (groupId) =>
+            activeUsers[groupId] !== undefined &&
+            activeUsers[groupId] !== NO_ACTIVE_USER,
+        )
         .map((groupId) => ({ groupId, participantId: activeUsers[groupId] })),
     [groupIds, activeUsers],
   )

@@ -1,6 +1,7 @@
 'use client'
 
 import { GroupForm } from '@/components/core/templates/GroupForm'
+import { GroupHeader } from '@/components/core/templates/GroupHeader'
 import { trpc } from '@/trpc/client'
 
 export function EditGroupPageClient({ groupId }: { groupId: string }) {
@@ -9,9 +10,12 @@ export function EditGroupPageClient({ groupId }: { groupId: string }) {
   if (isPending || !data) return null
 
   return (
-    <GroupForm
-      group={data.group}
-      protectedParticipantIds={data.participantsWithExpenses}
-    />
+    <>
+      <GroupHeader />
+      <GroupForm
+        group={data.group}
+        protectedParticipantIds={data.participantsWithExpenses}
+      />
+    </>
   )
 }

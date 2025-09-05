@@ -152,13 +152,15 @@ export function ExpenseCard({
           />
         )}
         {involved && (
-          <Money
-            amount={balance}
-            currency={currency}
-            locale={locale}
-            tone={balance >= 0 ? 'credit' : 'debit'}
-            className="text-body-sm"
-          />
+          <span className="flex items-baseline gap-1 text-body-sm">
+            <span className="text-muted-foreground">{t('yourBalance')}</span>
+            <Money
+              amount={balance}
+              currency={currency}
+              locale={locale}
+              tone={balance >= 0 ? 'credit' : 'debit'}
+            />
+          </span>
         )}
         <span className="text-body-sm text-muted-foreground">
           {formatDateOnly(expense.expenseDate, locale, { dateStyle: 'medium' })}
