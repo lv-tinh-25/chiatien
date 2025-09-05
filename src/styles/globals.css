@@ -1,1 +1,110 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+:root {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 160 84% 39%;
+
+  --primary: 161 94% 30%;
+  --primary-foreground: 0 0% 100%;
+  --primary-active: 163 94% 24%;
+  --secondary: 199 89% 48%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 38 92% 50%;
+  --accent-foreground: 222 47% 11%;
+
+  /* Money the viewer is owed, and money the viewer owes. `--debit` is kept
+     separate from `--destructive` on purpose: debt is not an error, and the two
+     must be able to diverge without a find-and-replace. */
+  --credit: 161 94% 30%;
+  --credit-subtle: 152 81% 96%;
+  --debit: 0 84% 60%;
+  --debit-subtle: 0 86% 97%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-credit: hsl(var(--credit));
+  --color-credit-subtle: hsl(var(--credit-subtle));
+  --color-debit: hsl(var(--debit));
+  --color-debit-subtle: hsl(var(--debit-subtle));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-control: 0.75rem;
+
+  --spacing-thumb-safe: 5rem;
+  --spacing-touch-min: 3rem;
+
+  --text-display-currency: 2.25rem;
+  --text-display-currency--line-height: 2.75rem;
+  --text-display-currency--letter-spacing: -0.03em;
+  --text-display-currency--font-weight: 700;
+  --text-headline-lg: 1.875rem;
+  --text-headline-lg--line-height: 2.375rem;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 700;
+  --text-headline-md: 1.25rem;
+  --text-headline-md--line-height: 1.75rem;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 600;
+  --text-headline-sm: 1rem;
+  --text-headline-sm--line-height: 1.5rem;
+  --text-headline-sm--font-weight: 600;
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.5rem;
+  --text-body-md: 0.875rem;
+  --text-body-md--line-height: 1.25rem;
+  --text-body-sm: 0.75rem;
+  --text-body-sm--line-height: 1.125rem;
+  --text-numeric-table-lg: 1.125rem;
+  --text-numeric-table-lg--line-height: 1.5rem;
+  --text-numeric-table-lg--letter-spacing: -0.01em;
+  --text-numeric-table-lg--font-weight: 600;
+  --text-numeric-table-md: 0.9375rem;
+  --text-numeric-table-md--line-height: 1.25rem;
+  --text-numeric-table-md--font-weight: 600;
+  --text-label-md: 0.8125rem;
+  --text-label-md--line-height: 1rem;
+  --text-label-md--font-weight: 600;
+  --text-label-sm: 0.6875rem;
+  --text-label-sm--line-height: 0.875rem;
+  --text-label-sm--letter-spacing: 0.02em;
+  --text-label-sm--font-weight: 600;
+}
+
+@layer base {
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
