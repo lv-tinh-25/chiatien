@@ -1,7 +1,10 @@
 'use client'
 
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
+import { groupActivitiesByDate } from '@/lib/activity-groups'
+import { getWeekStartsOn } from '@/lib/date-groups'
 import { trpc } from '@/trpc/client'
+import dayjs from 'dayjs'
 import { useEffect, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 
@@ -30,6 +33,11 @@ export function useActivityLog() {
     [query.data],
   )
 
+  const sections = useMemo(
+    () => groupActivitiesByDate(activities, dayjs(), getWeekStartsOn(locale)),
+    [activities, locale],
+  )
+
   const participantName = useMemo(() => {
     const names = new Map((group?.participants ?? []).map((p) => [p.id, p.name]))
     return (participantId: string | null) =>
@@ -39,7 +47,7 @@ export function useActivityLog() {
   return {
     groupId,
     locale,
-    activities,
+    sections,
     participantName,
     isPending: query.isPending,
     isEmpty: !query.isPending && activities.length === 0,
