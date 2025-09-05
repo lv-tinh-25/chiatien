@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { useCallback, useSyncExternalStore } from 'react'
 import useSWR, { Fetcher } from 'swr'
+import * as z from 'zod'
 
 const emptySubscribe = () => () => {}
 
@@ -31,17 +32,22 @@ export function useBaseUrl(): string | null {
   )
 }
 
-interface FrankfurterAPIResponse {
-  base: string
-  date: string
-  rates: Record<string, number>
-}
+// Parsed rather than asserted: the exchange-rate messages downstream turn on
+// `date` and on which codes `rates` holds, so a response that does not match
+// has to fail here rather than silently produce a wrong conversion.
+const frankfurterResponse = z.object({
+  base: z.string(),
+  date: z.string(),
+  rates: z.record(z.string(), z.number()),
+})
+
+type FrankfurterAPIResponse = z.infer<typeof frankfurterResponse>
 
 const fetcher: Fetcher<FrankfurterAPIResponse> = (url: string) =>
   fetch(url).then(async (res) => {
     if (!res.ok)
       throw new TypeError('Unsuccessful response from API', { cause: res })
-    return res.json() as Promise<FrankfurterAPIResponse>
+    return frankfurterResponse.parse(await res.json())
   })
 
 export function useCurrencyRate(
