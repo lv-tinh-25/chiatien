@@ -1,4 +1,9 @@
-import { defaultLocale, localeLabels, locales } from '@/i18n/locales'
+import {
+  defaultLocale,
+  displayLocale,
+  localeLabels,
+  locales,
+} from '@/i18n/locales'
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -26,8 +31,12 @@ describe('messages', () => {
     expect(localeLabels.vi).toBe('Tiếng Việt')
   })
 
-  it('falls back to English', () => {
+  it('merges every locale on top of English', () => {
     expect(defaultLocale).toBe('en-US')
+  })
+
+  it('shows Vietnamese to a browser that states no preference', () => {
+    expect(displayLocale).toBe('vi')
   })
 
   it('splits every locale into the same namespaces', () => {

@@ -1,6 +1,6 @@
 'use server'
 
-import { Locale, Locales, defaultLocale, locales } from '@/i18n/locales'
+import { Locale, Locales, displayLocale, locales } from '@/i18n/locales'
 import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 import { cookies, headers } from 'next/headers'
@@ -15,9 +15,9 @@ function getAcceptLanguageLocale(requestHeaders: Headers, locales: Locales) {
     },
   }).languages()
   try {
-    locale = match(languages, locales, defaultLocale)
+    locale = match(languages, locales, displayLocale)
   } catch (e) {
-    locale = defaultLocale
+    locale = displayLocale
   }
   return locale
 }
