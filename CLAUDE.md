@@ -58,7 +58,7 @@ npm run dev            # Next.js dev server
 npm test               # Jest unit tests (src/lib)
 npm run check-types    # tsc --noEmit
 npm run lint           # ESLint
-npm run e2e            # Playwright, against a docker compose stack
+npm run e2e            # Playwright; it starts `next start` itself
 npm run storybook      # Component states
 npx prisma migrate dev # Create and apply a migration
 npx prisma studio      # Inspect the database
@@ -66,6 +66,10 @@ npx prisma studio      # Inspect the database
 
 Run heavy TypeScript commands one at a time — this machine has limited free RAM and
 three of them in one shell will crash it.
+
+PostgreSQL is the local Homebrew `postgresql@16` service and the database is
+`chiatien`; start it with `brew services start postgresql@16`. Docker is not used.
+Node is pinned to 24 by `.nvmrc` because Prisma 7 rejects odd-numbered releases.
 
 ## Git workflow
 

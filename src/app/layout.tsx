@@ -1,16 +1,23 @@
 import { jakarta } from '@/lib/fonts'
 import '@/styles/globals.css'
 import { TRPCProvider } from '@/trpc/client'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="vi" className={jakarta.variable}>
+    <html lang={locale} className={jakarta.variable}>
       <body className="font-sans">
-        <TRPCProvider>{children}</TRPCProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <TRPCProvider>{children}</TRPCProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )
