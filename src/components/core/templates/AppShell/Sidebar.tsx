@@ -19,6 +19,9 @@ const ICONS = {
   activity: History,
 }
 
+const LINK =
+  'flex min-h-touch-min items-center gap-3 rounded-control px-3 transition-colors duration-150 ease-out-soft'
+
 export function Sidebar({
   items,
   groupId,
@@ -27,16 +30,21 @@ export function Sidebar({
   groupId: string
 }) {
   const t = useTranslations('Nav')
+  const tApp = useTranslations('App')
   const tForm = useTranslations('GroupForm')
 
   return (
     <nav
       aria-label={t('groupSections')}
-      className="hidden w-60 shrink-0 flex-col border-r border-border bg-card p-3 lg:flex"
+      className="glass-float fixed top-4 bottom-4 left-4 z-30 hidden w-60 flex-col rounded-card p-3 lg:flex"
     >
+      <span className="px-3 pt-2 pb-4 text-headline-md text-primary">
+        {tApp('name')}
+      </span>
+
       <Link
         href="/groups"
-        className="mb-4 inline-flex min-h-touch-min items-center gap-2 rounded-control px-3 text-body-md text-muted-foreground hover:bg-muted"
+        className={cn(LINK, 'mb-3 text-body-md text-muted-foreground hover:text-foreground')}
       >
         <ArrowLeft className="size-4" aria-hidden />
         {t('backToGroups')}
@@ -51,12 +59,19 @@ export function Sidebar({
                 href={item.href}
                 aria-current={item.active ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-lg',
+                  LINK,
+                  'relative text-body-lg',
                   item.active
-                    ? 'bg-primary/10 font-semibold text-primary'
-                    : 'text-foreground hover:bg-muted',
+                    ? 'glass-flush font-semibold text-primary'
+                    : 'text-foreground hover:bg-foreground/5',
                 )}
               >
+                {item.active && (
+                  <span
+                    aria-hidden
+                    className="absolute top-1/2 left-0 h-6 w-1 -translate-y-1/2 rounded-r-full bg-primary"
+                  />
+                )}
                 <Icon className="size-5" aria-hidden />
                 {t(item.key)}
               </Link>
@@ -66,7 +81,7 @@ export function Sidebar({
         <li>
           <Link
             href={`/groups/${groupId}/information`}
-            className="flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-lg text-foreground hover:bg-muted"
+            className={cn(LINK, 'text-body-lg text-foreground hover:bg-foreground/5')}
           >
             <Info className="size-5" aria-hidden />
             {tForm('InformationField.label')}
@@ -76,7 +91,10 @@ export function Sidebar({
 
       <Link
         href="/settings"
-        className="mt-auto flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-md text-muted-foreground hover:bg-muted"
+        className={cn(
+          LINK,
+          'mt-auto text-body-md text-muted-foreground hover:bg-foreground/5 hover:text-foreground',
+        )}
       >
         <Settings className="size-5" aria-hidden />
         {t('settings')}

@@ -63,8 +63,8 @@ export function CreateFromReceipt({
         </Button>
       </DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-foreground/40" />
-        <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-50 w-[min(32rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-card border border-border bg-card p-5 shadow-sheet">
+        <DialogPrimitive.Overlay className="glass-scrim fixed inset-0 z-50" />
+        <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-50 w-[min(32rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 glass-modal rounded-card p-5">
           <DialogPrimitive.Title className="text-headline-md text-foreground">
             {t('Dialog.title')}
           </DialogPrimitive.Title>

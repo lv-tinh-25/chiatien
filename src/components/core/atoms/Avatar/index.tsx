@@ -1,22 +1,6 @@
 import { initialsOf } from '@/components/core/atoms/Avatar/initials'
+import { participantTone } from '@/components/core/atoms/Avatar/tone'
 import { cn } from '@/lib/utils'
-
-const TONES = [
-  'bg-primary/15 text-primary',
-  'bg-secondary/15 text-secondary',
-  'bg-accent/20 text-foreground',
-  'bg-credit/15 text-credit',
-  'bg-muted text-muted-foreground',
-] as const
-
-// A stable colour per name, so the same participant keeps the same swatch
-// across every screen without storing anything.
-function toneFor(name: string): string {
-  let hash = 0
-  for (let i = 0; i < name.length; i++)
-    hash = (hash * 31 + name.charCodeAt(i)) >>> 0
-  return TONES[hash % TONES.length]
-}
 
 type AvatarProps = {
   name: string
@@ -35,9 +19,9 @@ export function Avatar({ name, size = 'md', className }: AvatarProps) {
     <span
       aria-hidden
       className={cn(
-        'inline-flex shrink-0 items-center justify-center rounded-full font-semibold select-none',
+        'inline-flex shrink-0 items-center justify-center rounded-full font-semibold ring-1 ring-current/15 select-none',
         SIZES[size],
-        toneFor(name),
+        participantTone(name).surface,
         className,
       )}
     >

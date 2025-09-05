@@ -56,12 +56,16 @@ export function GroupList() {
     )
 
   return (
-    <div className="flex flex-col gap-6 py-4">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-headline-lg text-foreground">{t('myGroups')}</h1>
+    <div className="flex flex-col gap-7 pb-4">
+      <header className="glass-bar sticky top-0 z-20 -mx-4 mb-1 flex items-center gap-3 px-4 py-3 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        {/* A labelled primary action shares this row, so the title steps down a
+            size on a phone rather than truncating to "Nhóm của…". */}
+        <h1 className="min-w-0 flex-1 truncate text-headline-md text-foreground sm:text-headline-lg">
+          {t('myGroups')}
+        </h1>
         <nav
           aria-label={tNav('mainSections')}
-          className="flex items-center gap-1"
+          className="flex shrink-0 items-center gap-1"
         >
           <Button asChild>
             <Link href="/groups/create">
@@ -75,7 +79,7 @@ export function GroupList() {
             </Link>
           </Button>
         </nav>
-      </div>
+      </header>
 
       <GlobalBalanceCard balances={balances} />
 

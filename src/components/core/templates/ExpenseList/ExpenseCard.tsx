@@ -1,6 +1,6 @@
 'use client'
 
-import { CategoryIcon } from '@/components/core/atoms/CategoryIcon'
+import { CategoryLens } from '@/components/core/atoms/CategoryLens'
 import { Money } from '@/components/core/atoms/Money'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
@@ -55,7 +55,9 @@ function PaidForNames({
       {ordered.map((paidFor, index) => (
         <Fragment key={paidFor.participant.id}>
           {index !== 0 && ', '}
-          <strong>{paidFor.participant.name}</strong>
+          <strong className="font-semibold text-foreground">
+            {paidFor.participant.name}
+          </strong>
         </Fragment>
       ))}
     </>
@@ -106,21 +108,26 @@ export function ExpenseCard({
       data-testid="expense-card"
       data-expense-id={expense.id}
       className={cn(
-        'flex items-start gap-3 rounded-card border border-border bg-card p-3 shadow-card',
+        'glass-flush glass-contain flex items-start gap-3 rounded-card p-3',
+        'transition-[transform,box-shadow,background-color] duration-200 ease-out-soft',
+        'hover:-translate-y-0.5 hover:bg-card hover:shadow-card active:translate-y-0 active:duration-75',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
         expense.isReimbursement && 'italic',
       )}
     >
-      <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-control bg-muted text-muted-foreground">
-        <CategoryIcon category={expense.category} className="size-5" />
-      </span>
+      <CategoryLens category={expense.category} className="mt-0.5" />
 
       <span className="min-w-0 flex-1">
-        <span className="block text-headline-sm text-foreground">
+        <span className="block truncate text-headline-sm text-foreground">
           {expense.title}
         </span>
-        <span className="block text-body-sm text-muted-foreground">
+        <span className="block truncate text-body-sm text-muted-foreground">
           {t.rich(expense.amount > 0 ? 'paidBy' : 'receivedBy', {
-            strong: (chunks) => <strong>{chunks}</strong>,
+            strong: (chunks) => (
+              <strong className="font-semibold text-foreground">
+                {chunks}
+              </strong>
+            ),
             paidBy: expense.paidBy.name,
             paidFor: () => (
               <PaidForNames
@@ -132,6 +139,44 @@ export function ExpenseCard({
             forCount: expense.paidFor.length,
           })}
         </span>
+        {/* Date, attachments and the viewer's own share stay in the flexible
+            column: hanging them off the amount squeezes the title to nothing on
+            a phone. */}
+        <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-body-sm text-muted-foreground">
+          <span className="whitespace-nowrap">
+            {formatDateOnly(expense.expenseDate, locale, {
+              dateStyle: 'medium',
+            })}
+          </span>
+          {expense._count.documents > 0 && (
+            <span className="flex items-center gap-1">
+              <Paperclip className="size-3.5" aria-hidden />
+              {expense._count.documents}
+            </span>
+          )}
+          {activeUserId !== null &&
+            (involved ? (
+              <span
+                className={cn(
+                  'flex items-baseline gap-1 rounded-full px-2 py-0.5 whitespace-nowrap',
+                  balance >= 0
+                    ? 'bg-credit-subtle text-credit'
+                    : 'bg-debit-subtle text-debit',
+                )}
+              >
+                <span className="opacity-70">{t('yourBalance')}</span>
+                <Money
+                  amount={balance}
+                  currency={currency}
+                  locale={locale}
+                  tone={balance >= 0 ? 'credit' : 'debit'}
+                  className="font-semibold"
+                />
+              </span>
+            ) : (
+              <span>{t('notInvolved')}</span>
+            ))}
+        </span>
       </span>
 
       <span className="flex shrink-0 flex-col items-end gap-0.5">
@@ -140,8 +185,8 @@ export function ExpenseCard({
           currency={currency}
           locale={locale}
           className={cn(
-            'text-numeric-table-md',
-            expense.isReimbursement ? 'font-normal italic' : '',
+            'whitespace-nowrap text-numeric-table-lg',
+            expense.isReimbursement && 'font-normal italic',
           )}
         />
         {original && (
@@ -149,34 +194,9 @@ export function ExpenseCard({
             amount={original.amount}
             currency={original.currency}
             locale={locale}
-            className="text-body-sm text-muted-foreground"
+            className="whitespace-nowrap text-body-sm text-muted-foreground"
           />
         )}
-        {activeUserId !== null &&
-          (involved ? (
-            <span className="flex items-baseline gap-1 text-body-sm">
-              <span className="text-muted-foreground">{t('yourBalance')}</span>
-              <Money
-                amount={balance}
-                currency={currency}
-                locale={locale}
-                tone={balance >= 0 ? 'credit' : 'debit'}
-              />
-            </span>
-          ) : (
-            <span className="text-body-sm text-muted-foreground">
-              {t('notInvolved')}
-            </span>
-          ))}
-        <span className="flex items-center gap-2 text-body-sm text-muted-foreground">
-          {expense._count.documents > 0 && (
-            <span className="flex items-center gap-1">
-              <Paperclip className="size-3.5" aria-hidden />
-              {expense._count.documents}
-            </span>
-          )}
-          {formatDateOnly(expense.expenseDate, locale, { dateStyle: 'medium' })}
-        </span>
       </span>
     </Link>
   )

@@ -17,15 +17,15 @@ export function SheetContent({
 }: ComponentPropsWithoutRef<typeof Drawer.Content> & { children: ReactNode }) {
   return (
     <Drawer.Portal>
-      <Drawer.Overlay className="fixed inset-0 z-50 bg-foreground/40" />
+      <Drawer.Overlay className="glass-scrim fixed inset-0 z-50" />
       <Drawer.Content
         className={cn(
-          'fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-[1.5rem] border-t border-border bg-card pb-[env(safe-area-inset-bottom)] shadow-sheet outline-none',
+          'glass-modal fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-sheet border-b-0 pb-[env(safe-area-inset-bottom)] outline-none',
           className,
         )}
         {...props}
       >
-        <div className="mx-auto mt-3 h-1 w-9 shrink-0 rounded-full bg-border" />
+        <div className="mx-auto mt-3 h-1.5 w-10 shrink-0 rounded-full bg-foreground/15" />
         {children}
       </Drawer.Content>
     </Drawer.Portal>

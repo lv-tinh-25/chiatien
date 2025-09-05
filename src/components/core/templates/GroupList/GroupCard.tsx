@@ -27,10 +27,13 @@ export function GroupCard({
   const t = useTranslations('Groups')
 
   return (
-    <Card className="flex items-center gap-1 p-2 pl-4">
+    <Card
+      interactive
+      className="flex items-center gap-0.5 p-2 pl-4 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring"
+    >
       <Link
         href={`/groups/${group.id}/expenses`}
-        className="flex min-h-touch-min flex-1 items-center text-headline-sm text-foreground"
+        className="flex min-h-touch-min min-w-0 flex-1 items-center truncate text-headline-sm text-foreground outline-none"
       >
         {group.name}
       </Link>
@@ -61,7 +64,7 @@ export function GroupCard({
         size="icon"
         aria-label={t('removeRecent')}
         onClick={onForget}
-        className="text-muted-foreground"
+        className="text-muted-foreground hover:text-destructive"
       >
         <Trash2 aria-hidden />
       </Button>

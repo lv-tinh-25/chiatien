@@ -44,7 +44,7 @@ export function SearchBar({
           type="button"
           aria-label={clearLabel}
           onClick={() => update('')}
-          className="absolute top-1/2 right-2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+          className="absolute top-1/2 right-2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:bg-foreground/8"
         >
           <X className="size-4" aria-hidden />
         </button>

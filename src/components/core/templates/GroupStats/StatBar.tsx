@@ -30,10 +30,10 @@ function Body({
           {value}
         </span>
       </span>
-      <span className="mt-1 block h-2 overflow-hidden rounded-full bg-muted">
+      <span className="mt-1.5 block h-2 overflow-hidden rounded-full bg-foreground/8">
         <span
           className={cn(
-            'block h-full',
+            'block h-full rounded-full transition-[width] duration-500 ease-out-soft',
             tone === 'secondary' ? 'bg-secondary' : 'bg-primary',
           )}
           style={{
@@ -64,7 +64,7 @@ export const StatBar = forwardRef<HTMLButtonElement, StatBarProps>(
           ref={ref}
           type="button"
           aria-label={selectLabel}
-          className="w-full rounded-control py-2 text-left hover:bg-muted"
+          className="w-full cursor-pointer rounded-control px-2 py-2 text-left transition-colors duration-150 ease-out-soft hover:bg-foreground/5"
           {...props}
         >
           <Body label={label} value={value} fill={fill} tone={tone} />

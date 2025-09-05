@@ -82,12 +82,12 @@ export function PaidForList({
 
   return (
     <Card>
-      <CardHeader className="flex-row items-start justify-between gap-2">
+      <CardHeader className="gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-1">
           <CardTitle>{t(`${scope}.paidFor.title`)}</CardTitle>
           <CardDescription>{t(`${scope}.paidFor.description`)}</CardDescription>
         </div>
-        <div className="flex shrink-0 gap-1">
+        <div className="-mx-2 flex shrink-0 gap-1 sm:mx-0">
           <Button
             type="button"
             variant="ghost"

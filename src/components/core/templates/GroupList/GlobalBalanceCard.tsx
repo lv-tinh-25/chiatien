@@ -47,23 +47,32 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
   if (totals.length === 0) return null
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+    <Card tier="float" className="overflow-hidden p-6">
+      {/* The heading has to stay a real heading inside a header element: the
+          ported `cardByTitle` helper finds a card by walking up two levels from
+          its heading. */}
+      <CardHeader className="p-0">
+        <CardTitle className="text-label-md font-semibold text-muted-foreground">
+          {t('title')}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+
+      <CardContent className="mt-5 flex flex-col gap-5 p-0">
         {totals.map(([key, { owed, owing, currency }]) => {
           const money = getCurrencyFromGroup(currency)
           if (owed === 0 && owing === 0) {
             return (
-              <p key={key} className="text-body-md text-muted-foreground">
+              <p key={key} className="text-body-lg text-muted-foreground">
                 {t('settledUp')}
               </p>
             )
           }
           return (
-            <div key={key} className="flex items-center justify-between gap-4">
-              <div className="flex flex-col">
+            <div
+              key={key}
+              className="grid grid-cols-2 gap-4 divide-x divide-border"
+            >
+              <div className="flex flex-col gap-1">
                 <span className="text-label-md text-muted-foreground">
                   {t('owedToYou')}
                 </span>
@@ -72,10 +81,10 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
                   currency={money}
                   locale={locale}
                   tone="credit"
-                  className="text-numeric-table-lg"
+                  className="text-headline-lg sm:text-display-currency"
                 />
               </div>
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col gap-1 pl-4">
                 <span className="text-label-md text-muted-foreground">
                   {t('youOwe')}
                 </span>
@@ -84,7 +93,7 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
                   currency={money}
                   locale={locale}
                   tone="debit"
-                  className="text-numeric-table-lg"
+                  className="text-headline-lg sm:text-display-currency"
                 />
               </div>
             </div>

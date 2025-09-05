@@ -4,6 +4,7 @@ import { Button } from '@/components/core/atoms/Button'
 import { Card, CardContent } from '@/components/core/atoms/Card'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { QrScanner } from '@/components/core/templates/GroupList/QrScanner'
+import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -43,19 +44,28 @@ export function AddGroupByUrl({
   return (
     <Card>
       <CardContent className="flex flex-col gap-3 p-4">
-        <div role="tablist" className="flex gap-1">
+        <div
+          role="tablist"
+          className="glass-flush inline-flex self-start rounded-full p-1"
+        >
           {(['url', 'qr'] as const).map((candidate) => (
             <Button
               key={candidate}
               type="button"
               role="tab"
               aria-selected={mode === candidate}
-              variant={mode === candidate ? 'secondary' : 'ghost'}
+              variant="ghost"
               size="sm"
               onClick={() => {
                 setMode(candidate)
                 setFailed(false)
               }}
+              className={cn(
+                'rounded-full',
+                mode === candidate
+                  ? 'bg-card text-primary shadow-card'
+                  : 'text-muted-foreground hover:bg-transparent hover:text-foreground',
+              )}
             >
               {t(candidate === 'url' ? 'urlMode' : 'qrMode')}
             </Button>

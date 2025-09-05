@@ -47,7 +47,7 @@ export function GroupStats() {
   const categoryMax = widest(stats.categories.map((row) => row.total))
 
   return (
-    <div className="flex flex-col gap-4 py-4">
+    <div className="flex flex-col gap-5">
       <StatsRangeSelector
         period={period}
         customRange={customRange}
@@ -67,209 +67,221 @@ export function GroupStats() {
         locale={locale}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('Summary.title')}</CardTitle>
-          <CardDescription>{t('Summary.description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {stats.summary.expenseCount === 0 ? (
-            <p className="text-body-md text-muted-foreground">
-              {t('Summary.empty')}
-            </p>
-          ) : (
-            <dl className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <dt className="text-label-md text-muted-foreground">
-                  {t('Summary.expenseCount')}
-                </dt>
-                <dd className="text-numeric-table-md tabular">
-                  {stats.summary.expenseCount}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-label-md text-muted-foreground">
-                  {t('Summary.averageExpense')}
-                </dt>
-                <dd>{money(stats.summary.averageExpense)}</dd>
-              </div>
-              {stats.summary.largestExpense && (
+      {/* Five independent readings of the same range. Past 1280px they sit
+          side by side, so comparing them costs no scrolling. */}
+      <div className="grid gap-5 xl:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('Summary.title')}</CardTitle>
+            <CardDescription>{t('Summary.description')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {stats.summary.expenseCount === 0 ? (
+              <p className="text-body-md text-muted-foreground">
+                {t('Summary.empty')}
+              </p>
+            ) : (
+              <dl className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <dt className="text-label-md text-muted-foreground">
-                    {t('Summary.largestExpense')}
+                    {t('Summary.expenseCount')}
                   </dt>
-                  <dd>
-                    {stats.summary.largestExpense.title} ·{' '}
-                    {money(stats.summary.largestExpense.amount)}
+                  <dd className="text-numeric-table-md tabular">
+                    {stats.summary.expenseCount}
                   </dd>
                 </div>
-              )}
-              {stats.summary.firstDate && stats.summary.lastDate && (
                 <div>
                   <dt className="text-label-md text-muted-foreground">
-                    {t('Summary.activeSpan')}
+                    {t('Summary.averageExpense')}
                   </dt>
-                  <dd className="tabular">
-                    {formatDateOnly(new Date(stats.summary.firstDate), locale, {
-                      dateStyle: 'medium',
-                    })}{' '}
-                    –{' '}
-                    {formatDateOnly(new Date(stats.summary.lastDate), locale, {
-                      dateStyle: 'medium',
-                    })}
-                  </dd>
+                  <dd>{money(stats.summary.averageExpense)}</dd>
                 </div>
-              )}
-            </dl>
-          )}
-        </CardContent>
-      </Card>
+                {stats.summary.largestExpense && (
+                  <div>
+                    <dt className="text-label-md text-muted-foreground">
+                      {t('Summary.largestExpense')}
+                    </dt>
+                    <dd>
+                      {stats.summary.largestExpense.title} ·{' '}
+                      {money(stats.summary.largestExpense.amount)}
+                    </dd>
+                  </div>
+                )}
+                {stats.summary.firstDate && stats.summary.lastDate && (
+                  <div>
+                    <dt className="text-label-md text-muted-foreground">
+                      {t('Summary.activeSpan')}
+                    </dt>
+                    <dd className="tabular">
+                      {formatDateOnly(
+                        new Date(stats.summary.firstDate),
+                        locale,
+                        {
+                          dateStyle: 'medium',
+                        },
+                      )}{' '}
+                      –{' '}
+                      {formatDateOnly(
+                        new Date(stats.summary.lastDate),
+                        locale,
+                        {
+                          dateStyle: 'medium',
+                        },
+                      )}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            )}
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('OverTime.title')}</CardTitle>
-          <CardDescription>{t('OverTime.description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {stats.months.length === 0 ? (
-            <p className="text-body-md text-muted-foreground">
-              {t('OverTime.empty')}
-            </p>
-          ) : (
-            <ul>
-              {stats.months.map((month) => (
-                <MonthDrilldown
-                  key={month.month}
-                  groupId={groupId}
-                  month={month.month}
-                  monthLabel={formatMonth(month.month, locale)}
-                  range={range}
-                  currency={currency}
-                  locale={locale}
-                  trigger={
-                    <StatBar
-                      label={formatMonth(month.month, locale)}
-                      value={money(month.total)}
-                      fill={monthMax === 0 ? 0 : month.total / monthMax}
-                      selectLabel={t('OverTime.showExpenses', {
-                        month: formatMonth(month.month, locale),
-                      })}
-                      asButton
-                    />
-                  }
-                />
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('ByParticipant.title')}</CardTitle>
-          <CardDescription>{t('ByParticipant.description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {stats.participants.length === 0 ? (
-            <p className="text-body-md text-muted-foreground">
-              {t('ByParticipant.empty')}
-            </p>
-          ) : (
-            <ParticipantTable
-              participants={stats.participants}
-              currency={currency}
-              locale={locale}
-            />
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('ByCategory.title')}</CardTitle>
-          <CardDescription>{t('ByCategory.description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {stats.categories.length === 0 ? (
-            <p className="text-body-md text-muted-foreground">
-              {t('ByCategory.empty')}
-            </p>
-          ) : (
-            <ul>
-              {stats.categories.map((row) => {
-                const label = tCategories(`${row.grouping}.${row.name}`)
-                return (
-                  <CategoryDrilldown
-                    key={row.categoryId}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('OverTime.title')}</CardTitle>
+            <CardDescription>{t('OverTime.description')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {stats.months.length === 0 ? (
+              <p className="text-body-md text-muted-foreground">
+                {t('OverTime.empty')}
+              </p>
+            ) : (
+              <ul>
+                {stats.months.map((month) => (
+                  <MonthDrilldown
+                    key={month.month}
                     groupId={groupId}
-                    categoryId={row.categoryId}
-                    categoryLabel={label}
+                    month={month.month}
+                    monthLabel={formatMonth(month.month, locale)}
                     range={range}
                     currency={currency}
                     locale={locale}
                     trigger={
                       <StatBar
-                        label={label}
-                        value={money(row.total)}
-                        fill={categoryMax === 0 ? 0 : row.total / categoryMax}
-                        selectLabel={t('ByCategory.showExpenses', {
-                          category: label,
+                        label={formatMonth(month.month, locale)}
+                        value={money(month.total)}
+                        fill={monthMax === 0 ? 0 : month.total / monthMax}
+                        selectLabel={t('OverTime.showExpenses', {
+                          month: formatMonth(month.month, locale),
                         })}
                         asButton
                       />
                     }
                   />
-                )
-              })}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-
-      {stats.recurring.count > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('Recurring.title')}</CardTitle>
-            <CardDescription>{t('Recurring.description')}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <div>
-              <span className="text-label-md text-muted-foreground">
-                {t('Recurring.estimatedMonthly')}
-              </span>
-              <div className="text-numeric-table-lg">
-                {money(stats.recurring.estimatedMonthly)}
-              </div>
-              <div className="text-body-sm text-muted-foreground">
-                {t('Recurring.estimatedYearly', {
-                  amount: formatCurrency(
-                    currency,
-                    stats.recurring.estimatedYearly,
-                    locale,
-                  ),
-                })}
-              </div>
-            </div>
-            <ul className="flex flex-col gap-1">
-              {stats.recurring.byPeriod
-                .filter((entry) => entry.count > 0)
-                .map((entry) => (
-                  <li
-                    key={entry.period}
-                    className="flex items-baseline justify-between gap-2 text-body-md text-muted-foreground"
-                  >
-                    <span>
-                      {t(`Recurring.period.${entry.period}`, {
-                        count: entry.count,
-                      })}
-                    </span>
-                    {money(entry.total)}
-                  </li>
                 ))}
-            </ul>
+              </ul>
+            )}
           </CardContent>
         </Card>
-      )}
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('ByParticipant.title')}</CardTitle>
+            <CardDescription>{t('ByParticipant.description')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {stats.participants.length === 0 ? (
+              <p className="text-body-md text-muted-foreground">
+                {t('ByParticipant.empty')}
+              </p>
+            ) : (
+              <ParticipantTable
+                participants={stats.participants}
+                currency={currency}
+                locale={locale}
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('ByCategory.title')}</CardTitle>
+            <CardDescription>{t('ByCategory.description')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {stats.categories.length === 0 ? (
+              <p className="text-body-md text-muted-foreground">
+                {t('ByCategory.empty')}
+              </p>
+            ) : (
+              <ul>
+                {stats.categories.map((row) => {
+                  const label = tCategories(`${row.grouping}.${row.name}`)
+                  return (
+                    <CategoryDrilldown
+                      key={row.categoryId}
+                      groupId={groupId}
+                      categoryId={row.categoryId}
+                      categoryLabel={label}
+                      range={range}
+                      currency={currency}
+                      locale={locale}
+                      trigger={
+                        <StatBar
+                          label={label}
+                          value={money(row.total)}
+                          fill={categoryMax === 0 ? 0 : row.total / categoryMax}
+                          selectLabel={t('ByCategory.showExpenses', {
+                            category: label,
+                          })}
+                          asButton
+                        />
+                      }
+                    />
+                  )
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+
+        {stats.recurring.count > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('Recurring.title')}</CardTitle>
+              <CardDescription>{t('Recurring.description')}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              <div>
+                <span className="text-label-md text-muted-foreground">
+                  {t('Recurring.estimatedMonthly')}
+                </span>
+                <div className="text-numeric-table-lg">
+                  {money(stats.recurring.estimatedMonthly)}
+                </div>
+                <div className="text-body-sm text-muted-foreground">
+                  {t('Recurring.estimatedYearly', {
+                    amount: formatCurrency(
+                      currency,
+                      stats.recurring.estimatedYearly,
+                      locale,
+                    ),
+                  })}
+                </div>
+              </div>
+              <ul className="flex flex-col gap-1">
+                {stats.recurring.byPeriod
+                  .filter((entry) => entry.count > 0)
+                  .map((entry) => (
+                    <li
+                      key={entry.period}
+                      className="flex items-baseline justify-between gap-2 text-body-md text-muted-foreground"
+                    >
+                      <span>
+                        {t(`Recurring.period.${entry.period}`, {
+                          count: entry.count,
+                        })}
+                      </span>
+                      {money(entry.total)}
+                    </li>
+                  ))}
+              </ul>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   )
 }
