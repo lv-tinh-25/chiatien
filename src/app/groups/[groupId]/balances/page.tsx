@@ -1,3 +1,4 @@
+import { BalancesPageClient } from '@/app/groups/[groupId]/balances/page.client'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
@@ -6,5 +7,5 @@ export async function generateMetadata() {
 }
 
 export default function BalancesPage() {
-  return <div />
+  return <BalancesPageClient />
 }

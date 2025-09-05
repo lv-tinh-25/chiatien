@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
+import { ConfirmDialog } from '@/components/core/molecules/ConfirmDialog'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { useState } from 'react'
 
 type Props = {
   isCreate: boolean
@@ -19,7 +19,6 @@ export function ExpenseFormFooter({
   onDelete,
 }: Props) {
   const t = useTranslations('ExpenseForm')
-  const [confirming, setConfirming] = useState(false)
 
   const label = isCreate
     ? isSubmitting
@@ -39,39 +38,20 @@ export function ExpenseFormFooter({
       </Button>
 
       {!isCreate && (
-        <div className="ml-auto flex items-center gap-2">
-          {confirming ? (
-            <>
-              <span className="text-body-sm text-muted-foreground">
-                {t('DeletePopup.title')}
-              </span>
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={onDelete}
-              >
-                {t('DeletePopup.yes')}
+        <div className="ml-auto">
+          <ConfirmDialog
+            trigger={
+              <Button type="button" variant="ghost" className="text-destructive">
+                {t('DeletePopup.label')}
               </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => setConfirming(false)}
-              >
-                {t('DeletePopup.cancel')}
-              </Button>
-            </>
-          ) : (
-            <Button
-              type="button"
-              variant="ghost"
-              className="text-destructive"
-              onClick={() => setConfirming(true)}
-            >
-              {t('DeletePopup.label')}
-            </Button>
-          )}
+            }
+            title={t('DeletePopup.title')}
+            description={t('DeletePopup.description')}
+            confirmLabel={t('DeletePopup.yes')}
+            cancelLabel={t('DeletePopup.cancel')}
+            destructive
+            onConfirm={onDelete}
+          />
         </div>
       )}
     </div>
