@@ -92,3 +92,41 @@ test('caches static assets but never API responses', async ({ page }) => {
   expect(paths.some((path) => path.startsWith('/_next/static/'))).toBe(true)
   expect(paths.filter((path) => path.startsWith('/api/'))).toEqual([])
 })
+
+test('titles every page with the app name', async ({ page }) => {
+  await page.goto('/groups')
+  await expect(page).toHaveTitle('My groups · ChiaTien')
+
+  await page.goto('/settings')
+  await expect(page).toHaveTitle('Settings · ChiaTien')
+})
+
+test('describes the app in the web manifest', async ({ page }) => {
+  const response = await page.request.get('/manifest.webmanifest')
+  expect(response.ok()).toBe(true)
+  const manifest: unknown = await response.json()
+  expect(manifest).toMatchObject({
+    name: 'ChiaTien',
+    start_url: '/groups',
+    display: 'standalone',
+  })
+})
+
+test('serves the offline page in the browser language', async ({ browser }) => {
+  const context = await browser.newContext({
+    locale: 'vi-VN',
+    baseURL: 'http://localhost:3000',
+  })
+  const page = await context.newPage()
+  try {
+    await page.goto('/offline.html')
+    await expect(
+      page.getByRole('heading', { name: 'Bạn đang ngoại tuyến' }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: "You're offline" }),
+    ).toBeHidden()
+  } finally {
+    await context.close()
+  }
+})

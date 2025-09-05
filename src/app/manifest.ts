@@ -1,11 +1,13 @@
 import { MetadataRoute } from 'next'
+import { getTranslations } from 'next-intl/server'
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const t = await getTranslations('App')
+
   return {
-    name: 'ChiaTien',
-    short_name: 'ChiaTien',
-    description:
-      'Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản.',
+    name: t('name'),
+    short_name: t('name'),
+    description: t('description'),
     start_url: '/groups',
     id: '/groups',
     display: 'standalone',

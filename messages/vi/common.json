@@ -1,19 +1,7 @@
 {
-  "Homepage": {
-    "description": "Chào mừng bạn đến với phiên bản <strong>ChiaTien</strong> mới của bạn!",
-    "title": "Chia sẻ <strong>Chi tiêu</strong> với <strong>Bạn bè & Gia đình</strong>",
-    "button": {
-      "groups": "Xem các nhóm",
-      "github": "GitHub"
-    },
-    "metaTitle": "ChiaTien · Chia tiền với bạn bè và gia đình"
-  },
-  "Header": {
-    "groups": "Nhóm"
-  },
-  "Footer": {
-    "madeIn": "Made in Montréal, Québec 🇨🇦",
-    "builtBy": "Xây dựng bởi <author>Sebastien Castiel</author> và <source>các cộng sự</source>"
+  "App": {
+    "name": "ChiaTien",
+    "description": "Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản."
   },
   "Settings": {
     "title": "Cài đặt"
