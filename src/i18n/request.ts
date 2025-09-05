@@ -1,4 +1,9 @@
-import { defaultLocale, isLocale, type Locale } from '@/i18n/locales'
+import {
+  defaultLocale,
+  displayLocale,
+  isLocale,
+  type Locale,
+} from '@/i18n/locales'
 import { getUserLocale } from '@/lib/locale'
 import deepmerge from 'deepmerge'
 import { getRequestConfig } from 'next-intl/server'
@@ -24,7 +29,7 @@ async function load(locale: Locale) {
 
 export default getRequestConfig(async () => {
   const requested = await getUserLocale()
-  const locale = isLocale(requested) ? requested : defaultLocale
+  const locale = isLocale(requested) ? requested : displayLocale
 
   // English is merged underneath every other locale so a key that has not been
   // translated yet renders in English instead of throwing. The messages test is
