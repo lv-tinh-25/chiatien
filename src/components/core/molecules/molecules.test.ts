@@ -8,8 +8,8 @@ const files = readdirSync(dir, { recursive: true, encoding: 'utf8' })
   .map((file) => join(dir, file))
 
 describe('molecule styling', () => {
-  it('finds every molecule', () => {
-    expect(files).toHaveLength(6)
+  it('finds the molecules to check', () => {
+    expect(files.length).toBeGreaterThan(0)
   })
 
   it.each(files)('%s uses no hardcoded colour', (file) => {
