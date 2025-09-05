@@ -3,6 +3,7 @@
 import { Button } from '@/components/core/atoms/Button'
 import { Card, CardContent } from '@/components/core/atoms/Card'
 import { FormInput } from '@/components/core/molecules/FormInput'
+import { QrScanner } from '@/components/core/templates/GroupList/QrScanner'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -26,9 +27,10 @@ export function AddGroupByUrl({
   const t = useTranslations('Groups.AddByURL')
   const [value, setValue] = useState('')
   const [failed, setFailed] = useState(false)
+  const [mode, setMode] = useState<'url' | 'qr'>('url')
 
-  const submit = async () => {
-    const groupId = groupIdFromUrl(value)
+  const add = async (candidate: string) => {
+    const groupId = groupIdFromUrl(candidate)
     if (groupId === null) {
       setFailed(true)
       return
@@ -40,12 +42,32 @@ export function AddGroupByUrl({
 
   return (
     <Card>
-      <CardContent className="p-4">
+      <CardContent className="flex flex-col gap-3 p-4">
+        <div role="tablist" className="flex gap-1">
+          {(['url', 'qr'] as const).map((candidate) => (
+            <Button
+              key={candidate}
+              type="button"
+              role="tab"
+              aria-selected={mode === candidate}
+              variant={mode === candidate ? 'secondary' : 'ghost'}
+              size="sm"
+              onClick={() => {
+                setMode(candidate)
+                setFailed(false)
+              }}
+            >
+              {t(candidate === 'url' ? 'urlMode' : 'qrMode')}
+            </Button>
+          ))}
+        </div>
+
         <form
+          hidden={mode !== 'url'}
           className="flex flex-col gap-3 sm:flex-row sm:items-end"
           onSubmit={(event) => {
             event.preventDefault()
-            void submit()
+            void add(value)
           }}
         >
           <FormInput
@@ -64,8 +86,11 @@ export function AddGroupByUrl({
             {t('button')}
           </Button>
         </form>
+
+        {mode === 'qr' && <QrScanner onScan={(text) => void add(text)} />}
+
         {failed && (
-          <p role="alert" className="mt-2 text-body-sm text-destructive">
+          <p role="alert" className="text-body-sm text-destructive">
             {t('error')}
           </p>
         )}

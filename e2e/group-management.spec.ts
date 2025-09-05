@@ -180,3 +180,22 @@ test('accepts a custom currency symbol when no code fits', async ({ page }) => {
   })
   await expect(page.getByTestId('expense-card').first()).toContainText('sats')
 })
+
+test('shares a group as a link and as a QR code', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Share ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await page.goto(`/groups/${groupId}/expenses`)
+  await page.getByRole('button', { name: 'Share', exact: true }).click()
+
+  const sheet = page.getByRole('dialog')
+  await expect(sheet).toContainText('Share via QR Code')
+  await expect(sheet).toContainText(`/groups/${groupId}/expenses`)
+  await expect(sheet.locator('canvas')).toBeVisible()
+
+  const download = page.waitForEvent('download')
+  await sheet.getByRole('button', { name: 'Download QR Code' }).click()
+  expect((await download).suggestedFilename()).toBe(`chiatien-${groupId}.png`)
+})
