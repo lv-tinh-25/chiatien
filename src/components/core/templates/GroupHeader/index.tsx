@@ -9,7 +9,13 @@ import {
 } from '@/components/core/atoms/Sheet'
 import { ShareSheet } from '@/components/core/templates/GroupHeader/ShareSheet'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
-import { Download, Info, MoreHorizontal, Settings2 } from 'lucide-react'
+import {
+  Download,
+  Info,
+  MoreHorizontal,
+  Settings,
+  Settings2,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
@@ -62,6 +68,12 @@ export function GroupHeader() {
                   <Download aria-hidden />
                   {t('exportJson')}
                 </a>
+              </Button>
+              <Button variant="ghost" className="justify-start" asChild>
+                <Link href="/settings">
+                  <Settings aria-hidden />
+                  {tNav('settings')}
+                </Link>
               </Button>
             </nav>
           </SheetContent>
