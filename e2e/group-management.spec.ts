@@ -7,7 +7,7 @@ import {
   uniqueSuffix,
 } from './app'
 import { expect, test } from './fixtures'
-import { fillStable } from './ui'
+import { fieldByLabel, fillStable } from './ui'
 
 test('renames a group and adds a participant afterwards', async ({ page }) => {
   const original = `E2E Settings ${uniqueSuffix()}`
@@ -140,4 +140,43 @@ test('exports the expenses as CSV', async ({ page }) => {
   )
   expect(response.status()).toBe(200)
   expect(await response.text()).toContain('Parking')
+})
+
+test('searches the currency list and reports a miss', async ({ page }) => {
+  await page.goto('/groups/create')
+  const currency = fieldByLabel(page, 'Main currency')
+  await currency.getByRole('combobox').click()
+
+  await page.getByPlaceholder('Search currency...').fill('dong')
+  await expect(
+    page.getByRole('option', { name: /Vietnamese Dong \(VND\)/ }),
+  ).toBeVisible()
+  await expect(page.getByRole('option', { name: /Euro/ })).toBeHidden()
+
+  await page.getByPlaceholder('Search currency...').fill('qqqq')
+  await expect(page.getByText('No currencies found.')).toBeVisible()
+})
+
+test('accepts a custom currency symbol when no code fits', async ({ page }) => {
+  const name = `E2E Custom ${uniqueSuffix()}`
+  await page.goto('/groups/create')
+
+  await fillStable(page.locator('input[name="name"]'), name)
+
+  const currency = fieldByLabel(page, 'Main currency')
+  await currency.getByRole('combobox').click()
+  await page.getByRole('option', { name: 'Custom', exact: true }).click()
+
+  // The symbol is derived from the code, so it is editable only for a custom
+  // currency -- and required, because nothing else can render an amount.
+  await fillStable(page.locator('input[name="currency"]'), 'sats')
+  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.waitForURL(/\/groups\/[^/]+\/expenses$/, { timeout: 30_000 })
+
+  await addExpense(page, page.url().split('/')[4], {
+    title: 'Node fee',
+    amount: '12',
+    paidBy: 'John',
+  })
+  await expect(page.getByTestId('expense-card').first()).toContainText('sats')
 })

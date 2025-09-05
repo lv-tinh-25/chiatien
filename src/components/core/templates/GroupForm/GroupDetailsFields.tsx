@@ -61,18 +61,22 @@ export function GroupDetailsFields({
               aria-describedby={describedBy}
               locale={locale}
               value={currencyCode ?? ''}
+              customLabel={t('CurrencyCodeField.customOption')}
               onValueChange={onCurrencyCodeChange}
             />
           )}
         </FormField>
 
-        <FormInput
-          label={t('CurrencyField.label')}
-          placeholder={t('CurrencyField.placeholder')}
-          description={t('CurrencyField.description')}
-          errorKey={errors.currency?.message}
-          {...form.register('currency')}
-        />
+        {(currencyCode ?? '') === '' && (
+          <FormInput
+            label={t('CurrencyField.label')}
+            placeholder={t('CurrencyField.placeholder')}
+            description={t('CurrencyField.description')}
+            maxLength={5}
+            errorKey={errors.currency?.message}
+            {...form.register('currency')}
+          />
+        )}
 
         {isEdit && (
           <FormTextarea
