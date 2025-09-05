@@ -1,0 +1,124 @@
+{
+  "Expenses": {
+    "title": "Chi tiêu",
+    "description": "Đây là các khoản chi tiêu bạn đã tạo cho nhóm của mình.",
+    "create": "Tạo chi tiêu",
+    "createFirst": "Tạo chi tiêu đầu tiên",
+    "noExpenses": "Nhóm của bạn chưa có chi tiêu nào.",
+    "export": "Xuất",
+    "exportJson": "Xuất JSON",
+    "exportCsv": "Xuất CSV",
+    "searchPlaceholder": "Tìm kiếm chi tiêu…",
+    "ActiveUserModal": {
+      "title": "Bạn là ai?",
+      "description": "Hãy cho chúng tôi biết bạn là thành viên nào để chúng tôi có thể tùy chỉnh cách hiển thị thông tin.",
+      "nobody": "Tôi không muốn chọn ai",
+      "save": "Lưu thay đổi",
+      "footer": "Cài đặt này có thể thay đổi sau trong cài đặt nhóm."
+    },
+    "Groups": {
+      "upcoming": "Tiếp theo",
+      "thisWeek": "Tuần này",
+      "earlierThisMonth": "Trong tháng này",
+      "lastMonth": "Tháng trước",
+      "earlierThisYear": "Trong năm nay",
+      "lastYear": "Năm trước",
+      "older": "Cũ hơn"
+    }
+  },
+  "ExpenseCard": {
+    "paidBy": "<strong>{paidBy}</strong> chi cho <paidFor></paidFor>",
+    "everyone": "mọi người",
+    "receivedBy": "Nhận bởi <strong>{paidBy}</strong> cho <paidFor></paidFor>",
+    "yourBalance": "Số dư của bạn:",
+    "notInvolved": "Bạn chưa tham gia"
+  },
+  "ExpenseForm": {
+    "Income": {
+      "create": "Tạo khoản thu",
+      "edit": "Sửa khoản thu",
+      "TitleField": {
+        "label": "Tên khoản thu",
+        "placeholder": "Nhà hàng tối thứ Hai",
+        "description": "Nhập mô tả cho khoản thu."
+      },
+      "DateField": {
+        "label": "Ngày",
+        "description": "Nhập ngày nhận được khoản thu."
+      },
+      "currencyField": {
+        "label": "Đơn vị tiền tệ",
+        "description": "Đơn vị tiền tệ mà khoản thu được nhận."
+      },
+      "categoryFieldDescription": "Chọn hạng mục cho khoản thu.",
+      "paidByField": {
+        "label": "Nhận bởi",
+        "description": "Chọn thành viên đã nhận khoản thu."
+      },
+      "paidFor": {
+        "title": "Nhận cho",
+        "description": "Chọn thành viên được nhận khoản thu."
+      },
+      "splitModeDescription": "Chọn cách chia khoản thu.",
+      "attachDescription": "Xem và đính kèm biên lai vào khoản thu."
+    },
+    "Expense": {
+      "create": "Tạo khoản chi",
+      "edit": "Sửa khoản chi",
+      "TitleField": {
+        "label": "Tên khoản chi",
+        "placeholder": "Nhà hàng tối thứ Hai",
+        "description": "Điền mô tả cho khoản chi."
+      },
+      "DateField": {
+        "label": "Ngày chi",
+        "description": "Điền ngày chi tiêu."
+      },
+      "currencyField": {
+        "label": "Đơn vị tiền tệ",
+        "description": "Đơn vị tiền tệ khoản chi đã thanh toán."
+      },
+      "categoryFieldDescription": "Chọn hạng mục cho khoản chi.",
+      "paidByField": {
+        "label": "Thanh toán bởi",
+        "placeholder": "Chọn thành viên",
+        "description": "Chọn thành viên đã thanh toán khoản chi."
+      },
+      "recurrenceRule": {
+        "label": "Chi tiêu định kỳ",
+        "description": "Chọn tần suất lặp lại của khoản chi.",
+        "none": "Không có",
+        "daily": "Hàng ngày",
+        "weekly": "Hàng tuần",
+        "monthly": "Hàng tháng"
+      },
+      "paidFor": {
+        "title": "Chi cho",
+        "description": "Chọn thành viên nhận khoản chi."
+      },
+      "splitModeDescription": "Chọn cách chia khoản chi.",
+      "attachDescription": "Xem và đính kèm biên lai vào khoản chi."
+    },
+    "amountField": {
+      "label": "Số tiền"
+    },
+    "conversionUnavailable": "Để thiết lập đơn vị tiền tệ khác nhau cho từng khoản chi và quy đổi đơn vị tiền tệ, hãy chọn một đơn vị tiền tệ không tùy chỉnh cho nhóm.",
+    "originalAmountField": {
+      "label": "Số tiền quy đổi"
+    },
+    "conversionRateField": {
+      "useApi": "Sử dụng tỷ giá từ Frankfurter",
+      "useCustom": "Sử dụng tỷ giá tùy chỉnh",
+      "label": "Tỷ giá"
+    },
+    "conversionRateState": {
+      "loading": "Đang tìm tỷ giá hối đoái…",
+      "success": "Tỷ giá đã tìm được:",
+      "error": "Rất tiếc, chúng tôi không thể lấy được tỷ giá mới nhất.",
+      "staleRate": "Sử dụng tỷ giá:",
+      "noRate": "Nhập tỷ giá tùy chỉnh bên dưới.",
+      "currencyNotFound": "Rất tiếc, Frankfurter hiện không có tỷ giá hối đoái cho loại tiền tệ này.",
+      "noDate": "Nhập ngày phát sinh chi tiêu để lấy tỷ giá quy đổi."
+    }
+  }
+}
