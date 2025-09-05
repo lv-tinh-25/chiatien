@@ -18,6 +18,9 @@
   "Settings": {
     "title": "Cài đặt"
   },
+  "Toast": {
+    "dismiss": "Bỏ qua"
+  },
   "Share": {
     "title": "Chia sẻ",
     "description": "Gửi đường dẫn này cho người khác để họ xem nhóm và thêm khoản chi.",

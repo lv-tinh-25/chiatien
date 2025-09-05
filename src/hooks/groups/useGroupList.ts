@@ -1,12 +1,19 @@
 'use client'
 
-import { partitionGroups, type RecentGroups } from '@/lib/recent-groups'
+import {
+  partitionGroups,
+  type RecentGroup,
+  type RecentGroups,
+} from '@/lib/recent-groups'
 import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
+import { useToastStore } from '@/stores/useToastStore'
 import { trpc } from '@/trpc/client'
+import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 
 export function useGroupList() {
+  const t = useTranslations('Groups.RecentRemovedToast')
   const hydrated = useRecentGroupsStore((state) => state.hydrated)
   const groups = useRecentGroupsStore((state) => state.groups)
   const starredIds = useRecentGroupsStore((state) => state.starredIds)
@@ -16,6 +23,7 @@ export function useGroupList() {
   const forget = useRecentGroupsStore((state) => state.forget)
   const visit = useRecentGroupsStore((state) => state.visit)
   const activeUsers = useActiveUserStore((state) => state.activeUsers)
+  const showToast = useToastStore((state) => state.show)
 
   const groupIds = useMemo(() => groups.map((group) => group.id), [groups])
 
@@ -77,7 +85,18 @@ export function useGroupList() {
     balances: balances.data?.balances ?? [],
     toggleStar,
     toggleArchive,
-    forget,
+    forget: (group: RecentGroup) => {
+      forget(group.id)
+      showToast({
+        title: t('title'),
+        description: t('description'),
+        action: {
+          label: t('undo'),
+          altLabel: t('undoAlt'),
+          onAction: () => visit(group),
+        },
+      })
+    },
     visit,
     isStarred: (groupId: string) => starredIds.includes(groupId),
     isArchived: (groupId: string) => archivedIds.includes(groupId),

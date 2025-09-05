@@ -1,3 +1,4 @@
+import { ToastViewport } from '@/components/core/molecules/Toast'
 import { ServiceWorkerRegistration } from '@/components/core/templates/ServiceWorkerRegistration'
 import { jakarta } from '@/lib/fonts'
 import '@/styles/globals.css'
@@ -18,6 +19,7 @@ export default async function RootLayout({
       <body className="font-sans">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <TRPCProvider>{children}</TRPCProvider>
+          <ToastViewport />
           <ServiceWorkerRegistration />
         </NextIntlClientProvider>
       </body>
