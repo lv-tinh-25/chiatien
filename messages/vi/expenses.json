@@ -144,7 +144,15 @@
       "byShares": "Không đều – Theo phần",
       "byPercentage": "Không đều – Theo phần trăm",
       "byAmount": "Không đều – Theo số tiền",
-      "saveAsDefault": "Lưu làm cách chia mặc định"
+      "saveAsDefault": "Lưu làm cách chia mặc định",
+      "evenlyChip": "Đều",
+      "bySharesChip": "Theo phần",
+      "byPercentageChip": "%",
+      "byAmountChip": "Số tiền",
+      "evenlyShort": "Đều",
+      "bySharesShort": "Phần",
+      "byPercentageShort": "%",
+      "byAmountShort": "Tiền"
     },
     "DeletePopup": {
       "label": "Xoá",
@@ -159,7 +167,8 @@
     "save": "Lưu",
     "saving": "Đang lưu…",
     "cancel": "Huỷ",
-    "reimbursement": "Hoàn trả"
+    "reimbursement": "Hoàn trả",
+    "selectedCount": "{selected}/{total} người"
   },
   "ExpenseDocumentsInput": {
     "add": "Đính kèm chứng từ",
@@ -231,5 +240,12 @@
       "heading": "Khác",
       "Other": "Khác"
     }
+  },
+  "PayerPicker": {
+    "title": "Ai đã trả?",
+    "search": "Tìm theo tên…",
+    "empty": "Không tìm thấy thành viên nào",
+    "showAll": "Xem tất cả thành viên",
+    "count": "{count} thành viên"
   }
 }

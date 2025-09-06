@@ -1,9 +1,9 @@
 'use client'
 
-import { CategorySelect } from '@/components/core/molecules/CategorySelect'
+import { CategoryChips } from '@/components/core/molecules/CategoryChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
-import { Select } from '@/components/core/molecules/Select'
+import { PayerPicker } from '@/components/core/molecules/PayerPicker'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
@@ -57,7 +57,7 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
         description={t(`${scope}.categoryFieldDescription`)}
       >
         {({ id, describedBy }) => (
-          <CategorySelect
+          <CategoryChips
             id={id}
             aria-describedby={describedBy}
             value={Number(category ?? 0)}
@@ -73,17 +73,15 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
         errorKey={form.formState.errors.paidBy?.message}
       >
         {({ id, describedBy }) => (
-          <Select
+          <PayerPicker
             id={id}
             testId="paid-by"
             aria-describedby={describedBy}
             value={String(paidBy ?? '')}
-            onValueChange={(value) => form.setValue('paidBy', value)}
-            options={participants.map((participant) => ({
-              value: participant.id,
-              label: participant.name,
-            }))}
-            placeholder={t(`${scope}.paidByField.placeholder`)}
+            participants={participants}
+            onValueChange={(value) =>
+              form.setValue('paidBy', value, { shouldValidate: true })
+            }
           />
         )}
       </FormField>

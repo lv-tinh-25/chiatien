@@ -144,7 +144,15 @@
       "byShares": "Unevenly – By shares",
       "byPercentage": "Unevenly – By percentage",
       "byAmount": "Unevenly – By amount",
-      "saveAsDefault": "Save as default splitting options"
+      "saveAsDefault": "Save as default splitting options",
+      "evenlyChip": "Evenly",
+      "bySharesChip": "Shares",
+      "byPercentageChip": "%",
+      "byAmountChip": "Amount",
+      "evenlyShort": "Even",
+      "bySharesShort": "Shares",
+      "byPercentageShort": "%",
+      "byAmountShort": "Amt"
     },
     "DeletePopup": {
       "label": "Delete",
@@ -159,7 +167,8 @@
     "save": "Save",
     "saving": "Saving…",
     "cancel": "Cancel",
-    "reimbursement": "Reimbursement"
+    "reimbursement": "Reimbursement",
+    "selectedCount": "{selected}/{total} people"
   },
   "ExpenseDocumentsInput": {
     "add": "Attach a document",
@@ -231,5 +240,12 @@
       "heading": "Other",
       "Other": "Other"
     }
+  },
+  "PayerPicker": {
+    "title": "Who paid?",
+    "search": "Search by name…",
+    "empty": "No participant found",
+    "showAll": "Show all participants",
+    "count": "{count} members"
   }
 }

@@ -1,13 +1,7 @@
 'use client'
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/core/atoms/Card'
+import { Card } from '@/components/core/atoms/Card'
 import { Checkbox } from '@/components/core/atoms/Checkbox'
-import { AdvancedSplitCollapsible } from '@/components/core/templates/ExpenseForm/AdvancedSplitCollapsible'
 import { ExpenseAmountField } from '@/components/core/templates/ExpenseForm/ExpenseAmountField'
 import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/ExpenseCurrencyBlock'
 import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/ExpenseDocumentsField'
@@ -77,17 +71,13 @@ function ExpenseFormFields({
   const scope = isIncome ? 'Income' : 'Expense'
 
   return (
-    <form
-      onSubmit={submit}
-      className="mx-auto flex w-full max-w-3xl flex-col gap-5"
-    >
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {isCreate ? t(`${scope}.create`) : t(`${scope}.edit`)}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+    <form onSubmit={submit} className="flex w-full flex-col gap-4">
+      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
+        {isCreate ? t(`${scope}.create`) : t(`${scope}.edit`)}
+      </h1>
+
+      <div className="grid items-start gap-4 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,22.5rem),1fr))]">
+        <Card className="flex flex-col gap-4 p-4 lg:p-5">
           <ExpenseTitleField
             form={form}
             isIncome={isIncome}
@@ -109,6 +99,14 @@ function ExpenseFormFields({
             onRefreshRate={() => void exchangeRate.refresh()}
           />
 
+          <ExpenseRecurrenceField form={form} />
+
+          <ExpenseMetaFields
+            form={form}
+            isIncome={isIncome}
+            participants={participants}
+          />
+
           <label className="flex min-h-touch-min items-center gap-3">
             <Checkbox
               checked={Boolean(isReimbursement)}
@@ -121,39 +119,28 @@ function ExpenseFormFields({
             </span>
           </label>
 
-          <ExpenseMetaFields
-            form={form}
-            isIncome={isIncome}
-            participants={participants}
-          />
-          <ExpenseRecurrenceField form={form} />
-        </CardContent>
-      </Card>
-
-      <PaidForList
-        form={form}
-        participants={participants}
-        currency={groupCurrency}
-        isIncome={isIncome}
-        onShareEdited={markEdited}
-      />
-
-      <AdvancedSplitCollapsible form={form} isIncome={isIncome} />
-
-      {documentsEnabled && (
-        <Card>
-          <CardContent className="pt-6">
+          {documentsEnabled && (
             <ExpenseDocumentsField form={form} isIncome={isIncome} />
-          </CardContent>
+          )}
         </Card>
-      )}
 
-      <ExpenseFormFooter
-        isCreate={isCreate}
-        isSubmitting={isSubmitting}
-        cancelHref={`/groups/${groupId}/expenses`}
-        onDelete={() => void remove()}
-      />
+        <div className="flex flex-col gap-3.5">
+          <PaidForList
+            form={form}
+            participants={participants}
+            currency={groupCurrency}
+            isIncome={isIncome}
+            onShareEdited={markEdited}
+          />
+
+          <ExpenseFormFooter
+            isCreate={isCreate}
+            isSubmitting={isSubmitting}
+            cancelHref={`/groups/${groupId}/expenses`}
+            onDelete={() => void remove()}
+          />
+        </div>
+      </div>
     </form>
   )
 }

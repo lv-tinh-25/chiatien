@@ -1,5 +1,6 @@
 'use client'
 
+import { Avatar } from '@/components/core/atoms/Avatar'
 import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { ShareInput } from '@/components/core/templates/ExpenseForm/ShareInput'
 import type { SplitMode } from '@/generated/prisma/browser'
@@ -21,8 +22,9 @@ type PaidForRowProps = {
  * share inputs inside carry no name attribute of their own.
  *
  * That contract also reads the participant's name off the row's first line of
- * `innerText`, which is why this row carries no avatar: initials would render
- * as text and be read as the name.
+ * `innerText`, which is why the name comes first in the DOM and the avatar and
+ * checkbox are moved ahead of it with `order`. `innerText` follows the DOM, not
+ * the visual order, so the initials cannot be mistaken for the name.
  */
 export function PaidForRow({
   participant,
@@ -36,15 +38,23 @@ export function PaidForRow({
   return (
     <li
       data-id={participant.id}
-      className="flex items-center justify-between gap-3 rounded-control px-2 py-1 transition-colors duration-150 ease-out-soft hover:bg-foreground/4"
+      className="flex items-center justify-between gap-3 border-b border-border/50 py-2 last:border-b-0"
     >
       <label className="flex min-h-touch-min flex-1 items-center gap-3">
+        <span className="min-w-0 flex-1 truncate text-body-lg font-semibold text-foreground">
+          {participant.name}
+        </span>
         <Checkbox
           checked={checked}
           onCheckedChange={(state) => onToggle(state === true)}
           aria-label={participant.name}
+          className="order-first shrink-0"
         />
-        <span className="text-body-lg text-foreground">{participant.name}</span>
+        <Avatar
+          name={participant.name}
+          size="lg"
+          className="order-first size-7.5"
+        />
       </label>
 
       {checked && splitMode !== 'EVENLY' && (

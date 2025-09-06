@@ -29,22 +29,15 @@ export function ExpenseFormFooter({
       : t('save')
 
   return (
-    <div className="glass-float sticky bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-10 flex flex-wrap items-center gap-2 rounded-card p-3 lg:bottom-4">
-      <Button type="submit" disabled={isSubmitting}>
-        {label}
-      </Button>
-      <Button variant="ghost" asChild>
-        <Link href={cancelHref}>{t('cancel')}</Link>
-      </Button>
-
+    <div className="flex flex-wrap items-center gap-2.5">
       {!isCreate && (
-        <div className="ml-auto">
+        <div className="flex-1">
           <ConfirmDialog
             trigger={
               <Button
                 type="button"
-                variant="ghost"
-                className="text-destructive"
+                variant="outline"
+                className="w-full text-destructive"
               >
                 {t('DeletePopup.label')}
               </Button>
@@ -58,6 +51,19 @@ export function ExpenseFormFooter({
           />
         </div>
       )}
+
+      <Button
+        type="submit"
+        size="lg"
+        disabled={isSubmitting}
+        className="flex-2 shadow-action"
+      >
+        {label}
+      </Button>
+
+      <Button variant="ghost" className="w-full" asChild>
+        <Link href={cancelHref}>{t('cancel')}</Link>
+      </Button>
     </div>
   )
 }
