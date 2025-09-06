@@ -47,7 +47,11 @@
       "owedToYou": "Bạn được nhận",
       "youOwe": "Bạn nợ",
       "settledUp": "Bạn đã tất toán xong ở mọi nhóm."
-    }
+    },
+    "settled": "Đã cân bằng",
+    "expenseCount": "{count} khoản chi",
+    "subtitle": "Không cần tài khoản — mỗi nhóm là một đường link.",
+    "joinTitle": "Tham gia nhóm có sẵn"
   },
   "GroupForm": {
     "title": "Thông tin nhóm",

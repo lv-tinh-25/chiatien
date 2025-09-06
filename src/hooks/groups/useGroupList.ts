@@ -1,16 +1,23 @@
 'use client'
 
-import {
-  partitionGroups,
-  type RecentGroup,
-  type RecentGroups,
-} from '@/lib/recent-groups'
+import { partitionGroups, type RecentGroup } from '@/lib/recent-groups'
+import type { Currency } from '@/lib/currency'
+import { getCurrencyFromGroup } from '@/lib/utils'
 import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
 import { useToastStore } from '@/stores/useToastStore'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
+
+export type GroupListEntry = {
+  id: string
+  name: string
+  participantCount: number
+  expenseCount: number
+  /** Absent until this browser says who it is in that group. */
+  balance: { amount: number; currency: Currency } | null
+}
 
 export function useGroupList() {
   const t = useTranslations('Groups.RecentRemovedToast')
@@ -56,15 +63,37 @@ export function useGroupList() {
    * remembered group the server no longer has is dropped from the render but
    * left in storage: a transient fetch failure should not erase someone's list.
    */
-  const known: RecentGroups = useMemo(() => {
+  const known: GroupListEntry[] = useMemo(() => {
     const byId = new Map(
-      (details.data?.groups ?? []).map((group) => [group.id, group.name]),
+      (details.data?.groups ?? []).map((group) => [group.id, group]),
+    )
+    const balanceById = new Map(
+      (balances.data?.balances ?? []).map((balance) => [
+        balance.groupId,
+        balance,
+      ]),
     )
     return groups.flatMap((group) => {
-      const name = byId.get(group.id)
-      return name === undefined ? [] : [{ id: group.id, name }]
+      const detail = byId.get(group.id)
+      if (detail === undefined) return []
+      const balance = balanceById.get(group.id)
+      return [
+        {
+          id: detail.id,
+          name: detail.name,
+          participantCount: detail._count.participants,
+          expenseCount: detail._count.expenses,
+          balance:
+            balance === undefined
+              ? null
+              : {
+                  amount: balance.amount,
+                  currency: getCurrencyFromGroup(balance),
+                },
+        },
+      ]
     })
-  }, [groups, details.data])
+  }, [groups, details.data, balances.data])
 
   const partitioned = useMemo(
     () => partitionGroups(known, starredIds, archivedIds),

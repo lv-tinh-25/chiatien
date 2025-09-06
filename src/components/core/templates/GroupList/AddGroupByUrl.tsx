@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
-import { Card, CardContent } from '@/components/core/atoms/Card'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { QrScanner } from '@/components/core/templates/GroupList/QrScanner'
 import { cn } from '@/lib/utils'
@@ -26,6 +25,7 @@ export function AddGroupByUrl({
   onAdd: (groupId: string) => Promise<boolean>
 }) {
   const t = useTranslations('Groups.AddByURL')
+  const tGroups = useTranslations('Groups')
   const [value, setValue] = useState('')
   const [failed, setFailed] = useState(false)
   const [mode, setMode] = useState<'url' | 'qr'>('url')
@@ -42,69 +42,69 @@ export function AddGroupByUrl({
   }
 
   return (
-    <Card>
-      <CardContent className="flex flex-col gap-3 p-4">
-        <div
-          role="tablist"
-          className="glass-flush inline-flex self-start rounded-full p-1"
-        >
-          {(['url', 'qr'] as const).map((candidate) => (
-            <Button
-              key={candidate}
-              type="button"
-              role="tab"
-              aria-selected={mode === candidate}
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setMode(candidate)
-                setFailed(false)
-              }}
-              className={cn(
-                'rounded-full',
-                mode === candidate
-                  ? 'bg-card text-primary shadow-card'
-                  : 'text-muted-foreground hover:bg-transparent hover:text-foreground',
-              )}
-            >
-              {t(candidate === 'url' ? 'urlMode' : 'qrMode')}
-            </Button>
-          ))}
-        </div>
+    <div className="flex flex-col justify-center gap-2.5 rounded-hero border border-dashed border-border bg-card/45 p-5 backdrop-blur-md">
+      <p className="text-body-lg font-extrabold text-foreground">
+        {tGroups('joinTitle')}
+      </p>
+      <p className="text-body-sm text-muted-foreground">{t('description')}</p>
 
-        <form
-          hidden={mode !== 'url'}
-          className="flex flex-col gap-3 sm:flex-row sm:items-end"
-          onSubmit={(event) => {
-            event.preventDefault()
-            void add(value)
-          }}
-        >
-          <FormInput
-            name="groupUrl"
-            label={t('title')}
-            description={t('description')}
-            placeholder="https://…/groups/…"
-            fieldClassName="flex-1"
-            value={value}
-            onChange={(event) => {
-              setValue(event.target.value)
+      <div role="tablist" className="flex gap-1 self-start">
+        {(['url', 'qr'] as const).map((candidate) => (
+          <Button
+            key={candidate}
+            type="button"
+            role="tab"
+            aria-selected={mode === candidate}
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setMode(candidate)
               setFailed(false)
             }}
-          />
-          <Button type="submit" variant="outline" className="sm:mb-8">
-            {t('button')}
+            className={cn(
+              'rounded-full',
+              mode === candidate
+                ? 'bg-card text-primary-ink shadow-card'
+                : 'text-muted-foreground hover:bg-transparent hover:text-foreground',
+            )}
+          >
+            {t(candidate === 'url' ? 'urlMode' : 'qrMode')}
           </Button>
-        </form>
+        ))}
+      </div>
 
-        {mode === 'qr' && <QrScanner onScan={(text) => void add(text)} />}
+      <form
+        hidden={mode !== 'url'}
+        className="flex items-end gap-2"
+        onSubmit={(event) => {
+          event.preventDefault()
+          void add(value)
+        }}
+      >
+        <FormInput
+          name="groupUrl"
+          label={t('title')}
+          labelClassName="sr-only"
+          placeholder="https://…/groups/…"
+          fieldClassName="flex-1"
+          value={value}
+          onChange={(event) => {
+            setValue(event.target.value)
+            setFailed(false)
+          }}
+        />
+        <Button type="submit" variant="outline">
+          {t('button')}
+        </Button>
+      </form>
 
-        {failed && (
-          <p role="alert" className="text-body-sm text-destructive">
-            {t('error')}
-          </p>
-        )}
-      </CardContent>
-    </Card>
+      {mode === 'qr' && <QrScanner onScan={(text) => void add(text)} />}
+
+      {failed && (
+        <p role="alert" className="text-body-sm text-destructive">
+          {t('error')}
+        </p>
+      )}
+    </div>
   )
 }

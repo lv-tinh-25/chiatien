@@ -9,6 +9,7 @@ type FormInputProps = InputHTMLAttributes<HTMLInputElement> & {
   description?: string
   errorKey?: string
   fieldClassName?: string
+  labelClassName?: string
 }
 
 export function FormInput({
@@ -16,6 +17,7 @@ export function FormInput({
   description,
   errorKey,
   fieldClassName,
+  labelClassName,
   ...props
 }: FormInputProps) {
   return (
@@ -24,6 +26,7 @@ export function FormInput({
       description={description}
       errorKey={errorKey}
       className={fieldClassName}
+      labelClassName={labelClassName}
     >
       {({ id, describedBy }) => (
         <Input

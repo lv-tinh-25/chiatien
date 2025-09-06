@@ -6,16 +6,16 @@ import { AddGroupByUrl } from '@/components/core/templates/GroupList/AddGroupByU
 import { GlobalBalanceCard } from '@/components/core/templates/GroupList/GlobalBalanceCard'
 import { GroupCard } from '@/components/core/templates/GroupList/GroupCard'
 import { GroupSection } from '@/components/core/templates/GroupList/GroupSection'
+import type { GroupListEntry } from '@/hooks/groups/useGroupList'
 import { useGroupList } from '@/hooks/groups/useGroupList'
-import type { RecentGroup } from '@/lib/recent-groups'
 import { trpc } from '@/trpc/client'
-import { Plus, Settings } from 'lucide-react'
+import { Plus, Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 
 export function GroupList() {
   const t = useTranslations('Groups')
-  const tNav = useTranslations('Nav')
   const {
     status,
     starred,
@@ -38,9 +38,13 @@ export function GroupList() {
     return true
   }
 
-  const renderSection = (title: string, groups: RecentGroup[]) =>
+  const renderSection = (
+    title: string,
+    groups: GroupListEntry[],
+    icon?: ReactNode,
+  ) =>
     groups.length === 0 ? null : (
-      <GroupSection key={title} title={title}>
+      <GroupSection key={title} title={title} icon={icon} className="lg:col-span-2">
         {groups.map((group) => (
           <GroupCard
             key={group.id}
@@ -56,60 +60,63 @@ export function GroupList() {
     )
 
   return (
-    <div className="flex flex-col gap-7 pb-4">
-      <header className="glass-bar sticky top-0 z-20 -mx-4 mb-1 flex items-center gap-3 px-4 py-3 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        {/* A labelled primary action shares this row, so the title steps down a
-            size on a phone rather than truncating to "Nhóm của…". */}
-        <h1 className="min-w-0 flex-1 truncate text-headline-md text-foreground sm:text-headline-lg">
-          {t('myGroups')}
-        </h1>
-        <nav
-          aria-label={tNav('mainSections')}
-          className="flex shrink-0 items-center gap-1"
-        >
-          <Button asChild>
-            <Link href="/groups/create">
-              <Plus aria-hidden />
-              {t('createGroup')}
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/settings" aria-label={tNav('settings')}>
-              <Settings aria-hidden />
-            </Link>
-          </Button>
-        </nav>
+    <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[repeat(2,minmax(0,1fr))] lg:items-start lg:gap-4">
+      <header className="hidden items-end justify-between gap-4 lg:col-span-2 lg:flex">
+        <div>
+          <h1 className="text-headline-lg font-extrabold text-foreground">
+            {t('myGroups')}
+          </h1>
+          <p className="mt-1 text-body-md text-muted-foreground">
+            {t('subtitle')}
+          </p>
+        </div>
+        <Button asChild>
+          <Link href="/groups/create">
+            <Plus aria-hidden />
+            {t('createGroup')}
+          </Link>
+        </Button>
       </header>
 
       <GlobalBalanceCard balances={balances} />
 
+      {/* One instance only: a second copy for the other breakpoint would give
+          the page two tablists and two inputs with the same name. */}
+      <div className="order-last lg:order-none">
+        <AddGroupByUrl onAdd={addByUrl} />
+      </div>
+
       {status === 'pending' && (
-        <p className="text-body-md text-muted-foreground">
+        <p className="text-body-md text-muted-foreground lg:col-span-2">
           {t('loadingRecent')}
         </p>
       )}
 
       {status === 'empty' && (
-        <EmptyState
-          title={t('NoRecent.description')}
-          description={t('NoRecent.orAsk')}
-          action={
-            <Button asChild className="mt-2">
-              <Link href="/groups/create">{t('NoRecent.create')}</Link>
-            </Button>
-          }
-        />
+        <div className="lg:col-span-2">
+          <EmptyState
+            title={t('NoRecent.description')}
+            description={t('NoRecent.orAsk')}
+            action={
+              <Button asChild className="mt-2">
+                <Link href="/groups/create">{t('NoRecent.create')}</Link>
+              </Button>
+            }
+          />
+        </div>
       )}
 
       {status === 'ready' && (
         <>
-          {renderSection(t('starred'), starred)}
+          {renderSection(
+            t('starred'),
+            starred,
+            <Star className="size-3.5 fill-accent text-accent" aria-hidden />,
+          )}
           {renderSection(t('recent'), recent)}
           {renderSection(t('archived'), archived)}
         </>
       )}
-
-      <AddGroupByUrl onAdd={addByUrl} />
     </div>
   )
 }
