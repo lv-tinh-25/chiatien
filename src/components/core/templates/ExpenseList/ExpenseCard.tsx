@@ -97,13 +97,13 @@ export function ExpenseCard({
         >
           {expense.title}
         </span>
-        <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
+        {/* One line that truncates, never two: the design keeps every row the
+            same height so the column of amounts stays a column. */}
+        <span className="mt-0.5 flex items-center gap-x-1.5 truncate text-body-sm whitespace-nowrap text-muted-foreground">
           <span className="truncate lg:hidden">{summary}</span>
           <span className="hidden truncate lg:inline">{summaryWide}</span>
           <span aria-hidden>·</span>
-          <span className="whitespace-nowrap">
-            {formatExpenseDate(expense.expenseDate, locale)}
-          </span>
+          <span>{formatExpenseDate(expense.expenseDate, locale)}</span>
           {expense._count.documents > 0 && (
             <span className="flex items-center gap-1">
               <Paperclip className="size-3.5" aria-hidden />

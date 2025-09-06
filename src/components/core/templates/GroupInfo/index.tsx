@@ -37,7 +37,7 @@ export function GroupInfo() {
 
       {/* The only provenance the ported schema records. */}
       {group && (
-        <p className="px-1 text-body-sm text-muted-foreground-subtle">
+        <p className="px-1 text-body-sm text-muted-foreground">
           {t('meta', {
             created: formatDate(new Date(group.createdAt), locale, {
               dateStyle: 'medium',

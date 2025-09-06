@@ -59,10 +59,7 @@ export function ReimbursementRow({
       </span>
 
       <Button variant="settle" size="sm" className="shrink-0" asChild>
-        <Link href={settleHref}>
-          <span className="lg:hidden">{t('markAsPaidShort')}</span>
-          <span className="hidden lg:inline">{t('markAsPaid')}</span>
-        </Link>
+        <Link href={settleHref}>{t('markAsPaid')}</Link>
       </Button>
     </li>
   )

@@ -82,7 +82,7 @@ export function GroupSummaryAside() {
 
       <Card className="p-4">
         <h2 className="text-body-lg font-extrabold text-foreground">
-          {t('Reimbursements.title')}
+          {t('Reimbursements.title', { count: reimbursements.length })}
         </h2>
         {isSettled ? (
           <p className="mt-2 text-body-sm text-muted-foreground">

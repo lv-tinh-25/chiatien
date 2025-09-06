@@ -6,9 +6,12 @@
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
   --muted: 210 40% 96%;
-  --muted-foreground: 215 19% 47%;
-  /* The mockup's faintest tier: dates, timestamps, "load more" hints. Only
-     ever decorative meta or 18.66px-and-up, never a body string. */
+  /* A shade darker than the mockup's #64748B: measured on the aurora rather
+     than on flat white, the mockup's own value lands at 4.45:1. */
+  --muted-foreground: 215 19% 45%;
+  /* The mockup's faintest tier. It cannot clear 4.5:1 on any surface here, so
+     it is for glyphs that carry no words — an arrow between two avatars, a
+     remove ✕ — and never for text. */
   --muted-foreground-subtle: 215 20% 65%;
   --border: 214 32% 91%;
   --input: 214 32% 91%;

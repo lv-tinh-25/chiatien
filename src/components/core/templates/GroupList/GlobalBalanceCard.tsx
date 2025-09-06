@@ -61,7 +61,7 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
           ported `cardByTitle` helper finds a card by walking up two levels from
           its heading. */}
       <CardHeader className="p-0">
-        <CardTitle className="text-label-md tracking-wide text-muted-foreground">
+        <CardTitle className="text-label-md tracking-wide text-muted-foreground uppercase">
           <span className="lg:hidden">{t('title')}</span>
           <span className="hidden lg:inline">{t('titleWide')}</span>
         </CardTitle>

@@ -56,10 +56,15 @@ export function ActivityLog() {
           const name = participantName(participantId)
           return name === null ? [] : [name]
         })
+        // "Today" and "Yesterday" each name one day, so the design spells that
+        // day out beside them; the wider buckets have no single date to give.
+        const heading = showsDate(group)
+          ? t(`Groups.${group}`)
+          : `${t(`Groups.${group}`)} · ${formatDate(activities[0].time, locale, { dateStyle: 'medium' })}`
         return (
           <section key={group} className="flex flex-col gap-2">
             <h2 className="px-1 text-label-sm tracking-wide text-muted-foreground uppercase">
-              {t(`Groups.${group}`)}
+              {heading}
             </h2>
             <Card className="overflow-hidden">
               {activities.map((activity) => {
@@ -102,7 +107,7 @@ export function ActivityLog() {
                         body
                       )}
                     </span>
-                    <span className="shrink-0 text-body-sm text-muted-foreground-subtle tabular">
+                    <span className="shrink-0 text-body-sm text-muted-foreground tabular">
                       {formatDate(activity.time, locale, {
                         dateStyle: showsDate(group) ? 'medium' : undefined,
                         timeStyle: 'short',

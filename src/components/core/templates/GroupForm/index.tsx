@@ -29,7 +29,7 @@ export function GroupForm({
   defaultCurrencyCode,
 }: GroupFormProps) {
   const tNav = useTranslations('Nav')
-  const tGroups = useTranslations('Groups')
+  const tGroupForm = useTranslations('GroupForm')
   const {
     form,
     isEdit,
@@ -51,7 +51,7 @@ export function GroupForm({
           href={group ? `/groups/${group.id}/information` : '/groups'}
         />
         <h1 className="text-headline-lg text-foreground">
-          {isEdit ? tNav('groupSettingsTitle') : tGroups('createGroup')}
+          {isEdit ? tNav('groupSettingsTitle') : tGroupForm('createTitle')}
         </h1>
       </div>
       <GroupDetailsFields

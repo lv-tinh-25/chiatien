@@ -53,7 +53,7 @@ export function SegmentedControl({
             'transition-colors duration-150 ease-out-soft',
             'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
             'data-[state=checked]:bg-card data-[state=checked]:text-primary-ink data-[state=checked]:shadow-segment',
-            'data-[state=unchecked]:text-muted-foreground data-[state=unchecked]:hover:text-foreground',
+            'data-[state=unchecked]:text-chip-foreground data-[state=unchecked]:hover:text-foreground',
           )}
         >
           <span className="sm:hidden">{option.shortLabel ?? option.label}</span>

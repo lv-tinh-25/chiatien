@@ -71,7 +71,7 @@ export function TotalsCard({
           this card by walking up two levels from it. */}
       <CardHeader className="flex-row items-baseline gap-1.5 pb-1">
         <CardTitle className="text-label-md text-muted-foreground">
-          {t('title')}
+          {t(totalGroupSpendings < 0 ? 'groupEarnings' : 'title')}
         </CardTitle>
         <span className="text-label-md text-muted-foreground">
           · {rangeCaption}
@@ -106,25 +106,24 @@ export function TotalsCard({
               locale={locale}
             />
             {/* What the viewer would get back or still owe if the group
-                settled at this instant — the reading the other two exist for. */}
-            <Metric
-              label={t('difference')}
-              amount={totalParticipantSpendings - totalParticipantShare}
-              currency={currency}
-              locale={locale}
-              tone={
-                totalParticipantSpendings - totalParticipantShare >= 0
-                  ? 'credit'
-                  : 'debit'
-              }
-              sign="always"
-            />
+                settled at this instant. Desktop only: on a phone the design
+                keeps the row to one line, and the balances screen says it. */}
+            <span className="hidden lg:contents">
+              <Metric
+                label={t('difference')}
+                amount={totalParticipantSpendings - totalParticipantShare}
+                currency={currency}
+                locale={locale}
+                tone={
+                  totalParticipantSpendings - totalParticipantShare >= 0
+                    ? 'credit'
+                    : 'debit'
+                }
+                sign="always"
+              />
+            </span>
           </div>
         )}
-
-        <span className="text-label-md text-muted-foreground">
-          {t(totalGroupSpendings < 0 ? 'groupEarnings' : 'groupSpendings')}
-        </span>
       </CardContent>
     </Card>
   )

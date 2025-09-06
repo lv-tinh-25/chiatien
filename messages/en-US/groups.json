@@ -56,14 +56,13 @@
     "unstar": "Unstar"
   },
   "GroupForm": {
-    "title": "Group information",
     "NameField": {
       "label": "Group name",
       "placeholder": "Summer vacations"
     },
     "InformationField": {
       "label": "Group information",
-      "placeholder": "What information is relevant to group participants?"
+      "placeholder": "Notes, house rules, bank details…"
     },
     "CurrencyField": {
       "label": "Currency symbol",
@@ -94,7 +93,8 @@
       "saving": "Saving…",
       "create": "Create group",
       "creating": "Creating…"
-    }
+    },
+    "createTitle": "New group"
   },
   "Information": {
     "title": "Group information",

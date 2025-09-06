@@ -56,7 +56,7 @@ export function TimeColumnChart({
                   height: `${Math.round(Math.max(0.04, Math.min(1, column.fill)) * 100)}%`,
                 }}
               />
-              <span className="truncate text-label-sm text-muted-foreground-subtle">
+              <span className="truncate text-label-sm text-muted-foreground">
                 {column.label}
               </span>
             </button>,

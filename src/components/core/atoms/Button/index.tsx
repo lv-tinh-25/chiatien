@@ -24,8 +24,10 @@ const buttonVariants = cva(
         outline:
           'glass-flush text-foreground ring-1 ring-border/70 ring-inset hover:bg-card',
         ghost: 'text-foreground hover:glass-flush',
+        // The design fills this one: settling is the action the balances
+        // screen exists to offer, so it is not a quiet secondary.
         settle:
-          'bg-credit-subtle text-credit ring-1 ring-credit/25 ring-inset hover:bg-credit/15',
+          'bg-primary text-primary-foreground ring-1 ring-primary ring-inset hover:bg-primary-active',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
       },

@@ -32,7 +32,8 @@ test('shows group totals, and personal totals once you pick a user', async ({
   await openTab(page, 'Stats')
   const totals = cardByTitle(page, 'Total spending')
 
-  await expect(totals).toContainText('Total group spendings')
+  // The card names the reading and the range it covers, then the figure.
+  await expect(totals).toContainText('All time')
   await expect(totals).toContainText(money(120))
 
   // Without an active user there is nobody to compute a personal total for.

@@ -102,7 +102,7 @@ export function ExpenseList({
 
       <div ref={sentinelRef} aria-hidden className="h-px" />
       {isFetchingNextPage && (
-        <p className="text-center text-body-sm text-muted-foreground-subtle">
+        <p className="text-center text-body-sm text-muted-foreground">
           <span className="lg:hidden">{t('loadMore')}</span>
           <span className="hidden lg:inline">{t('loadMoreWide')}</span>
         </p>

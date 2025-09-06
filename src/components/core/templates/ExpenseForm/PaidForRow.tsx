@@ -50,7 +50,7 @@ export function PaidForRow({
         <span
           className={cn(
             'min-w-0 flex-1 truncate text-body-lg font-semibold',
-            checked ? 'text-foreground' : 'text-muted-foreground-subtle',
+            checked ? 'text-foreground' : 'text-muted-foreground',
           )}
         >
           {participant.name}
@@ -81,7 +81,7 @@ export function PaidForRow({
         <span
           className={cn(
             'shrink-0 rounded-[0.5625rem] px-2.5 py-1 text-numeric-table-md tabular',
-            checked ? 'text-foreground' : 'text-muted-foreground-subtle',
+            checked ? 'text-foreground' : 'text-muted-foreground',
           )}
         >
           {checked ? shareDisplay : '—'}

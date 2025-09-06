@@ -56,14 +56,13 @@
     "unstar": "Bỏ gắn sao"
   },
   "GroupForm": {
-    "title": "Thông tin nhóm",
     "NameField": {
       "label": "Tên nhóm",
       "placeholder": "Kì nghỉ hè"
     },
     "InformationField": {
       "label": "Thông tin nhóm",
-      "placeholder": "Những thông tin nào cần thiết cho các thành viên tham gia nhóm?"
+      "placeholder": "Mô tả, quy ước, số tài khoản…"
     },
     "CurrencyField": {
       "label": "Biểu tượng tiền tệ",
@@ -94,7 +93,8 @@
       "saving": "Đang lưu…",
       "create": "Tạo nhóm",
       "creating": "Đang tạo…"
-    }
+    },
+    "createTitle": "Tạo nhóm mới"
   },
   "Information": {
     "title": "Thông tin nhóm",

@@ -10,7 +10,8 @@ type StatBarProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'value'> & {
   value: ReactNode
   /** 0 to 1. */
   fill: number
-  tone?: 'primary' | 'secondary'
+  /** Tailwind background class for the fill; defaults to the brand green. */
+  tone?: string
   /** Render as a button so it can act as a dialog trigger. */
   asButton?: boolean
   selectLabel?: string
@@ -34,11 +35,11 @@ function Body({
           {value}
         </span>
       </span>
-      <span className="mt-1.5 block h-2 overflow-hidden rounded-full bg-foreground/8">
+      <span className="mt-1.5 block h-2 overflow-hidden rounded-full bg-muted">
         <span
           className={cn(
             'block h-full rounded-full transition-[width] duration-500 ease-out-soft',
-            tone === 'secondary' ? 'bg-secondary' : 'bg-primary',
+            tone ?? 'bg-primary',
           )}
           style={{
             width: `${Math.round(Math.max(0, Math.min(1, fill)) * 100)}%`,

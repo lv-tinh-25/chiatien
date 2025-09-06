@@ -26,7 +26,7 @@ export function GroupList() {
   }
 
   return (
-    <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[repeat(2,minmax(0,1fr))] lg:items-start lg:gap-4">
+    <div className="flex flex-col gap-5 *:min-w-0 lg:grid lg:grid-cols-[repeat(2,minmax(0,1fr))] lg:items-start lg:gap-4">
       <header className="hidden items-end justify-between gap-4 lg:col-span-2 lg:flex">
         <div>
           <h1 className="text-headline-lg text-foreground">{t('myGroups')}</h1>

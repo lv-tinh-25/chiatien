@@ -76,7 +76,7 @@ function ExpenseFormFields({
         </h1>
       </div>
 
-      <div className="grid items-start gap-4 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,22.5rem),1fr))]">
+      <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,22.5rem),1fr))]">
         <Card className="flex flex-col gap-4 p-4 lg:p-5">
           <ExpenseTitleField
             form={form}

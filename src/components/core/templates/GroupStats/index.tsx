@@ -1,5 +1,6 @@
 'use client'
 
+import { toneAt } from '@/components/core/atoms/Avatar/tone'
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ import { StatsRangeSelector } from '@/components/core/templates/GroupStats/Stats
 import { TimeColumnChart } from '@/components/core/templates/GroupStats/TimeColumnChart'
 import { TotalsCard } from '@/components/core/templates/GroupStats/TotalsCard'
 import { useGroupStats } from '@/hooks/stats/useGroupStats'
+import { categoryToneIndex } from '@/lib/categories'
 import { formatMonth } from '@/lib/format-month'
 import { formatCurrency } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -63,7 +65,7 @@ export function GroupStats() {
 
       {/* A bento of independent readings of the same range: the two that carry
           a chart take a full row so no bar is squeezed into a third. */}
-      <div className="grid items-start gap-4 lg:grid-cols-3">
+      <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-3">
         <TotalsCard
           className={
             stats.recurring.count > 0 ? 'lg:col-span-2' : 'lg:col-span-3'
@@ -224,6 +226,7 @@ export function GroupStats() {
                           }
                           label={label}
                           value={money(row.total)}
+                          tone={toneAt(categoryToneIndex(row.categoryId)).fill}
                           fill={categoryMax === 0 ? 0 : row.total / categoryMax}
                           selectLabel={t('ByCategory.showExpenses', {
                             category: label,

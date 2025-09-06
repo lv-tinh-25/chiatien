@@ -18,7 +18,6 @@
     },
     "Totals": {
       "title": "Total spending",
-      "groupSpendings": "Total group spendings",
       "groupEarnings": "Total group earnings",
       "yourSpendings": "You paid",
       "yourEarnings": "You received",

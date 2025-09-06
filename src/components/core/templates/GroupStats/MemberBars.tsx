@@ -55,7 +55,7 @@ export function MemberBars({ participants, currency, locale }: Props) {
                   }}
                 />
               </span>
-              <span className="mt-0.5 block truncate text-body-sm text-muted-foreground-subtle">
+              <span className="mt-0.5 hidden truncate text-body-sm text-muted-foreground lg:block">
                 {t('meta', {
                   count: participant.paidCount,
                   share: formatCurrency(currency, participant.share, locale),

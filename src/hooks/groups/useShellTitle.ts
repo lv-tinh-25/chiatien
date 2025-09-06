@@ -26,7 +26,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
   const pathname = usePathname()
   const t = useTranslations('Nav')
   const tExpense = useTranslations('ExpenseForm.Expense')
-  const tGroups = useTranslations('Groups')
+  const tGroupForm = useTranslations('GroupForm')
   const tInfo = useTranslations('Information')
 
   const none = {
@@ -39,7 +39,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
 
   if (pathname === '/groups') return none
   if (pathname === '/groups/create')
-    return { ...none, title: tGroups('createGroup'), showBack: true }
+    return { ...none, title: tGroupForm('createTitle'), showBack: true }
   if (pathname === '/settings')
     return {
       ...none,

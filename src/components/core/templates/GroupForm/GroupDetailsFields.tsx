@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/core/atoms/Card'
+import { Card, CardContent } from '@/components/core/atoms/Card'
 import { CurrencyChips } from '@/components/core/molecules/CurrencyChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormInput } from '@/components/core/molecules/FormInput'
@@ -33,10 +28,7 @@ export function GroupDetailsFields({
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 pt-5">
         <FormInput
           label={t('NameField.label')}
           placeholder={t('NameField.placeholder')}
