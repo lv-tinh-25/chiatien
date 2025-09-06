@@ -1,7 +1,39 @@
 import { Category, Group } from '@/generated/prisma/browser'
 import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
 import { Currency, getCurrency } from './currency'
+
+/**
+ * tailwind-merge only recognises t-shirt sizes as font sizes, so every name in
+ * this project's scale was classified as a text *colour* and silently dropped
+ * whenever a class string also carried one — `text-headline-sm text-foreground`
+ * merged down to `text-foreground`. Naming the scale here is what makes the
+ * design's typography reach the DOM at all.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [
+        {
+          text: [
+            'display-currency',
+            'numeric-hero',
+            'headline-lg',
+            'headline-md',
+            'headline-sm',
+            'body-lg',
+            'body-md',
+            'body-sm',
+            'numeric-table-lg',
+            'numeric-table-md',
+            'label-md',
+            'label-sm',
+          ],
+        },
+      ],
+    },
+  },
+})
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
