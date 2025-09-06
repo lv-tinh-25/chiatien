@@ -39,16 +39,22 @@ export function useGroupList() {
     { enabled: hydrated && groupIds.length > 0 },
   )
 
-  // Only groups this browser has identified itself in can contribute a balance.
+  /**
+   * Only groups this browser has identified itself in can contribute a balance.
+   * The stored value is checked for being a real id rather than merely present:
+   * localStorage is user-writable, and a null there would otherwise be sent to
+   * a procedure whose schema rejects it.
+   */
   const balanceInput = useMemo(
     () =>
-      groupIds
-        .filter(
-          (groupId) =>
-            activeUsers[groupId] !== undefined &&
-            activeUsers[groupId] !== NO_ACTIVE_USER,
-        )
-        .map((groupId) => ({ groupId, participantId: activeUsers[groupId] })),
+      groupIds.flatMap((groupId) => {
+        const participantId = activeUsers[groupId]
+        return typeof participantId !== 'string' ||
+          participantId === '' ||
+          participantId === NO_ACTIVE_USER
+          ? []
+          : [{ groupId, participantId }]
+      }),
     [groupIds, activeUsers],
   )
 

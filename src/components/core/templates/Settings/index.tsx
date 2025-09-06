@@ -11,7 +11,6 @@ const FLAGS: Record<string, string> = { vi: '🇻🇳', 'en-US': '🇬🇧' }
 
 export function Settings() {
   const t = useTranslations('Settings')
-  const tNav = useTranslations('Nav')
   const locale = asLocale(useLocale())
   const router = useRouter()
 
@@ -23,11 +22,11 @@ export function Settings() {
 
       <Card className="flex flex-col gap-2.5 p-4 lg:p-5">
         <span className="text-label-md font-bold text-muted-foreground">
-          {tNav('settings')}
+          {t('language')}
         </span>
         <div
           role="radiogroup"
-          aria-label={tNav('settings')}
+          aria-label={t('language')}
           className="grid gap-2.5 sm:grid-cols-2"
         >
           {locales.map((candidate) => {

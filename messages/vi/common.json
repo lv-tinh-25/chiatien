@@ -5,7 +5,8 @@
   },
   "Settings": {
     "title": "Cài đặt",
-    "about": "ChiaTiền · webapp tự lưu trữ, không cần tài khoản. Lõi tính toán dựa trên Spliit (giấy phép MIT)."
+    "about": "ChiaTiền · webapp tự lưu trữ, không cần tài khoản. Lõi tính toán dựa trên Spliit (giấy phép MIT).",
+    "language": "Ngôn ngữ"
   },
   "Toast": {
     "dismiss": "Bỏ qua"

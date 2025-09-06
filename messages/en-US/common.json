@@ -5,7 +5,8 @@
   },
   "Settings": {
     "title": "Settings",
-    "about": "ChiaTien · a self-hosted web app, no account needed. Calculations are based on Spliit (MIT licence)."
+    "about": "ChiaTien · a self-hosted web app, no account needed. Calculations are based on Spliit (MIT licence).",
+    "language": "Language"
   },
   "Toast": {
     "dismiss": "Dismiss"

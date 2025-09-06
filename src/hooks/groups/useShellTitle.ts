@@ -9,6 +9,8 @@ export type ShellTitle = {
   title: string | null
   subtitle: string | null
   showBack: boolean
+  /** False on the settings screen itself. */
+  showSettings: boolean
 }
 
 /**
@@ -22,22 +24,33 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
   const tGroups = useTranslations('Groups')
   const tInfo = useTranslations('Information')
 
-  const none = { title: null, subtitle: null, showBack: false }
+  const none = {
+    title: null,
+    subtitle: null,
+    showBack: false,
+    showSettings: true,
+  }
 
   if (pathname === '/groups') return none
   if (pathname === '/groups/create')
-    return { title: tGroups('createGroup'), subtitle: null, showBack: true }
+    return { ...none, title: tGroups('createGroup'), showBack: true }
   if (pathname === '/settings')
-    return { title: t('settings'), subtitle: null, showBack: true }
+    return {
+      ...none,
+      title: t('settings'),
+      showBack: true,
+      showSettings: false,
+    }
 
   const section = pathname.match(/^\/groups\/[^/]+\/([^/]+)/)?.[1] ?? null
 
   if (section === 'expenses') {
     if (pathname.endsWith('/create'))
-      return { title: tExpense('create'), subtitle: null, showBack: true }
+      return { ...none, title: tExpense('create'), showBack: true }
     if (pathname.endsWith('/edit'))
-      return { title: tExpense('edit'), subtitle: null, showBack: true }
+      return { ...none, title: tExpense('edit'), showBack: true }
     return {
+      ...none,
       title: chrome.name,
       subtitle:
         chrome.participantCount === 0
@@ -49,22 +62,34 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
 
   if (section === 'balances')
     return {
+      ...none,
       title: chrome.name,
       subtitle: t('balancesSubtitle'),
       showBack: true,
     }
   if (section === 'stats')
-    return { title: chrome.name, subtitle: t('statsSubtitle'), showBack: true }
+    return {
+      ...none,
+      title: chrome.name,
+      subtitle: t('statsSubtitle'),
+      showBack: true,
+    }
   if (section === 'activity')
     return {
+      ...none,
       title: chrome.name,
       subtitle: t('activitySubtitle'),
       showBack: true,
     }
   if (section === 'information')
-    return { title: tInfo('title'), subtitle: chrome.name, showBack: true }
+    return {
+      ...none,
+      title: tInfo('title'),
+      subtitle: chrome.name,
+      showBack: true,
+    }
   if (section === 'edit')
-    return { title: t('groupSettingsTitle'), subtitle: null, showBack: true }
+    return { ...none, title: t('groupSettingsTitle'), showBack: true }
 
   return none
 }

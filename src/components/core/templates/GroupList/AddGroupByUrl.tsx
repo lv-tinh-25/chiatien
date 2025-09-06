@@ -75,7 +75,7 @@ export function AddGroupByUrl({
 
       <form
         hidden={mode !== 'url'}
-        className="flex items-end gap-2"
+        className="flex flex-col gap-2 sm:flex-row sm:items-end"
         onSubmit={(event) => {
           event.preventDefault()
           void add(value)
@@ -93,7 +93,7 @@ export function AddGroupByUrl({
             setFailed(false)
           }}
         />
-        <Button type="submit" variant="outline">
+        <Button type="submit" variant="outline" className="shrink-0">
           {t('button')}
         </Button>
       </form>
