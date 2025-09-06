@@ -3,8 +3,11 @@
 import { Button } from '@/components/core/atoms/Button'
 import { Sheet, SheetContent, SheetTitle } from '@/components/core/atoms/Sheet'
 import { ShareSheet } from '@/components/core/templates/AppShell/ShareSheet'
+import { useGroupMembership } from '@/hooks/groups/useGroupMembership'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import {
+  Archive,
+  ArchiveRestore,
   ChevronDown,
   Download,
   FileJson,
@@ -13,6 +16,8 @@ import {
   MoreHorizontal,
   Settings,
   Settings2,
+  Star,
+  Trash2,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -32,6 +37,13 @@ function Items({
 }) {
   const t = useTranslations('Nav')
   const tExpenses = useTranslations('Expenses')
+  const tGroups = useTranslations('Groups')
+  const membership = useGroupMembership(groupId)
+
+  const act = (action: () => void) => () => {
+    onNavigate()
+    action()
+  }
 
   return (
     <>
@@ -77,12 +89,51 @@ function Items({
         <Settings aria-hidden />
         {t('settings')}
       </Link>
+
+      {membership.remembered && (
+        <>
+          <hr className="my-1.5 border-border/60" />
+          <button
+            type="button"
+            className={ROW}
+            aria-pressed={membership.starred}
+            onClick={act(membership.toggleStar)}
+          >
+            <Star
+              aria-hidden
+              className={membership.starred ? 'text-accent' : undefined}
+              fill={membership.starred ? 'currentColor' : 'none'}
+            />
+            {tGroups(membership.starred ? 'unstar' : 'star')}
+          </button>
+          <button
+            type="button"
+            className={ROW}
+            onClick={act(membership.toggleArchive)}
+          >
+            {membership.archived ? (
+              <ArchiveRestore aria-hidden />
+            ) : (
+              <Archive aria-hidden />
+            )}
+            {tGroups(membership.archived ? 'unarchive' : 'archive')}
+          </button>
+          <button
+            type="button"
+            className={ROW}
+            onClick={act(membership.forget)}
+          >
+            <Trash2 aria-hidden className="text-destructive" />
+            {tGroups('removeRecent')}
+          </button>
+        </>
+      )}
     </>
   )
 }
 
 /**
- * The same five destinations in the two shapes the design asks for: a labelled
+ * Every group-level action in the two shapes the design asks for: a labelled
  * dropdown beside the desktop breadcrumb, and a bottom sheet behind the mobile
  * header's overflow button.
  */

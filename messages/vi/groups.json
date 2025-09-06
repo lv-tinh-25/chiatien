@@ -1,6 +1,6 @@
 {
   "Groups": {
-    "myGroups": "Nhóm của tôi",
+    "myGroups": "Nhóm của bạn",
     "create": "Tạo",
     "loadingRecent": "Đang tải các nhóm gần đây…",
     "NoRecent": {
@@ -8,9 +8,9 @@
       "create": "Tạo nhóm",
       "orAsk": "hoặc nhờ một người bạn gửi đường dẫn đến nhóm có sẵn."
     },
-    "recent": "Nhóm gần đây",
-    "starred": "Nhóm đánh dấu",
-    "archived": "Nhóm đã lưu trữ",
+    "recent": "Gần đây",
+    "starred": "Gắn sao",
+    "archived": "Đã lưu trữ",
     "archive": "Lưu trữ nhóm",
     "unarchive": "Bỏ lưu trữ nhóm",
     "removeRecent": "Bỏ khỏi nhóm gần đây",
@@ -21,12 +21,9 @@
       "undo": "Hoàn tác"
     },
     "AddByURL": {
-      "button": "Thêm bằng URL",
       "title": "Thêm nhóm bằng URL",
-      "description": "Nếu nhóm được chia sẻ với bạn, bạn có thể dán URL vào đây để thêm vào danh sách của bạn.",
+      "description": "Dán link được chia sẻ, hoặc quét mã QR từ điện thoại.",
       "error": "Rất tiếc, chúng tôi không thể tìm thấy nhóm từ URL bạn cung cấp…",
-      "urlMode": "Nhập link",
-      "qrMode": "Quét QR",
       "scanner": {
         "startCamera": "Bật camera",
         "stopScanning": "Dừng quét",
@@ -34,7 +31,9 @@
         "noCamera": "Không tìm thấy camera trên thiết bị này.",
         "cameraError": "Không bật được camera. Vui lòng thử lại.",
         "permissionError": "Không truy cập được camera. Hãy kiểm tra lại quyền."
-      }
+      },
+      "placeholder": "Dán link nhóm để tham gia…",
+      "scanQr": "Quét mã QR"
     },
     "NotFound": {
       "text": "Nhóm này không tồn tại.",
@@ -43,15 +42,19 @@
     "createGroup": "Tạo nhóm",
     "GlobalBalance": {
       "title": "Tổng số dư của bạn",
-      "description": "Số dư cộng gộp trên tất cả các nhóm của bạn.",
-      "owedToYou": "Bạn được nhận",
-      "youOwe": "Bạn nợ",
-      "settledUp": "Bạn đã tất toán xong ở mọi nhóm."
+      "owedToYou": "Được nhận",
+      "youOwe": "Đang nợ",
+      "settledUp": "Bạn đã tất toán xong ở mọi nhóm.",
+      "titleWide": "Tổng số dư của bạn · mọi nhóm",
+      "groupCount": "{count} nhóm"
     },
     "settled": "Đã cân bằng",
     "expenseCount": "{count} khoản chi",
     "subtitle": "Không cần tài khoản — mỗi nhóm là một đường link.",
-    "joinTitle": "Tham gia nhóm có sẵn"
+    "joinTitle": "Tham gia nhóm có sẵn",
+    "settledShort": "đã tất toán",
+    "star": "Gắn sao",
+    "unstar": "Bỏ gắn sao"
   },
   "GroupForm": {
     "title": "Thông tin nhóm",

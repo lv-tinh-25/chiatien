@@ -57,7 +57,13 @@ export const StatBar = forwardRef<HTMLButtonElement, StatBarProps>(
     if (!asButton) {
       return (
         <li className="py-2">
-          <Body icon={icon} label={label} value={value} fill={fill} tone={tone} />
+          <Body
+            icon={icon}
+            label={label}
+            value={value}
+            fill={fill}
+            tone={tone}
+          />
         </li>
       )
     }
@@ -71,7 +77,13 @@ export const StatBar = forwardRef<HTMLButtonElement, StatBarProps>(
           className="w-full cursor-pointer rounded-control px-2 py-2 text-left transition-colors duration-150 ease-out-soft hover:bg-foreground/5"
           {...props}
         >
-          <Body icon={icon} label={label} value={value} fill={fill} tone={tone} />
+          <Body
+            icon={icon}
+            label={label}
+            value={value}
+            fill={fill}
+            tone={tone}
+          />
         </button>
       </li>
     )

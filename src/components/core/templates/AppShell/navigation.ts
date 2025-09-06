@@ -1,9 +1,5 @@
 export type NavKey =
-  | 'expenses'
-  | 'balances'
-  | 'stats'
-  | 'activity'
-  | 'information'
+  'expenses' | 'balances' | 'stats' | 'activity' | 'information'
 
 export type NavItem = {
   key: NavKey

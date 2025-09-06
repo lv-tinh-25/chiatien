@@ -1,7 +1,7 @@
 'use client'
 
-import { NAV_ICONS } from '@/components/core/templates/AppShell/navIcons'
 import { ActiveUserCard } from '@/components/core/templates/AppShell/ActiveUserCard'
+import { NAV_ICONS } from '@/components/core/templates/AppShell/navIcons'
 import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'

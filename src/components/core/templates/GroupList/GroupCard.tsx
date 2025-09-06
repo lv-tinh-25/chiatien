@@ -1,82 +1,70 @@
 'use client'
 
-import { Card } from '@/components/core/atoms/Card'
+import { toneAt } from '@/components/core/atoms/Avatar/tone'
 import { BalanceChip } from '@/components/core/molecules/BalanceChip'
-import { GroupCardMenu } from '@/components/core/templates/GroupList/GroupCardMenu'
 import type { GroupListEntry } from '@/hooks/groups/useGroupList'
 import { asLocale } from '@/i18n/locales'
-import { groupEmoji } from '@/lib/group-emoji'
+import { groupEmoji, groupToneIndex } from '@/lib/group-emoji'
+import { cn } from '@/lib/utils'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 
-type GroupCardProps = {
-  group: GroupListEntry
-  starred: boolean
-  archived: boolean
-  onToggleStar: () => void
-  onToggleArchive: () => void
-  onForget: () => void
-}
-
-export function GroupCard({
-  group,
-  starred,
-  archived,
-  onToggleStar,
-  onToggleArchive,
-  onForget,
-}: GroupCardProps) {
+/**
+ * One link, no controls. Star, archive and forget live in the group's own
+ * overflow menu, which is where every other group-level action already is.
+ */
+export function GroupCard({ group }: { group: GroupListEntry }) {
   const t = useTranslations('Groups')
   const tNav = useTranslations('Nav')
   const locale = asLocale(useLocale())
 
+  const tone = toneAt(groupToneIndex(group.id))
+
+  const chip = group.balance !== null && (
+    <BalanceChip
+      amount={group.balance.amount}
+      currency={group.balance.currency}
+      locale={locale}
+      settledLabel={t('settled')}
+    />
+  )
+
   return (
-    <Card
-      interactive
+    <Link
+      href={`/groups/${group.id}/expenses`}
       data-testid="group-card"
-      className="relative flex flex-col gap-3 p-4 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring"
+      className={cn(
+        'glass-raised flex flex-col gap-2.5 rounded-card p-3.5 lg:gap-3 lg:p-4',
+        'transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-raised active:translate-y-0 active:duration-75',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+      )}
     >
-      <div className="flex items-start justify-between gap-2">
+      <span className="flex items-center justify-between gap-2">
         <span
           aria-hidden
-          className="glass-flush flex size-10 items-center justify-center rounded-control text-xl"
+          className={cn(
+            'flex size-9.5 items-center justify-center rounded-control border border-white/80 text-lg lg:size-10 lg:text-xl',
+            tone.surface,
+          )}
         >
           {groupEmoji(group.id)}
         </span>
-        <div className="relative z-10 flex items-center gap-1">
-          {group.balance !== null && (
-            <BalanceChip
-              amount={group.balance.amount}
-              currency={group.balance.currency}
-              locale={locale}
-              settledLabel={t('settled')}
-            />
-          )}
-          <GroupCardMenu
-            starred={starred}
-            archived={archived}
-            onToggleStar={onToggleStar}
-            onToggleArchive={onToggleArchive}
-            onForget={onForget}
-          />
-        </div>
-      </div>
+        {/* Desktop pairs the chip with the emoji; a phone has no room, so it
+            drops below the name instead. */}
+        <span className="hidden lg:block">{chip}</span>
+      </span>
 
-      <div className="min-w-0">
-        {/* The link stretches over the card so the whole tile is one target,
-            while the menu button above keeps its own hit area by sitting later
-            in the stacking order. */}
-        <Link
-          href={`/groups/${group.id}/expenses`}
-          className="text-headline-sm font-bold text-foreground outline-none before:absolute before:inset-0 before:rounded-card before:content-['']"
-        >
+      <span className="block min-w-0">
+        <span className="block text-headline-sm font-bold text-foreground">
           {group.name}
-        </Link>
-        <p className="mt-0.5 text-body-sm text-muted-foreground">
+        </span>
+        <span className="mt-0.5 block text-body-sm text-muted-foreground">
           {tNav('memberCount', { count: group.participantCount })} ·{' '}
           {t('expenseCount', { count: group.expenseCount })}
-        </p>
-      </div>
-    </Card>
+        </span>
+      </span>
+
+      <span className="block lg:hidden">{chip}</span>
+    </Link>
   )
 }

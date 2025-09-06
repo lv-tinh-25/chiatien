@@ -4,8 +4,8 @@ import { Avatar } from '@/components/core/atoms/Avatar'
 import { Chip } from '@/components/core/atoms/Chip'
 import { Input } from '@/components/core/atoms/Input'
 import { Sheet, SheetContent, SheetTitle } from '@/components/core/atoms/Sheet'
-import { cn } from '@/lib/utils'
 import { useMediaQuery } from '@/lib/hooks'
+import { cn } from '@/lib/utils'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { Check, Search } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -161,10 +161,7 @@ export function PayerPicker({
             name={participant.name}
             peers={peers}
             size="xs"
-            className={cn(
-              'ring-2 ring-card',
-              index !== 0 && '-ml-2',
-            )}
+            className={cn('ring-2 ring-card', index !== 0 && '-ml-2')}
           />
         ))}
       </span>
@@ -197,7 +194,9 @@ export function PayerPicker({
       {rest.length > 0 &&
         (isDesktop ? (
           <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
-            <PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
+            <PopoverPrimitive.Trigger asChild>
+              {trigger}
+            </PopoverPrimitive.Trigger>
             <PopoverPrimitive.Portal>
               <PopoverPrimitive.Content
                 align="start"
@@ -217,7 +216,12 @@ export function PayerPicker({
             </PopoverPrimitive.Portal>
           </PopoverPrimitive.Root>
         ) : (
-          <SheetPicker open={open} onOpenChange={setOpen} trigger={trigger} count={participants.length}>
+          <SheetPicker
+            open={open}
+            onOpenChange={setOpen}
+            trigger={trigger}
+            count={participants.length}
+          >
             {list}
           </SheetPicker>
         ))}

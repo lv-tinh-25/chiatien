@@ -31,7 +31,11 @@ export function DivergingBar({
   return (
     <div
       aria-hidden
-      className={cn('relative rounded-full bg-foreground/8', SIZES[size].track, className)}
+      className={cn(
+        'relative rounded-full bg-foreground/8',
+        SIZES[size].track,
+        className,
+      )}
     >
       <span
         className={cn(
@@ -42,7 +46,9 @@ export function DivergingBar({
       <span
         className={cn(
           'absolute inset-y-0',
-          credit ? 'left-1/2 rounded-r-full bg-credit' : 'right-1/2 rounded-l-full bg-debit',
+          credit
+            ? 'left-1/2 rounded-r-full bg-credit'
+            : 'right-1/2 rounded-l-full bg-debit',
         )}
         style={{ width: `${(share * 50).toFixed(2)}%` }}
       />

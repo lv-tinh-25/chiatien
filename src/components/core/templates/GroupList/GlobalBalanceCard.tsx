@@ -46,14 +46,24 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
 
   if (totals.length === 0) return null
 
+  /** How many groups contribute to one side of one currency's total. */
+  const groupsWith = (key: string, predicate: (amount: number) => boolean) =>
+    new Set(
+      balances
+        .filter((b) => (b.currencyCode ?? b.currency) === key)
+        .filter(({ amount }) => predicate(amount))
+        .map((b) => b.groupId),
+    ).size
+
   return (
     <Card tier="float" className="rounded-hero p-5">
       {/* The heading has to stay a real heading inside a header element: the
           ported `cardByTitle` helper finds a card by walking up two levels from
           its heading. */}
       <CardHeader className="p-0">
-        <CardTitle className="text-label-sm tracking-wider text-muted-foreground uppercase">
-          {t('title')}
+        <CardTitle className="text-label-md tracking-wide text-muted-foreground">
+          <span className="lg:hidden">{t('title')}</span>
+          <span className="hidden lg:inline">{t('titleWide')}</span>
         </CardTitle>
       </CardHeader>
 
@@ -69,7 +79,7 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
           }
           return (
             <div key={key} className="flex gap-3">
-              <div className="flex flex-1 flex-col gap-0.5 rounded-control bg-credit-subtle/90 px-4 py-3 ring-1 ring-credit/20 ring-inset">
+              <div className="flex flex-1 flex-col rounded-control bg-credit-subtle/90 px-3.5 py-3 ring-1 ring-credit/20 ring-inset lg:px-4 lg:py-3.5">
                 <span className="text-label-md font-semibold text-credit">
                   {t('owedToYou')}
                 </span>
@@ -78,10 +88,15 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
                   currency={money}
                   locale={locale}
                   tone="credit"
-                  className="text-headline-lg font-extrabold lg:text-display-currency"
+                  className="text-numeric-hero"
                 />
+                {groupsWith(key, (a) => a > 0) > 0 && (
+                  <span className="text-body-sm font-semibold text-credit/75">
+                    {t('groupCount', { count: groupsWith(key, (a) => a > 0) })}
+                  </span>
+                )}
               </div>
-              <div className="flex flex-1 flex-col gap-0.5 rounded-control bg-debit-subtle/90 px-4 py-3 ring-1 ring-debit/20 ring-inset">
+              <div className="flex flex-1 flex-col rounded-control bg-debit-subtle/90 px-3.5 py-3 ring-1 ring-debit/20 ring-inset lg:px-4 lg:py-3.5">
                 <span className="text-label-md font-semibold text-debit">
                   {t('youOwe')}
                 </span>
@@ -90,8 +105,13 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
                   currency={money}
                   locale={locale}
                   tone="debit"
-                  className="text-headline-lg font-extrabold lg:text-display-currency"
+                  className="text-numeric-hero"
                 />
+                {groupsWith(key, (a) => a < 0) > 0 && (
+                  <span className="text-body-sm font-semibold text-debit/75">
+                    {t('groupCount', { count: groupsWith(key, (a) => a < 0) })}
+                  </span>
+                )}
               </div>
             </div>
           )

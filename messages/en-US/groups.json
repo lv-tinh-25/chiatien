@@ -1,6 +1,6 @@
 {
   "Groups": {
-    "myGroups": "My groups",
+    "myGroups": "Your groups",
     "create": "Create",
     "createGroup": "Create group",
     "loadingRecent": "Loading recent groups…",
@@ -11,14 +11,15 @@
     },
     "GlobalBalance": {
       "title": "Your total balance",
-      "description": "Your combined balance across all your groups.",
-      "owedToYou": "You are owed",
+      "owedToYou": "Owed to you",
       "youOwe": "You owe",
-      "settledUp": "You are all settled up across your groups."
+      "settledUp": "You are all settled up across your groups.",
+      "titleWide": "Your total balance · all groups",
+      "groupCount": "{count, plural, one {# group} other {# groups}}"
     },
-    "recent": "Recent groups",
-    "starred": "Starred groups",
-    "archived": "Archived groups",
+    "recent": "Recent",
+    "starred": "Starred",
+    "archived": "Archived",
     "archive": "Archive group",
     "unarchive": "Unarchive group",
     "removeRecent": "Remove from recent groups",
@@ -29,12 +30,9 @@
       "undo": "Undo"
     },
     "AddByURL": {
-      "button": "Add by URL",
       "title": "Add a group by URL",
-      "description": "If a group was shared with you, you can paste its URL here to add it to your list.",
+      "description": "Paste a shared link, or scan a QR code from your phone.",
       "error": "Oops, we are not able to find the group from the URL you provided…",
-      "urlMode": "Enter URL",
-      "qrMode": "Scan QR",
       "scanner": {
         "startCamera": "Start Camera",
         "stopScanning": "Stop Scanning",
@@ -42,7 +40,9 @@
         "noCamera": "No camera found on this device.",
         "cameraError": "Failed to start camera. Please try again.",
         "permissionError": "Unable to access camera. Please check permissions."
-      }
+      },
+      "placeholder": "Paste a group link to join…",
+      "scanQr": "Scan QR code"
     },
     "NotFound": {
       "text": "This group does not exist.",
@@ -51,7 +51,10 @@
     "settled": "Settled up",
     "expenseCount": "{count} expenses",
     "subtitle": "No account needed — every group is just a link.",
-    "joinTitle": "Join an existing group"
+    "joinTitle": "Join an existing group",
+    "settledShort": "settled up",
+    "star": "Star",
+    "unstar": "Unstar"
   },
   "GroupForm": {
     "title": "Group information",

@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/atoms/Card'
-import { Money } from '@/components/core/atoms/Money'
 import { CategoryEmoji } from '@/components/core/atoms/CategoryEmoji'
+import { Money } from '@/components/core/atoms/Money'
 import { CategoryDrilldown } from '@/components/core/templates/GroupStats/CategoryDrilldown'
 import { MonthDrilldown } from '@/components/core/templates/GroupStats/MonthDrilldown'
 import { ParticipantTable } from '@/components/core/templates/GroupStats/ParticipantTable'
@@ -208,7 +208,12 @@ export function GroupStats() {
                       locale={locale}
                       trigger={
                         <StatBar
-                          icon={<CategoryEmoji categoryId={row.categoryId} size="sm" />}
+                          icon={
+                            <CategoryEmoji
+                              categoryId={row.categoryId}
+                              size="sm"
+                            />
+                          }
                           label={label}
                           value={money(row.total)}
                           fill={categoryMax === 0 ? 0 : row.total / categoryMax}

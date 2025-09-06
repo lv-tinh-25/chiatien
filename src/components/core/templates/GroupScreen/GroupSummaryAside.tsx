@@ -96,7 +96,10 @@ export function GroupSummaryAside() {
                 className="flex items-center gap-2 py-2"
               >
                 <span aria-hidden className="flex shrink-0 items-center gap-1">
-                  <Avatar name={participantName(reimbursement.from)} size="xs" />
+                  <Avatar
+                    name={participantName(reimbursement.from)}
+                    size="xs"
+                  />
                   <ArrowRight className="size-3 text-muted-foreground" />
                   <Avatar name={participantName(reimbursement.to)} size="xs" />
                 </span>
@@ -106,7 +109,12 @@ export function GroupSummaryAside() {
                   locale={locale}
                   className="min-w-0 flex-1 truncate text-body-sm font-extrabold"
                 />
-                <Button variant="settle" size="sm" className="min-h-8 px-2.5 text-label-md" asChild>
+                <Button
+                  variant="settle"
+                  size="sm"
+                  className="min-h-8 px-2.5 text-label-md"
+                  asChild
+                >
                   <Link
                     href={settleHref(
                       reimbursement.from,

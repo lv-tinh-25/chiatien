@@ -16,7 +16,13 @@ type Props = {
 }
 
 /** Design order: nearest range first, everything last, custom at the end. */
-const ORDER: StatsPeriod[] = ['thisMonth', 'last30', 'thisYear', 'all', 'custom']
+const ORDER: StatsPeriod[] = [
+  'thisMonth',
+  'last30',
+  'thisYear',
+  'all',
+  'custom',
+]
 
 const DATE_INPUT =
   'flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20'

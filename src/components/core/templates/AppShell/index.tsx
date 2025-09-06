@@ -40,7 +40,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       {chrome.fab !== null && (
         <Fab
           href={chrome.fab.href}
-          label={chrome.fab.aboveNav ? tExpenses('create') : tGroups('createGroup')}
+          label={
+            chrome.fab.aboveNav ? tExpenses('create') : tGroups('createGroup')
+          }
           aboveNav={chrome.fab.aboveNav}
         />
       )}

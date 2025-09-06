@@ -129,9 +129,7 @@ test('drills down from a category into its expenses', async ({ page }) => {
 
   await openTab(page, 'Stats')
 
-  await page
-    .getByRole('button', { name: 'Show expenses for Food' })
-    .click()
+  await page.getByRole('button', { name: 'Show expenses for Food' }).click()
 
   // The dialog lists the category's own expenses and nothing else.
   const dialog = page.getByRole('dialog')
