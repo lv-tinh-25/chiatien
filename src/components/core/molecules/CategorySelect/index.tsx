@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
-import { CategoryIcon } from '@/components/core/atoms/CategoryIcon'
+import { CategoryEmoji } from '@/components/core/atoms/CategoryEmoji'
 import type { Category } from '@/generated/prisma/browser'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
@@ -54,7 +54,7 @@ export function CategorySelect({
         >
           <span className="flex items-center gap-2">
             {selected !== undefined && (
-              <CategoryIcon category={selected} className="size-4" />
+              <CategoryEmoji categoryId={selected.id} size="sm" />
             )}
             {selected === undefined
               ? ''
@@ -100,7 +100,7 @@ export function CategorySelect({
                       className="flex min-h-touch-min cursor-default items-center justify-between rounded-control px-3 text-body-lg text-foreground data-[selected=true]:bg-foreground/6"
                     >
                       <span className="flex items-center gap-2">
-                        <CategoryIcon category={category} className="size-4" />
+                        <CategoryEmoji categoryId={category.id} size="sm" />
                         {t(`${grouping}.${category.name}`)}
                       </span>
                       {category.id === value && (

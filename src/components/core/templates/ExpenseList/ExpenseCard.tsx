@@ -1,6 +1,6 @@
 'use client'
 
-import { CategoryLens } from '@/components/core/atoms/CategoryLens'
+import { CategoryEmoji } from '@/components/core/atoms/CategoryEmoji'
 import { Money } from '@/components/core/atoms/Money'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
@@ -115,7 +115,7 @@ export function ExpenseCard({
         expense.isReimbursement && 'italic',
       )}
     >
-      <CategoryLens category={expense.category} className="mt-0.5" />
+      <CategoryEmoji categoryId={expense.category?.id ?? 0} className="mt-0.5" />
 
       <span className="min-w-0 flex-1">
         <span className="block truncate text-headline-sm text-foreground">
