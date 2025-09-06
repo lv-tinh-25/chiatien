@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/core/atoms/Card'
+import { Card } from '@/components/core/atoms/Card'
 import { BalanceRow } from '@/components/core/templates/BalanceList/BalanceRow'
 import { ReimbursementRow } from '@/components/core/templates/BalanceList/ReimbursementRow'
 import { useBalanceList } from '@/hooks/balances/useBalanceList'
@@ -41,14 +35,20 @@ export function BalanceList() {
     `/groups/${groupId}/expenses/create?reimbursement=yes&from=${from}&to=${to}&amount=${amount}`
 
   return (
-    <div className="flex flex-col gap-5">
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('title')}</CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="flex flex-col divide-y divide-border/50">
+    <div className="flex flex-col gap-4">
+      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
+        {t('title')}
+      </h1>
+
+      <div className="grid items-start gap-4 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
+        <Card className="p-4 lg:p-5">
+          {/* The bars diverge from a centre axis, so the two directions need
+              naming once rather than a legend per row. */}
+          <div className="flex items-center justify-between text-label-sm tracking-wider text-muted-foreground uppercase">
+            <span>← {t('owing')}</span>
+            <span>{t('owed')} →</span>
+          </div>
+          <ul className="mt-2 flex flex-col">
             {balances.map((balance) => (
               <BalanceRow
                 key={balance.participantId}
@@ -60,21 +60,21 @@ export function BalanceList() {
               />
             ))}
           </ul>
-        </CardContent>
-      </Card>
+          <p className="mt-3 text-body-sm text-muted-foreground">
+            {t('description')}
+          </p>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('Reimbursements.title')}</CardTitle>
-          <CardDescription>{t('Reimbursements.description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
+        <div className="flex flex-col gap-2.5">
+          <h2 className="px-1 text-body-md font-bold text-muted-foreground">
+            {t('Reimbursements.title')}
+          </h2>
           {isSettled ? (
-            <p className="text-body-md text-muted-foreground">
+            <Card className="p-4 text-body-md text-muted-foreground">
               {t('Reimbursements.noImbursements')}
-            </p>
+            </Card>
           ) : (
-            <ul className="flex flex-col divide-y divide-border/50">
+            <ul className="flex flex-col gap-2.5">
               {reimbursements.map((reimbursement) => (
                 <ReimbursementRow
                   key={`${reimbursement.from}-${reimbursement.to}`}
@@ -94,8 +94,11 @@ export function BalanceList() {
               ))}
             </ul>
           )}
-        </CardContent>
-      </Card>
+          <p className="px-1 text-body-sm text-muted-foreground">
+            {t('Reimbursements.description')}
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

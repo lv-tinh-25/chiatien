@@ -65,7 +65,9 @@ export function GroupStats() {
           a chart take a full row so no bar is squeezed into a third. */}
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <TotalsCard
-          className="lg:col-span-2"
+          className={
+            stats.recurring.count > 0 ? 'lg:col-span-2' : 'lg:col-span-3'
+          }
           totalGroupSpendings={stats.totalGroupSpendings}
           totalParticipantSpendings={
             activeUserId === null ? undefined : stats.totalParticipantSpendings

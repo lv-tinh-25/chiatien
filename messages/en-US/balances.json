@@ -10,6 +10,8 @@
       "markAsPaid": "Mark as paid",
       "markAsPaidShort": "Paid"
     },
-    "seeAll": "See all"
+    "seeAll": "See all",
+    "owing": "Owes",
+    "owed": "Is owed"
   }
 }

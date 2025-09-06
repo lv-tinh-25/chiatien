@@ -31,6 +31,8 @@ export type GroupChrome = {
   activeUserName: string | null
   /** The one screen-level create action a phone shows, or none. */
   fab: { href: string; aboveNav: boolean } | null
+  /** A form is a full-screen task: the bar would only crowd its submit. */
+  showBottomNav: boolean
 }
 
 /**
@@ -65,6 +67,10 @@ export function useGroupChrome(): GroupChrome {
     return null
   })()
 
+  const onForm =
+    /\/expenses\/(create|[^/]+\/edit)$/.test(pathname) ||
+    /^\/groups\/[^/]+\/edit$/.test(pathname)
+
   return {
     inGroup: groupId !== null,
     groupId,
@@ -78,5 +84,6 @@ export function useGroupChrome(): GroupChrome {
     currency: group ? currencyLabel(getCurrencyFromGroup(group)) : '',
     activeUserName: activeUser?.name ?? null,
     fab,
+    showBottomNav: groupId !== null && !onForm,
   }
 }

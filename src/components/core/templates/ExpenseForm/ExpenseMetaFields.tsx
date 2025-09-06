@@ -3,6 +3,7 @@
 import { CategoryChips } from '@/components/core/molecules/CategoryChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
+import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
 import { PayerPicker } from '@/components/core/molecules/PayerPicker'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { trpc } from '@/trpc/client'
@@ -31,26 +32,28 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <FormField
-        label={t(`${scope}.DateField.label`)}
-        description={t(`${scope}.DateField.description`)}
-        errorKey={form.formState.errors.expenseDate?.message}
-      >
-        {({ id, describedBy }) => (
-          <input
-            id={id}
-            type="date"
-            aria-describedby={describedBy}
-            className="flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
-            value={toDateInputValue(expenseDate)}
-            onChange={(event) =>
-              form.setValue('expenseDate', new Date(event.target.value), {
-                shouldDirty: true,
-              })
-            }
-          />
-        )}
-      </FormField>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <FormField
+          label={t(`${scope}.DateField.label`)}
+          errorKey={form.formState.errors.expenseDate?.message}
+        >
+          {({ id, describedBy }) => (
+            <input
+              id={id}
+              type="date"
+              aria-describedby={describedBy}
+              className="flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
+              value={toDateInputValue(expenseDate)}
+              onChange={(event) =>
+                form.setValue('expenseDate', new Date(event.target.value), {
+                  shouldDirty: true,
+                })
+              }
+            />
+          )}
+        </FormField>
+        <ExpenseRecurrenceField form={form} />
+      </div>
 
       <FormField
         label={t('categoryField.label')}

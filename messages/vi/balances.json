@@ -10,6 +10,8 @@
       "markAsPaid": "Đánh dấu đã trả",
       "markAsPaidShort": "Đã trả"
     },
-    "seeAll": "Xem tất cả"
+    "seeAll": "Xem tất cả",
+    "owing": "Nợ",
+    "owed": "Được nhận"
   }
 }

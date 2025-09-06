@@ -7,7 +7,6 @@ import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/Ex
 import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/ExpenseDocumentsField'
 import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/ExpenseFormFooter'
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
-import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
 import { ExpenseTitleField } from '@/components/core/templates/ExpenseForm/ExpenseTitleField'
 import { PaidForList } from '@/components/core/templates/ExpenseForm/PaidForList'
 import { useExpenseForm } from '@/hooks/expenses/useExpenseForm'
@@ -98,8 +97,6 @@ function ExpenseFormFields({
             onUseCustomRate={setUsingCustomRate}
             onRefreshRate={() => void exchangeRate.refresh()}
           />
-
-          <ExpenseRecurrenceField form={form} />
 
           <ExpenseMetaFields
             form={form}

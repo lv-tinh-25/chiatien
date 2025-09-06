@@ -25,7 +25,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main
         className={cn(
-          'px-4 pt-17 pb-28 lg:px-8 lg:pt-21 lg:pb-12',
+          'px-4 pt-17 lg:px-8 lg:pt-21 lg:pb-12',
+          chrome.showBottomNav ? 'pb-28' : 'pb-10',
           chrome.groupId !== null && 'lg:pl-70',
         )}
       >
@@ -34,7 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </main>
 
-      {chrome.groupId !== null && <BottomNav items={chrome.bottomItems} />}
+      {chrome.showBottomNav && <BottomNav items={chrome.bottomItems} />}
 
       {chrome.fab !== null && (
         <Fab
