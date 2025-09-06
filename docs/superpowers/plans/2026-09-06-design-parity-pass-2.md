@@ -169,22 +169,35 @@ reacting to different fixture dates — not a deviation.
 
 ---
 
-## Decisions to confirm before Task 4 and Task 6
+## Decisions — settled by the owner on 2026-09-06
 
-These three are the only places where following the mockup literally would drop
-a capability the app really has. Each lists the recommendation.
+These three were the only places where following the mockup literally would drop
+a capability the app has. The owner chose the mockup in all three.
 
-1. **Expense currency (D2).** The mockup shows two chips, `₫` and `$`; the app
-   supports the full ISO list because an expense abroad can be in any currency.
-   *Recommendation:* render the design's inline segmented control with the group
-   currency, the last currency used in this group, and a trailing `…` chip that
-   opens the existing searchable list. Same silhouette, no capability lost.
-2. **Group currency (G9).** Same shape, same recommendation: three chips
-   (`₫ VND`, `$ USD`, `€ EUR`) plus a `Khác…` chip opening `CurrencySelect`.
-3. **Stats custom range (F1).** The mockup has four tabs and no custom range.
-   *Recommendation:* keep the four design tabs and keep `Tùy chọn` as a fifth —
-   the design's own tab strip already scrolls horizontally on a phone. Say the
-   word and it goes instead, along with `StatsRangeSelector`'s date inputs.
+1. **Expense currency (D2).** Two chips, `₫` and `$`, exactly as the mockup
+   draws them. No `…` escape hatch. An expense can therefore be entered in the
+   group currency or in USD, and nothing else.
+2. **Group currency (G9).** Two chips, not the mockup's three: **`₫ VND` and
+   `$ USD` only** — the owner dropped EUR as well. A group can be created in
+   Vietnamese dong or US dollars.
+3. **Stats custom range (F1).** The four design tabs, with `Tùy chọn` kept as a
+   fifth.
+
+**Consequences of 1 and 2 — carried in Task 4 and Task 7:**
+
+- `src/components/core/molecules/CurrencySelect/` is deleted along with its
+  stories, and so is `src/lib/currency-data.json` if nothing else reads it.
+- The `Currencies.*` keys (`search`, `noCurrency`, `custom.heading`,
+  `common.heading`, `other.heading`) are deleted from both locales.
+- `SUPPORTED_CURRENCIES` in `src/lib/currency.ts` narrows to `VND` and `USD`.
+  This is a change to ported code and is deliberate; record it in the spec.
+- Groups already stored with another currency keep rendering — the code reads
+  the stored symbol — but they can no longer be edited to a third currency. The
+  database is dev-only and pre-public, so no migration is written.
+- `e2e/app.ts` loses `selectRadixOption` for currency; the chips get their own
+  driver.
+- `CurrencyChips` therefore takes a fixed two-option list and needs no `…` chip
+  or `moreLabel` prop.
 
 ---
 
@@ -199,7 +212,7 @@ a capability the app really has. Each lists the recommendation.
 | `src/components/core/atoms/Money/index.tsx` | optional explicit `+` sign |
 | `src/components/core/molecules/DivergingBar/index.tsx` | trackless gradient bar |
 | `src/components/core/molecules/BalanceChip/index.tsx` | always render, `Đã cân bằng` when zero |
-| `src/components/core/molecules/CurrencyChips/index.tsx` *(new)* | design-shaped currency control |
+| `src/components/core/molecules/CurrencyChips/index.tsx` *(new)* | the design's two-chip currency control |
 | `src/components/core/templates/GroupList/*` | card shape, archived row, join block |
 | `src/components/core/templates/ExpenseList/ExpenseCard.tsx` | chip copy, sub-line, scale |
 | `src/components/core/templates/ExpenseForm/*` | currency block, share pills, footer, submit |
@@ -551,11 +564,13 @@ git commit -m "update(groups): rebuild the group list to the design"
   `ExpenseMetaFields.tsx`, `ExpenseRecurrenceField.tsx`,
   `ExpenseFormFooter.tsx`, `PaidForList.tsx`, `PaidForRow.tsx`
 - Create: `src/components/core/molecules/CurrencyChips/index.tsx`
-- Modify: `src/lib/expense-defaults.ts` (default category), its test
-- Modify: `messages/{vi,en-US}/expenses.json`
+- Delete: `src/components/core/molecules/CurrencySelect/`
+- Modify: `src/lib/currency.ts` (narrow to VND and USD), `src/lib/expense-defaults.ts`
+  (default category), and both tests
+- Modify: `messages/{vi,en-US}/expenses.json`, `messages/{vi,en-US}/common.json`
 - Modify: `e2e/expenses.spec.ts`, `e2e/app.ts`
 
-Addresses C1–C8, D1–D12. Requires decision 1.
+Addresses C1–C8, D1–D12, and decisions 1 and 2.
 
 - [ ] **Step 1: Copy**
 
@@ -603,19 +618,24 @@ separates rows by padding alone.
 
 ```tsx
 type CurrencyChipsProps = {
-  value: Currency
-  options: readonly Currency[]   // group currency first, then recents
-  onChange: (currency: Currency) => void
-  label: string                  // accessible name for the group
-  moreLabel: string              // the trailing "…" chip
+  value: CurrencyCode
+  options: readonly CurrencyCode[]
+  onChange: (code: CurrencyCode) => void
+  label: string   // accessible name for the group
+  variant?: 'inset' | 'outline'
 }
 ```
 
-A Radix RadioGroup styled as the design's inset track, plus one trailing chip
-that opens the existing `CurrencySelect` in a popover at `lg` and a drawer
-below. It sits inline to the right of the amount input inside
+A Radix RadioGroup. The `inset` variant is the expense form's track — a bordered
+4 px pad, selected chip filled `bg-primary text-primary-foreground`. The
+`outline` variant is the group form's — full-width chips using the `--chip`
+tokens. It sits inline to the right of the amount input inside
 `ExpenseAmountField`; `ExpenseCurrencyBlock` loses its standalone field and
 keeps only the conversion notice.
+
+Then delete `CurrencySelect/`, narrow `SUPPORTED_CURRENCIES` in
+`src/lib/currency.ts` to `VND` and `USD`, and delete the `Currencies.*` keys in
+both locales. Drop `currency-data.json` only if nothing else imports it.
 
 - [ ] **Step 6: Per-person share and split footer**
 
@@ -729,7 +749,7 @@ git commit -m "update(balances): trackless diverging bars and one-line settlemen
 - Create: `src/lib/recurring-estimate.ts` and its test
 - Modify: `messages/{vi,en-US}/stats.json`
 
-Addresses F1–F7. Requires decision 3.
+Addresses F1–F7, with decision 3 keeping `custom` as a fifth tab.
 
 - [ ] **Step 1: Ranges**
 
@@ -838,8 +858,8 @@ its key.
 - [ ] **Step 4: Group form**
 
 Add the `Thông tin nhóm` textarea to the create form — the field exists on the
-edit form and is simply absent on create. Currency becomes `CurrencyChips` with
-`₫ VND`, `$ USD`, `€ EUR` and a `Khác…` chip (decision 2). Participant rows
+edit form and is simply absent on create. Currency becomes `CurrencyChips` in its
+`outline` variant with two options, `₫ VND` and `$ USD` (decision 2). Participant rows
 become avatar + name + `✕`, with one `Tên thành viên mới…` input and a
 `+ Thêm` button beneath; a row switches to an input only when it is clicked.
 Footer: one right-aligned gradient button, no `Hủy bỏ`.
@@ -929,9 +949,9 @@ does not re-derive them from the mockup.
 
 - [ ] **Step 2: Record the three decisions**
 
-Whatever is chosen for the currency controls and the custom stats range becomes
-a recorded deviation with its reason, replacing the pass-1 entries it
-supersedes.
+Record the narrowing of `SUPPORTED_CURRENCIES` to VND and USD as a deliberate
+change to ported code, and delete the pass-1 deviation that kept the currency
+select searchable — it no longer applies.
 
 - [ ] **Step 3: Commit**
 
