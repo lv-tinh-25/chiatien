@@ -6,7 +6,6 @@ import {
   SheetContent,
   SheetDescription,
   SheetTitle,
-  SheetTrigger,
 } from '@/components/core/atoms/Sheet'
 import { useBaseUrl } from '@/lib/hooks'
 import { Check, Copy, Download, Share2 } from 'lucide-react'
@@ -14,7 +13,16 @@ import { useTranslations } from 'next-intl'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useRef, useState } from 'react'
 
-export function ShareSheet({ groupId }: { groupId: string }) {
+/** Opened from the group overflow menu, so it carries no trigger of its own. */
+export function ShareSheet({
+  groupId,
+  open,
+  onOpenChange,
+}: {
+  groupId: string
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
   const t = useTranslations('Share')
   const baseUrl = useBaseUrl()
   const [copied, setCopied] = useState(false)
@@ -48,13 +56,8 @@ export function ShareSheet({ groupId }: { groupId: string }) {
   }
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label={t('title')}>
-          <Share2 aria-hidden />
-        </Button>
-      </SheetTrigger>
-      <SheetContent className="p-4">
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent className="max-h-[85dvh] overflow-y-auto p-4">
         <SheetTitle className="text-headline-md">{t('title')}</SheetTitle>
         <SheetDescription className="text-body-md text-muted-foreground">
           {t('description')}

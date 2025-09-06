@@ -51,6 +51,19 @@
     "settings": "Settings",
     "backToGroups": "Back to groups",
     "more": "More",
-    "groupSettings": "Group settings"
+    "groupSettings": "Group settings",
+    "information": "Information",
+    "thisGroup": "This group",
+    "shareLink": "Share group link",
+    "activeUser": "You are viewing as",
+    "changeActiveUser": "Change",
+    "create": "New",
+    "balancesSubtitle": "Balances & settling up",
+    "statsSubtitle": "Group statistics",
+    "activitySubtitle": "Activity log",
+    "memberCount": "{count} members",
+    "groupSettingsTitle": "Group settings",
+    "createGroupTitle": "New group",
+    "back": "Back"
   }
 }

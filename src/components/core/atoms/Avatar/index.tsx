@@ -4,24 +4,40 @@ import { cn } from '@/lib/utils'
 
 type AvatarProps = {
   name: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  /** `solid` fills with the participant's hue, as the design draws it. */
+  variant?: 'tinted' | 'solid'
   className?: string
 }
 
 const SIZES = {
+  xs: 'size-6 text-[0.625rem]',
   sm: 'size-7 text-label-sm',
-  md: 'size-10 text-label-md',
-  lg: 'size-12 text-headline-sm',
+  md: 'size-8 text-label-md',
+  lg: 'size-10 text-label-md',
 }
 
-export function Avatar({ name, size = 'md', className }: AvatarProps) {
+/**
+ * Decorative throughout: the participant's name is always written next to it,
+ * so announcing the initials again would only make a screen reader repeat
+ * itself in a voice that mispronounces them.
+ */
+export function Avatar({
+  name,
+  size = 'md',
+  variant = 'solid',
+  className,
+}: AvatarProps) {
+  const tone = participantTone(name)
   return (
     <span
       aria-hidden
       className={cn(
-        'inline-flex shrink-0 items-center justify-center rounded-full font-semibold ring-1 ring-current/15 select-none',
+        'inline-flex shrink-0 items-center justify-center rounded-full font-extrabold select-none',
         SIZES[size],
-        participantTone(name).surface,
+        variant === 'solid'
+          ? cn(tone.fill, 'text-primary-foreground')
+          : cn(tone.surface, 'ring-1 ring-current/15'),
         className,
       )}
     >

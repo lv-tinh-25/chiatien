@@ -1,0 +1,148 @@
+'use client'
+
+import { Button } from '@/components/core/atoms/Button'
+import { Sheet, SheetContent, SheetTitle } from '@/components/core/atoms/Sheet'
+import { ShareSheet } from '@/components/core/templates/AppShell/ShareSheet'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
+import {
+  ChevronDown,
+  Download,
+  FileJson,
+  Info,
+  Link2,
+  MoreHorizontal,
+  Settings2,
+} from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import Link from 'next/link'
+import { useState } from 'react'
+
+const ROW =
+  'flex min-h-touch-min w-full cursor-pointer items-center gap-3 rounded-control px-3 text-left text-body-lg font-medium text-foreground transition-colors duration-150 ease-out-soft hover:bg-foreground/5'
+
+function Items({
+  groupId,
+  onShare,
+  onNavigate,
+}: {
+  groupId: string
+  onShare: () => void
+  onNavigate: () => void
+}) {
+  const t = useTranslations('Nav')
+  const tExpenses = useTranslations('Expenses')
+
+  return (
+    <>
+      <Link
+        href={`/groups/${groupId}/information`}
+        className={ROW}
+        onClick={onNavigate}
+      >
+        <Info aria-hidden />
+        {t('information')}
+      </Link>
+      <Link
+        href={`/groups/${groupId}/edit`}
+        className={ROW}
+        onClick={onNavigate}
+      >
+        <Settings2 aria-hidden />
+        {t('groupSettings')}
+      </Link>
+      <button type="button" className={ROW} onClick={onShare}>
+        <Link2 aria-hidden />
+        {t('shareLink')}
+      </button>
+      <a
+        href={`/groups/${groupId}/expenses/export/csv`}
+        className={ROW}
+        onClick={onNavigate}
+      >
+        <Download aria-hidden />
+        {tExpenses('exportCsv')}
+      </a>
+      <a
+        href={`/groups/${groupId}/expenses/export/json`}
+        className={ROW}
+        onClick={onNavigate}
+      >
+        <FileJson aria-hidden />
+        {tExpenses('exportJson')}
+      </a>
+    </>
+  )
+}
+
+/**
+ * The same five destinations in the two shapes the design asks for: a labelled
+ * dropdown beside the desktop breadcrumb, and a bottom sheet behind the mobile
+ * header's overflow button.
+ */
+export function GroupOverflowMenu({
+  groupId,
+  variant,
+}: {
+  groupId: string
+  variant: 'menu' | 'sheet'
+}) {
+  const t = useTranslations('Nav')
+  const [open, setOpen] = useState(false)
+  const [sharing, setSharing] = useState(false)
+
+  const share = () => {
+    setOpen(false)
+    setSharing(true)
+  }
+
+  return (
+    <>
+      {variant === 'menu' ? (
+        <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
+          <PopoverPrimitive.Trigger asChild>
+            <Button variant="outline" size="sm" className="min-h-9.5">
+              {t('thisGroup')}
+              <ChevronDown aria-hidden />
+            </Button>
+          </PopoverPrimitive.Trigger>
+          <PopoverPrimitive.Portal>
+            <PopoverPrimitive.Content
+              align="end"
+              sideOffset={8}
+              className="glass-modal z-50 flex w-60 flex-col rounded-card p-1.5"
+            >
+              <Items
+                groupId={groupId}
+                onShare={share}
+                onNavigate={() => setOpen(false)}
+              />
+            </PopoverPrimitive.Content>
+          </PopoverPrimitive.Portal>
+        </PopoverPrimitive.Root>
+      ) : (
+        <Sheet open={open} onOpenChange={setOpen}>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('more')}
+            onClick={() => setOpen(true)}
+          >
+            <MoreHorizontal aria-hidden />
+          </Button>
+          <SheetContent className="p-3 pb-6">
+            <SheetTitle className="sr-only">{t('thisGroup')}</SheetTitle>
+            <div className="flex flex-col">
+              <Items
+                groupId={groupId}
+                onShare={share}
+                onNavigate={() => setOpen(false)}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
+      )}
+
+      <ShareSheet groupId={groupId} open={sharing} onOpenChange={setSharing} />
+    </>
+  )
+}
