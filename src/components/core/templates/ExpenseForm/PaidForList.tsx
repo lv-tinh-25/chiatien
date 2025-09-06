@@ -158,10 +158,12 @@ export function PaidForList({
       <ul className="flex max-h-66 flex-col overflow-y-auto">
         {participants.map((participant) => {
           const row = rowFor(participant.id)
+          const peers = participants.map(({ name }) => name)
           return (
             <PaidForRow
               key={participant.id}
               participant={participant}
+              peers={peers}
               checked={row !== undefined}
               splitMode={splitMode}
               currency={currency}

@@ -8,6 +8,7 @@ import type { Currency } from '@/lib/currency'
 
 type PaidForRowProps = {
   participant: { id: string; name: string }
+  peers: readonly string[]
   checked: boolean
   splitMode: SplitMode
   currency: Currency
@@ -28,6 +29,7 @@ type PaidForRowProps = {
  */
 export function PaidForRow({
   participant,
+  peers,
   checked,
   splitMode,
   currency,
@@ -52,6 +54,7 @@ export function PaidForRow({
         />
         <Avatar
           name={participant.name}
+          peers={peers}
           size="lg"
           className="order-first size-7.5"
         />

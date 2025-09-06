@@ -30,6 +30,7 @@ function PickerList({
   onPick: (id: string) => void
 }) {
   const t = useTranslations('PayerPicker')
+  const names = participants.map((participant) => participant.name)
   const needle = query.trim().toLowerCase()
   const matches = participants.filter(
     (participant) =>
@@ -70,7 +71,7 @@ function PickerList({
               participant.id === value && 'bg-chip-selected',
             )}
           >
-            <Avatar name={participant.name} size="md" />
+            <Avatar name={participant.name} peers={names} size="md" />
             <span className="min-w-0 flex-1 truncate">{participant.name}</span>
             {participant.id === value && (
               <Check className="size-4 shrink-0 text-primary-ink" aria-hidden />
@@ -139,6 +140,8 @@ export function PayerPicker({
     />
   )
 
+  const peers = participants.map((participant) => participant.name)
+
   const trigger = (
     <button
       type="button"
@@ -156,6 +159,7 @@ export function PayerPicker({
           <Avatar
             key={participant.id}
             name={participant.name}
+            peers={peers}
             size="xs"
             className={cn(
               'ring-2 ring-card',
@@ -185,7 +189,7 @@ export function PayerPicker({
           onClick={() => onValueChange(participant.id)}
           className="max-w-37.5 pl-1"
         >
-          <Avatar name={participant.name} size="xs" />
+          <Avatar name={participant.name} peers={peers} size="xs" />
           <span className="max-w-18 truncate">{participant.name}</span>
         </Chip>
       ))}
