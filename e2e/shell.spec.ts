@@ -8,11 +8,17 @@ test('the group list carries no in-group navigation', async ({ page }) => {
   ).toBeHidden()
 })
 
-test('a group shows four destinations in the sidebar', async ({ page }) => {
+test('a group shows its destinations in the sidebar', async ({ page }) => {
   await page.goto('/groups/seeded/expenses')
   const nav = page.getByRole('navigation', { name: 'Group sections' })
   await expect(nav).toBeVisible()
-  for (const label of ['Expenses', 'Balances', 'Stats', 'Activity']) {
+  for (const label of [
+    'Expenses',
+    'Balances',
+    'Stats',
+    'Activity',
+    'Information',
+  ]) {
     await expect(
       nav.getByRole('link', { name: label, exact: true }),
     ).toBeVisible()

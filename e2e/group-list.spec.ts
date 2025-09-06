@@ -1,6 +1,16 @@
+import type { Page } from '@playwright/test'
 import { createGroup, uniqueSuffix } from './app'
 import { expect, test } from './fixtures'
 import { fillStable } from './ui'
+
+/** Opens the overflow menu on the card for `name`. */
+async function openCardMenu(page: Page, name: string): Promise<void> {
+  await page
+    .getByTestId('group-card')
+    .filter({ has: page.getByRole('link', { name, exact: true }) })
+    .getByRole('button', { name: 'More' })
+    .click()
+}
 
 test('a fresh profile shows the empty state', async ({ page }) => {
   await page.goto('/groups')
@@ -61,11 +71,10 @@ test('starring moves a group into the starred section and survives a reload', as
   await createGroup(page, { name, participants: ['Alice', 'Bob'] })
 
   await page.goto('/groups')
-  const card = page
-    .locator('div')
-    .filter({ has: page.getByRole('link', { name }) })
-    .last()
-  await card.getByRole('button', { name: 'Starred groups' }).click()
+  // Star, archive and forget live behind the card's overflow menu so the card
+  // itself is one link.
+  await openCardMenu(page, name)
+  await page.getByRole('button', { name: 'Starred groups' }).click()
 
   await expect(
     page.getByRole('heading', { name: 'Starred groups' }),
@@ -82,11 +91,8 @@ test('archiving moves a group into the archived section', async ({ page }) => {
   await createGroup(page, { name, participants: ['Alice', 'Bob'] })
 
   await page.goto('/groups')
-  const card = page
-    .locator('div')
-    .filter({ has: page.getByRole('link', { name }) })
-    .last()
-  await card.getByRole('button', { name: 'Archive group' }).click()
+  await openCardMenu(page, name)
+  await page.getByRole('button', { name: 'Archive group' }).click()
 
   await expect(
     page.getByRole('heading', { name: 'Archived groups' }),
@@ -125,10 +131,8 @@ test('offers to undo forgetting a group', async ({ page }) => {
 
   await page.goto('/groups')
   await expect(page.getByRole('link', { name })).toBeVisible()
-  await page
-    .getByRole('button', { name: 'Remove from recent groups' })
-    .first()
-    .click()
+  await openCardMenu(page, name)
+  await page.getByRole('button', { name: 'Remove from recent groups' }).click()
   await expect(page.getByRole('link', { name })).toBeHidden()
 
   await page.getByRole('button', { name: 'Undo' }).click()

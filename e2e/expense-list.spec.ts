@@ -43,8 +43,15 @@ test('the group header links to settings and information', async ({ page }) => {
   })
 
   await page.goto(`/groups/${groupId}/expenses`)
-  await page.getByRole('button', { name: 'More' }).click()
+  // On a desktop viewport the overflow is a labelled dropdown in the top bar;
+  // a phone shows the same items behind an icon button.
+  await page.getByRole('button', { name: 'This group' }).click()
+  // The sidebar carries an Information link too, so scope to the menu.
+  const menu = page.locator('[data-radix-popper-content-wrapper]')
   await expect(
-    page.getByRole('link', { name: 'Group information' }),
+    menu.getByRole('link', { name: 'Information', exact: true }),
+  ).toBeVisible()
+  await expect(
+    menu.getByRole('link', { name: 'Group settings', exact: true }),
   ).toBeVisible()
 })

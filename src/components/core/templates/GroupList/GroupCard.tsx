@@ -33,6 +33,7 @@ export function GroupCard({
   return (
     <Card
       interactive
+      data-testid="group-card"
       className="relative flex flex-col gap-3 p-4 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring"
     >
       <div className="flex items-start justify-between gap-2">

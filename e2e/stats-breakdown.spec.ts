@@ -1,6 +1,6 @@
 import { addExpense, createGroup, openTab, uniqueSuffix } from './app'
 import { expect, test } from './fixtures'
-import { cardByTitle, money, selectRadixOption } from './ui'
+import { cardByTitle, money } from './ui'
 
 const PARTICIPANTS = ['Alice', 'Bob', 'Carol']
 
@@ -16,13 +16,13 @@ test('breaks spending down by participant and by category', async ({
     title: 'Weekly shop',
     amount: '90',
     paidBy: 'Alice',
-    category: 'Groceries',
+    category: 'Food',
   })
   await addExpense(page, groupId, {
     title: 'Taxi',
     amount: '30',
     paidBy: 'Bob',
-    category: 'Taxi',
+    category: 'Transport',
   })
 
   await openTab(page, 'Stats')
@@ -43,9 +43,9 @@ test('breaks spending down by participant and by category', async ({
   await expect(carol).toContainText(money(40))
 
   const byCategory = cardByTitle(page, 'Spending by category')
-  await expect(byCategory).toContainText('Groceries')
+  await expect(byCategory).toContainText('Food')
   await expect(byCategory).toContainText(money(90))
-  await expect(byCategory).toContainText('Taxi')
+  await expect(byCategory).toContainText('Transport')
   await expect(byCategory).toContainText(money(30))
 })
 
@@ -101,7 +101,7 @@ test('restricts the stats to the selected period', async ({ page }) => {
   const totals = cardByTitle(page, 'Totals')
   await expect(totals).toContainText(money(70))
 
-  await selectRadixOption(page, page.getByRole('combobox').first(), 'This year')
+  await page.getByRole('radio', { name: 'This year' }).click()
 
   // The 2020 expense drops out; only the one recorded today is left.
   await expect(totals).toContainText(money(20))
@@ -118,19 +118,19 @@ test('drills down from a category into its expenses', async ({ page }) => {
     title: 'Weekly shop',
     amount: '40',
     paidBy: 'Alice',
-    category: 'Groceries',
+    category: 'Food',
   })
   await addExpense(page, groupId, {
     title: 'Cab home',
     amount: '25',
     paidBy: 'Bob',
-    category: 'Taxi',
+    category: 'Transport',
   })
 
   await openTab(page, 'Stats')
 
   await page
-    .getByRole('button', { name: 'Show expenses for Groceries' })
+    .getByRole('button', { name: 'Show expenses for Food' })
     .click()
 
   // The dialog lists the category's own expenses and nothing else.
@@ -192,11 +192,7 @@ test('scopes the stats to a custom date range', async ({ page }) => {
   const totals = cardByTitle(page, 'Totals')
   await expect(totals).toContainText(money(125))
 
-  await selectRadixOption(
-    page,
-    page.getByRole('combobox').first(),
-    'Custom range',
-  )
+  await page.getByRole('radio', { name: 'Custom range' }).click()
   // Each date field is an <input> inside a <label> that also carries an
   // aria-label, so getByLabel matches both nodes. Scope to the input.
   const dateField = (label: string) =>

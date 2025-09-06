@@ -40,8 +40,7 @@ test('honours an English browser', async ({ browser }) => {
 
 test('remembers the language picked in settings', async ({ page }) => {
   await page.goto('/settings')
-  await page.getByRole('combobox').click()
-  await page.getByRole('option', { name: 'Tiếng Việt' }).click()
+  await page.getByRole('radio', { name: 'Tiếng Việt' }).click()
 
   await expect(page.getByRole('heading', { name: 'Cài đặt' })).toBeVisible()
   await page.goto('/groups')

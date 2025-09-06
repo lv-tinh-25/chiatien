@@ -3,7 +3,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/core/atoms/Card'
@@ -61,46 +60,57 @@ export function TotalsCard({
 
   return (
     <Card className={className}>
-      <CardHeader className="gap-0 pb-2">
+      {/* The heading stays a real heading inside a header: `cardByTitle` finds
+          this card by walking up two levels from it. */}
+      <CardHeader className="gap-0 pb-1">
         <CardTitle className="text-label-md font-bold text-muted-foreground">
           {t('title')}
         </CardTitle>
       </CardHeader>
+
       <CardContent className="flex flex-col gap-3 pt-0">
         <div className="flex flex-col">
-          <span className="text-display-currency font-extrabold text-foreground">
+          <span className="text-label-md text-muted-foreground">
+            {t(totalGroupSpendings < 0 ? 'groupEarnings' : 'groupSpendings')}
+          </span>
+          <span className="text-headline-lg font-extrabold text-foreground lg:text-display-currency">
             <Money
               amount={Math.abs(totalGroupSpendings)}
               currency={currency}
               locale={locale}
             />
           </span>
-          <span className="text-body-sm text-muted-foreground">
-            {t('description')}
-          </span>
         </div>
-        <div className="flex flex-wrap gap-x-7 gap-y-2">
-        {totalParticipantSpendings !== undefined && (
-          <Total
-            label={t(
-              totalParticipantSpendings < 0 ? 'yourEarnings' : 'yourSpendings',
+
+        {(totalParticipantSpendings !== undefined ||
+          totalParticipantShare !== undefined) && (
+          <div className="flex flex-wrap gap-x-7 gap-y-2">
+            {totalParticipantSpendings !== undefined && (
+              <Total
+                label={t(
+                  totalParticipantSpendings < 0
+                    ? 'yourEarnings'
+                    : 'yourSpendings',
+                )}
+                amount={totalParticipantSpendings}
+                currency={currency}
+                locale={locale}
+                tone={totalParticipantSpendings < 0 ? 'credit' : 'debit'}
+              />
             )}
-            amount={totalParticipantSpendings}
-            currency={currency}
-            locale={locale}
-            tone={totalParticipantSpendings < 0 ? 'credit' : 'debit'}
-          />
+            {totalParticipantShare !== undefined && (
+              <Total
+                label={t('yourShare')}
+                amount={totalParticipantShare}
+                currency={currency}
+                locale={locale}
+                tone={totalParticipantShare < 0 ? 'credit' : 'debit'}
+              />
+            )}
+          </div>
         )}
-        {totalParticipantShare !== undefined && (
-          <Total
-            label={t('yourShare')}
-            amount={totalParticipantShare}
-            currency={currency}
-            locale={locale}
-            tone={totalParticipantShare < 0 ? 'credit' : 'debit'}
-          />
-        )}
-        </div>
+
+        <p className="text-body-sm text-muted-foreground">{t('description')}</p>
       </CardContent>
     </Card>
   )

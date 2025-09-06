@@ -52,7 +52,10 @@ function PickerList({
         />
       </div>
 
-      <div className="flex max-h-65 flex-col gap-0.5 overflow-y-auto">
+      <div
+        data-testid="payer-picker"
+        className="flex max-h-65 flex-col gap-0.5 overflow-y-auto"
+      >
         {matches.map((participant) => (
           <button
             key={participant.id}

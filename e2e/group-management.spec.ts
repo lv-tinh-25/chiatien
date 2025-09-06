@@ -36,11 +36,12 @@ test('renames a group and adds a participant afterwards', async ({ page }) => {
   await page.getByRole('button', { name: 'Add participant' }).click()
   await fillStable(page.locator('input[name="participants.3.name"]'), 'Dave')
 
-  // EditGroup saves in place rather than navigating.
+  // EditGroup saves in place rather than navigating. The group name is chrome
+  // now — the breadcrumb and the sidebar carry it, not a heading on the form.
   await page.getByRole('button', { name: 'Save', exact: true }).click()
   await expect(
-    page.getByRole('heading', { name: renamed, exact: true }),
-  ).toBeVisible({ timeout: 30_000 })
+    page.getByRole('navigation', { name: 'Breadcrumb' }),
+  ).toContainText(renamed, { timeout: 30_000 })
 
   // The new participant must be usable straight away.
   await addExpense(page, groupId, {
@@ -188,7 +189,10 @@ test('shares a group as a link and as a QR code', async ({ page }) => {
   })
 
   await page.goto(`/groups/${groupId}/expenses`)
-  await page.getByRole('button', { name: 'Share', exact: true }).click()
+  // Sharing moved into the group overflow menu with the rest of the
+  // group-level actions.
+  await page.getByRole('button', { name: 'This group' }).click()
+  await page.getByRole('button', { name: 'Share group link' }).click()
 
   const sheet = page.getByRole('dialog')
   await expect(sheet).toContainText('Share via QR Code')
