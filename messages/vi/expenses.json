@@ -207,70 +207,29 @@
   "Categories": {
     "search": "Tìm danh mục...",
     "noCategory": "Không tìm thấy danh mục nào.",
-    "Uncategorized": {
-      "heading": "Chưa phân loại",
-      "General": "Chung",
-      "Payment": "Thanh toán"
+    "Accommodation": {
+      "heading": "Chỗ ở",
+      "Accommodation": "Chỗ ở"
     },
-    "Entertainment": {
-      "heading": "Giải trí",
-      "Entertainment": "Giải trí",
-      "Games": "Trò chơi",
-      "Movies": "Phim ảnh",
-      "Music": "Âm nhạc",
-      "Sports": "Thể thao"
-    },
-    "Food and Drink": {
+    "Food": {
       "heading": "Ăn uống",
-      "Food and Drink": "Ăn uống",
-      "Dining Out": "Ăn ngoài",
-      "Groceries": "Đi chợ, siêu thị",
-      "Liquor": "Đồ uống có cồn"
+      "Food": "Ăn uống"
     },
-    "Home": {
-      "heading": "Nhà cửa",
-      "Home": "Nhà cửa",
-      "Electronics": "Đồ điện tử",
-      "Furniture": "Nội thất",
-      "Household Supplies": "Đồ gia dụng",
-      "Maintenance": "Sửa chữa, bảo trì",
-      "Mortgage": "Trả góp nhà",
-      "Pets": "Thú cưng",
-      "Rent": "Tiền thuê nhà",
-      "Services": "Dịch vụ"
+    "Transport": {
+      "heading": "Di chuyển",
+      "Transport": "Di chuyển"
     },
-    "Life": {
-      "heading": "Đời sống",
-      "Childcare": "Chăm sóc trẻ",
-      "Clothing": "Quần áo",
-      "Donation": "Quyên góp",
-      "Education": "Học hành",
-      "Gifts": "Quà tặng",
-      "Insurance": "Bảo hiểm",
-      "Medical Expenses": "Chi phí y tế",
-      "Taxes": "Thuế"
+    "Leisure": {
+      "heading": "Giải trí",
+      "Leisure": "Giải trí"
     },
-    "Transportation": {
-      "heading": "Đi lại",
-      "Transportation": "Đi lại",
-      "Bicycle": "Xe đạp",
-      "Bus/Train": "Xe buýt, tàu",
-      "Car": "Ô tô",
-      "Gas/Fuel": "Xăng dầu",
-      "Hotel": "Khách sạn",
-      "Parking": "Gửi xe",
-      "Plane": "Máy bay",
-      "Taxi": "Taxi, xe ôm"
+    "Settlement": {
+      "heading": "Trả nợ",
+      "Settlement": "Trả nợ"
     },
-    "Utilities": {
-      "heading": "Tiện ích",
-      "Utilities": "Tiện ích",
-      "Cleaning": "Dọn dẹp",
-      "Electricity": "Tiền điện",
-      "Heat/Gas": "Gas, sưởi",
-      "Trash": "Tiền rác",
-      "TV/Phone/Internet": "TV, điện thoại, internet",
-      "Water": "Tiền nước"
+    "Other": {
+      "heading": "Khác",
+      "Other": "Khác"
     }
   }
 }

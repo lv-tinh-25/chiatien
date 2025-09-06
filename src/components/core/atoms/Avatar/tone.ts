@@ -55,6 +55,12 @@ const TONES: readonly ParticipantTone[] = [
   },
 ]
 
+/** Pick a tone by position rather than by name, for anything that already has
+ *  a stable slot of its own — a category, say. */
+export function toneAt(index: number): ParticipantTone {
+  return TONES[((index % TONES.length) + TONES.length) % TONES.length]
+}
+
 export function participantTone(name: string): ParticipantTone {
   let hash = 0
   for (let i = 0; i < name.length; i++)

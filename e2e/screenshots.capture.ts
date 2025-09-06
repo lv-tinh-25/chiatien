@@ -81,19 +81,19 @@ async function seed(page: Page): Promise<string> {
   const idOf = (name: string) =>
     participants.find((participant) => participant.name === name)?.id ?? ''
 
-  // Category ids come from prisma/migrations/*_add_categories: 34 Plane,
-  // 32 Hotel, 8 Dining Out, 7 Food and Drink, 35 Taxi.
+  // Category ids come from prisma/migrations/*_reduce_categories: 27 Transport,
+  // 11 Accommodation, 7 Food, 2 Leisure.
   const expenses = [
-    { title: 'Vé máy bay', amount: 6_400_000, paidBy: 'Linh', category: 34 },
-    { title: 'Khách sạn', amount: 3_200_000, paidBy: 'Minh', category: 32 },
+    { title: 'Vé máy bay', amount: 6_400_000, paidBy: 'Linh', category: 27 },
+    { title: 'Khách sạn', amount: 3_200_000, paidBy: 'Minh', category: 11 },
     {
       title: 'Bữa tối hải sản',
       amount: 1_850_000,
       paidBy: 'Trâm',
-      category: 8,
+      category: 7,
     },
     { title: 'Cà phê', amount: 240_000, paidBy: 'Đức', category: 7 },
-    { title: 'Taxi sân bay', amount: 450_000, paidBy: 'Linh', category: 35 },
+    { title: 'Taxi sân bay', amount: 450_000, paidBy: 'Linh', category: 27 },
   ]
 
   for (const expense of expenses) {

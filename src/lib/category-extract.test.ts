@@ -23,8 +23,8 @@ jest.mock('./featureFlags', () => ({
 }))
 jest.mock('./api', () => ({
   getCategories: async () => [
-    { id: 0, grouping: 'General', name: 'General' },
-    { id: 4, grouping: 'Transport', name: 'Taxi' },
+    { id: 0, grouping: 'Other', name: 'Other' },
+    { id: 27, grouping: 'Transport', name: 'Transport' },
   ],
 }))
 
@@ -38,14 +38,14 @@ describe('extractCategoryFromTitle', () => {
   beforeEach(() => mockCreate.mockReset())
 
   it('returns the category the model picked', async () => {
-    respondWith(JSON.stringify({ categoryId: 4 }))
+    respondWith(JSON.stringify({ categoryId: 27 }))
     expect(await extractCategoryFromTitle('Taxi to the airport')).toEqual({
-      categoryId: 4,
+      categoryId: 27,
     })
   })
 
   it('asks for a strict JSON schema, and for the configured model', async () => {
-    respondWith(JSON.stringify({ categoryId: 4 }))
+    respondWith(JSON.stringify({ categoryId: 27 }))
     await extractCategoryFromTitle('Taxi to the airport')
 
     const request = mockCreate.mock.calls[0][0]
@@ -59,14 +59,14 @@ describe('extractCategoryFromTitle', () => {
   })
 
   it('truncates the title before sending it', async () => {
-    respondWith(JSON.stringify({ categoryId: 4 }))
+    respondWith(JSON.stringify({ categoryId: 27 }))
     await extractCategoryFromTitle('T'.repeat(100))
 
     const userMessage = mockCreate.mock.calls[0][0].messages.at(-1)
     expect(userMessage.content).toHaveLength(40)
   })
 
-  // Everything below must degrade to the "General" fallback rather than throw:
+  // Everything below must degrade to the "Other" fallback rather than throw:
   // a self-hosted endpoint may ignore the schema entirely.
   it.each([
     ['an id that does not exist', JSON.stringify({ categoryId: 9999 })],

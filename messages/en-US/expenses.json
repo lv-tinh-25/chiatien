@@ -207,70 +207,29 @@
   "Categories": {
     "search": "Search category...",
     "noCategory": "No category found.",
-    "Uncategorized": {
-      "heading": "Uncategorized",
-      "General": "General",
-      "Payment": "Payment"
+    "Accommodation": {
+      "heading": "Accommodation",
+      "Accommodation": "Accommodation"
     },
-    "Entertainment": {
-      "heading": "Entertainment",
-      "Entertainment": "Entertainment",
-      "Games": "Games",
-      "Movies": "Movies",
-      "Music": "Music",
-      "Sports": "Sports"
+    "Food": {
+      "heading": "Food",
+      "Food": "Food"
     },
-    "Food and Drink": {
-      "heading": "Food and Drink",
-      "Food and Drink": "Food and Drink",
-      "Dining Out": "Dining Out",
-      "Groceries": "Groceries",
-      "Liquor": "Liquor"
+    "Transport": {
+      "heading": "Transport",
+      "Transport": "Transport"
     },
-    "Home": {
-      "heading": "Home",
-      "Home": "Home",
-      "Electronics": "Electronics",
-      "Furniture": "Furniture",
-      "Household Supplies": "Household Supplies",
-      "Maintenance": "Maintenance",
-      "Mortgage": "Mortgage",
-      "Pets": "Pets",
-      "Rent": "Rent",
-      "Services": "Services"
+    "Leisure": {
+      "heading": "Leisure",
+      "Leisure": "Leisure"
     },
-    "Life": {
-      "heading": "Life",
-      "Childcare": "Childcare",
-      "Clothing": "Clothing",
-      "Donation": "Donation",
-      "Education": "Education",
-      "Gifts": "Gifts",
-      "Insurance": "Insurance",
-      "Medical Expenses": "Medical Expenses",
-      "Taxes": "Taxes"
+    "Settlement": {
+      "heading": "Settlement",
+      "Settlement": "Settlement"
     },
-    "Transportation": {
-      "heading": "Transportation",
-      "Transportation": "Transportation",
-      "Bicycle": "Bicycle",
-      "Bus/Train": "Bus/Train",
-      "Car": "Car",
-      "Gas/Fuel": "Gas/Fuel",
-      "Hotel": "Hotel",
-      "Parking": "Parking",
-      "Plane": "Plane",
-      "Taxi": "Taxi"
-    },
-    "Utilities": {
-      "heading": "Utilities",
-      "Utilities": "Utilities",
-      "Cleaning": "Cleaning",
-      "Electricity": "Electricity",
-      "Heat/Gas": "Heat/Gas",
-      "Trash": "Trash",
-      "TV/Phone/Internet": "TV/Phone/Internet",
-      "Water": "Water"
+    "Other": {
+      "heading": "Other",
+      "Other": "Other"
     }
   }
 }
