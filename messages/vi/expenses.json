@@ -27,11 +27,11 @@
     }
   },
   "ExpenseCard": {
-    "paidBy": "<strong>{paidBy}</strong> chi cho <paidFor></paidFor>",
-    "everyone": "mọi người",
-    "receivedBy": "Nhận bởi <strong>{paidBy}</strong> cho <paidFor></paidFor>",
     "yourBalance": "Số dư của bạn:",
-    "notInvolved": "Bạn chưa tham gia"
+    "notInvolved": "Bạn chưa tham gia",
+    "paidBySummary": "{paidBy} trả · {count} người",
+    "receivedBySummary": "{paidBy} nhận · {count} người",
+    "reimbursement": "Trả nợ"
   },
   "ExpenseForm": {
     "Income": {

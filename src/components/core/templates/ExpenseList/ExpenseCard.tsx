@@ -11,7 +11,6 @@ import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { Paperclip } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Fragment } from 'react'
 
 type Expense = AppRouterOutput['groups']['expenses']['list']['expenses'][number]
 
@@ -20,48 +19,7 @@ type ExpenseCardProps = {
   groupId: string
   currency: Currency
   locale: Locale
-  participantCount: number
-  /** Participant ids in the group's own order. */
-  participantOrder: string[]
   activeUserId: string | null
-}
-
-function PaidForNames({
-  expense,
-  participantCount,
-  participantOrder,
-}: {
-  expense: Expense
-  participantCount: number
-  participantOrder: string[]
-}) {
-  const t = useTranslations('ExpenseCard')
-
-  if (expense.paidFor.length === participantCount && participantCount >= 4) {
-    return <strong>{t('everyone')}</strong>
-  }
-
-  // paidFor is fetched without an orderBy, so the database is free to return
-  // the rows in any order; the group's own participant order is the one people
-  // recognise.
-  const ordered = [...expense.paidFor].sort(
-    (a, b) =>
-      participantOrder.indexOf(a.participant.id) -
-      participantOrder.indexOf(b.participant.id),
-  )
-
-  return (
-    <>
-      {ordered.map((paidFor, index) => (
-        <Fragment key={paidFor.participant.id}>
-          {index !== 0 && ', '}
-          <strong className="font-semibold text-foreground">
-            {paidFor.participant.name}
-          </strong>
-        </Fragment>
-      ))}
-    </>
-  )
 }
 
 export function ExpenseCard({
@@ -69,8 +27,6 @@ export function ExpenseCard({
   groupId,
   currency,
   locale,
-  participantCount,
-  participantOrder,
   activeUserId,
 }: ExpenseCardProps) {
   const t = useTranslations('ExpenseCard')
@@ -102,47 +58,42 @@ export function ExpenseCard({
   const balance = paid - share
   const involved = share !== 0 || paid !== 0
 
+  const summary = expense.isReimbursement
+    ? t('reimbursement')
+    : t(expense.amount > 0 ? 'paidBySummary' : 'receivedBySummary', {
+        paidBy: expense.paidBy.name,
+        count: expense.paidFor.length,
+      })
+
   return (
     <Link
       href={`/groups/${groupId}/expenses/${expense.id}/edit`}
       data-testid="expense-card"
       data-expense-id={expense.id}
       className={cn(
-        'glass-flush glass-contain flex items-start gap-3 rounded-card p-3',
-        'transition-[transform,box-shadow,background-color] duration-200 ease-out-soft',
-        'hover:-translate-y-0.5 hover:bg-card hover:shadow-card active:translate-y-0 active:duration-75',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
-        expense.isReimbursement && 'italic',
+        'glass-contain flex w-full items-center gap-3 px-3.5 py-3 lg:gap-3.5 lg:px-4.5',
+        'transition-colors duration-150 ease-out-soft hover:bg-card',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:-outline-offset-2 focus-visible:outline-none',
       )}
     >
-      <CategoryEmoji categoryId={expense.category?.id ?? 0} className="mt-0.5" />
+      <CategoryEmoji
+        categoryId={expense.category?.id ?? 0}
+        size="md"
+        className="lg:size-11"
+      />
 
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-headline-sm text-foreground">
+        <span
+          className={cn(
+            'block truncate text-headline-sm font-bold text-foreground',
+            expense.isReimbursement && 'font-semibold italic',
+          )}
+        >
           {expense.title}
         </span>
-        <span className="block truncate text-body-sm text-muted-foreground">
-          {t.rich(expense.amount > 0 ? 'paidBy' : 'receivedBy', {
-            strong: (chunks) => (
-              <strong className="font-semibold text-foreground">
-                {chunks}
-              </strong>
-            ),
-            paidBy: expense.paidBy.name,
-            paidFor: () => (
-              <PaidForNames
-                expense={expense}
-                participantCount={participantCount}
-                participantOrder={participantOrder}
-              />
-            ),
-            forCount: expense.paidFor.length,
-          })}
-        </span>
-        {/* Date, attachments and the viewer's own share stay in the flexible
-            column: hanging them off the amount squeezes the title to nothing on
-            a phone. */}
-        <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-body-sm text-muted-foreground">
+        <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
+          <span className="truncate">{summary}</span>
+          <span aria-hidden>·</span>
           <span className="whitespace-nowrap">
             {formatDateOnly(expense.expenseDate, locale, {
               dateStyle: 'medium',
@@ -154,39 +105,17 @@ export function ExpenseCard({
               {expense._count.documents}
             </span>
           )}
-          {activeUserId !== null &&
-            (involved ? (
-              <span
-                className={cn(
-                  'flex items-baseline gap-1 rounded-full px-2 py-0.5 whitespace-nowrap',
-                  balance >= 0
-                    ? 'bg-credit-subtle text-credit'
-                    : 'bg-debit-subtle text-debit',
-                )}
-              >
-                <span className="opacity-70">{t('yourBalance')}</span>
-                <Money
-                  amount={balance}
-                  currency={currency}
-                  locale={locale}
-                  tone={balance >= 0 ? 'credit' : 'debit'}
-                  className="font-semibold"
-                />
-              </span>
-            ) : (
-              <span>{t('notInvolved')}</span>
-            ))}
         </span>
       </span>
 
-      <span className="flex shrink-0 flex-col items-end gap-0.5">
+      <span className="flex shrink-0 flex-col items-end gap-1">
         <Money
           amount={expense.amount}
           currency={currency}
           locale={locale}
           className={cn(
-            'whitespace-nowrap text-numeric-table-lg',
-            expense.isReimbursement && 'font-normal italic',
+            'text-numeric-table-lg font-extrabold whitespace-nowrap',
+            expense.isReimbursement && 'font-semibold italic',
           )}
         />
         {original && (
@@ -194,9 +123,38 @@ export function ExpenseCard({
             amount={original.amount}
             currency={original.currency}
             locale={locale}
-            className="whitespace-nowrap text-body-sm text-muted-foreground"
+            className="text-body-sm whitespace-nowrap text-muted-foreground"
           />
         )}
+        {activeUserId !== null &&
+          (involved ? (
+            <span
+              className={cn(
+                'flex items-baseline gap-1 rounded-full px-2 py-0.5 text-label-sm font-bold whitespace-nowrap',
+                balance >= 0
+                  ? 'bg-credit-subtle text-credit'
+                  : 'bg-debit-subtle text-debit',
+              )}
+            >
+              {/* The label is what the ported spec matches on, but it doubles
+                  the chip's width on a phone, where the tone already says which
+                  way the money goes. */}
+              <span className="sr-only opacity-70 lg:not-sr-only">
+                {t('yourBalance')}
+              </span>
+              <Money
+                amount={balance}
+                currency={currency}
+                locale={locale}
+                tone={balance >= 0 ? 'credit' : 'debit'}
+                className="font-extrabold"
+              />
+            </span>
+          ) : (
+            <span className="rounded-full bg-muted px-2 py-0.5 text-label-sm font-bold whitespace-nowrap text-muted-foreground">
+              {t('notInvolved')}
+            </span>
+          ))}
       </span>
     </Link>
   )

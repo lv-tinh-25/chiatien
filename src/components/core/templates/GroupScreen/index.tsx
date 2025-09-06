@@ -14,9 +14,9 @@ export function GroupScreen({
   children: ReactNode
 }) {
   return (
-    <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_19rem]">
+    <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_21.25rem]">
       <div className="min-w-0">{children}</div>
-      <aside className="hidden xl:sticky xl:top-24 xl:block">{aside}</aside>
+      <aside className="hidden xl:sticky xl:top-21 xl:block">{aside}</aside>
     </div>
   )
 }

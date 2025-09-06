@@ -27,11 +27,11 @@
     }
   },
   "ExpenseCard": {
-    "paidBy": "Paid by <strong>{paidBy}</strong> for <paidFor></paidFor>",
-    "everyone": "everyone",
-    "receivedBy": "Received by <strong>{paidBy}</strong> for <paidFor></paidFor>",
     "yourBalance": "Your balance:",
-    "notInvolved": "You are not involved"
+    "notInvolved": "You are not involved",
+    "paidBySummary": "{paidBy} paid · {count} people",
+    "receivedBySummary": "{paidBy} received · {count} people",
+    "reimbursement": "Settlement"
   },
   "ExpenseForm": {
     "Income": {
