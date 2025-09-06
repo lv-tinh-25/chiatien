@@ -1,3 +1,4 @@
+import { Aurora } from '@/components/core/atoms/Aurora'
 import { ToastViewport } from '@/components/core/molecules/Toast'
 import { ServiceWorkerRegistration } from '@/components/core/templates/ServiceWorkerRegistration'
 import { jakarta } from '@/lib/fonts'
@@ -38,7 +39,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={jakarta.variable}>
       <body className="min-h-dvh font-sans antialiased">
-        <div className="aurora pointer-events-none fixed inset-0 -z-10" />
+        <Aurora />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <TRPCProvider>{children}</TRPCProvider>
           <ToastViewport />

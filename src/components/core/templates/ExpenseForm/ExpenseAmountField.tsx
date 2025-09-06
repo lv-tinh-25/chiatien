@@ -21,6 +21,7 @@ export function ExpenseAmountField({ form, currency }: Props) {
       label={t('amountField.label')}
       inputMode="decimal"
       placeholder={currency.symbol_native}
+      className="h-13 text-headline-lg font-extrabold"
       errorKey={form.formState.errors.amount?.message}
       {...registration}
       onChange={(event) => {

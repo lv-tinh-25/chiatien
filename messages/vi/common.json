@@ -4,7 +4,9 @@
     "description": "Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản."
   },
   "Settings": {
-    "title": "Cài đặt"
+    "title": "Cài đặt",
+    "about": "ChiaTiền · webapp tự lưu trữ, không cần tài khoản. Lõi tính toán dựa trên Spliit (giấy phép MIT).",
+    "language": "Ngôn ngữ"
   },
   "Toast": {
     "dismiss": "Bỏ qua"
@@ -51,6 +53,20 @@
     "settings": "Cài đặt",
     "backToGroups": "Về danh sách nhóm",
     "more": "Thêm",
-    "groupSettings": "Cài đặt nhóm"
+    "groupSettings": "Cài đặt nhóm",
+    "information": "Thông tin",
+    "thisGroup": "Nhóm này",
+    "shareLink": "Chia sẻ link nhóm",
+    "activeUser": "Bạn đang xem là",
+    "changeActiveUser": "Đổi",
+    "create": "Thêm",
+    "balancesSubtitle": "Số dư & quyết toán",
+    "statsSubtitle": "Thống kê nhóm",
+    "activitySubtitle": "Nhật ký hoạt động",
+    "memberCount": "{count} thành viên",
+    "groupSettingsTitle": "Cài đặt nhóm",
+    "createGroupTitle": "Tạo nhóm mới",
+    "back": "Quay lại",
+    "breadcrumb": "Đường dẫn"
   }
 }

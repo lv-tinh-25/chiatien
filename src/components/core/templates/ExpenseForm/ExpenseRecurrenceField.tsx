@@ -27,7 +27,7 @@ export function ExpenseRecurrenceField({
   })
 
   return (
-    <FormField label={t('label')} description={t('description')}>
+    <FormField label={t('label')}>
       {({ id, describedBy }) => (
         <Select
           id={id}

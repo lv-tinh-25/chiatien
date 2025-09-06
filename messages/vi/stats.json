@@ -9,7 +9,12 @@
       "thisYear": "Năm nay",
       "custom": "Tùy chọn",
       "from": "Từ",
-      "to": "Đến"
+      "to": "Đến",
+      "allShort": "Tất cả",
+      "thisMonthShort": "Tháng",
+      "last30Short": "30 ngày",
+      "thisYearShort": "Năm",
+      "customShort": "Tuỳ chọn"
     },
     "Totals": {
       "title": "Tổng cộng",

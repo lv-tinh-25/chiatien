@@ -47,7 +47,11 @@
     "NotFound": {
       "text": "This group does not exist.",
       "link": "Go to recently visited groups"
-    }
+    },
+    "settled": "Settled up",
+    "expenseCount": "{count} expenses",
+    "subtitle": "No account needed — every group is just a link.",
+    "joinTitle": "Join an existing group"
   },
   "GroupForm": {
     "title": "Group information",
@@ -121,6 +125,12 @@
       "earlierThisYear": "Earlier this year",
       "lastYear": "Last year",
       "older": "Older"
+    },
+    "Tags": {
+      "UPDATE_GROUP": "Settings",
+      "CREATE_EXPENSE": "Created",
+      "UPDATE_EXPENSE": "Edited",
+      "DELETE_EXPENSE": "Deleted"
     }
   }
 }

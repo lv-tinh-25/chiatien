@@ -5,6 +5,8 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
 // there, and this component's own value is a formatted amount.
 type StatBarProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'value'> & {
   label: ReactNode
+  /** Decoration ahead of the label — a category lens, say. */
+  icon?: ReactNode
   value: ReactNode
   /** 0 to 1. */
   fill: number
@@ -15,15 +17,17 @@ type StatBarProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'value'> & {
 }
 
 function Body({
+  icon,
   label,
   value,
   fill,
   tone,
-}: Pick<StatBarProps, 'label' | 'value' | 'fill' | 'tone'>) {
+}: Pick<StatBarProps, 'icon' | 'label' | 'value' | 'fill' | 'tone'>) {
   return (
     <>
-      <span className="flex items-baseline justify-between gap-3">
-        <span className="min-w-0 truncate text-body-md text-foreground">
+      <span className="flex items-center justify-between gap-3">
+        <span className="flex min-w-0 items-center gap-2 truncate text-body-md font-semibold text-foreground">
+          {icon}
           {label}
         </span>
         <span className="shrink-0 tabular text-numeric-table-md text-foreground">
@@ -47,13 +51,13 @@ function Body({
 
 export const StatBar = forwardRef<HTMLButtonElement, StatBarProps>(
   function StatBar(
-    { label, value, fill, tone, asButton = false, selectLabel, ...props },
+    { icon, label, value, fill, tone, asButton = false, selectLabel, ...props },
     ref,
   ) {
     if (!asButton) {
       return (
         <li className="py-2">
-          <Body label={label} value={value} fill={fill} tone={tone} />
+          <Body icon={icon} label={label} value={value} fill={fill} tone={tone} />
         </li>
       )
     }
@@ -67,7 +71,7 @@ export const StatBar = forwardRef<HTMLButtonElement, StatBarProps>(
           className="w-full cursor-pointer rounded-control px-2 py-2 text-left transition-colors duration-150 ease-out-soft hover:bg-foreground/5"
           {...props}
         >
-          <Body label={label} value={value} fill={fill} tone={tone} />
+          <Body icon={icon} label={label} value={value} fill={fill} tone={tone} />
         </button>
       </li>
     )

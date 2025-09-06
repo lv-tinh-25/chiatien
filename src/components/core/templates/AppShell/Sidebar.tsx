@@ -1,104 +1,63 @@
-import type { NavItem } from '@/components/core/templates/AppShell/navigation'
+'use client'
+
+import { NAV_ICONS } from '@/components/core/templates/AppShell/navIcons'
+import { ActiveUserCard } from '@/components/core/templates/AppShell/ActiveUserCard'
+import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
 import { cn } from '@/lib/utils'
-import {
-  ArrowLeft,
-  BarChart3,
-  History,
-  Info,
-  Receipt,
-  Scale,
-  Settings,
-} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
-const ICONS = {
-  expenses: Receipt,
-  balances: Scale,
-  stats: BarChart3,
-  activity: History,
-}
-
-const LINK =
-  'flex min-h-touch-min items-center gap-3 rounded-control px-3 transition-colors duration-150 ease-out-soft'
-
-export function Sidebar({
-  items,
-  groupId,
-}: {
-  items: NavItem[]
-  groupId: string
-}) {
+export function Sidebar({ chrome }: { chrome: GroupChrome }) {
   const t = useTranslations('Nav')
-  const tApp = useTranslations('App')
-  const tForm = useTranslations('GroupForm')
 
   return (
     <nav
       aria-label={t('groupSections')}
-      className="glass-float fixed top-4 bottom-4 left-4 z-30 hidden w-60 flex-col rounded-card p-3 lg:flex"
+      className="glass-flush fixed top-15 bottom-0 left-0 z-20 hidden w-62 flex-col gap-1.5 rounded-none border-0 border-r border-white/70 p-3.5 pt-5 lg:flex"
     >
-      <span className="px-3 pt-2 pb-4 text-headline-md text-primary">
-        {tApp('name')}
-      </span>
+      <div className="flex items-center gap-3 px-2.5 pt-2.5 pb-4">
+        <span
+          aria-hidden
+          className="glass-flush flex size-10.5 items-center justify-center rounded-control text-xl"
+        >
+          {chrome.emoji}
+        </span>
+        <div className="min-w-0">
+          <div className="truncate text-body-md font-extrabold text-foreground">
+            {chrome.name}
+          </div>
+          <div className="truncate text-label-sm font-semibold text-muted-foreground">
+            {t('memberCount', { count: chrome.participantCount })} ·{' '}
+            {chrome.currency}
+          </div>
+        </div>
+      </div>
 
-      <Link
-        href="/groups"
-        className={cn(LINK, 'mb-3 text-body-md text-muted-foreground hover:text-foreground')}
-      >
-        <ArrowLeft className="size-4" aria-hidden />
-        {t('backToGroups')}
-      </Link>
-
-      <ul className="flex flex-col gap-1">
-        {items.map((item) => {
-          const Icon = ICONS[item.key]
+      <ul className="flex flex-col gap-1.5">
+        {chrome.items.map((item) => {
+          const Icon = NAV_ICONS[item.key]
           return (
             <li key={item.key}>
               <Link
                 href={item.href}
                 aria-current={item.active ? 'page' : undefined}
                 className={cn(
-                  LINK,
-                  'relative text-body-lg',
+                  'flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-md transition-colors duration-150 ease-out-soft',
                   item.active
-                    ? 'glass-flush font-semibold text-primary'
-                    : 'text-foreground hover:bg-foreground/5',
+                    ? 'glass-raised font-extrabold text-primary-ink'
+                    : 'font-semibold text-foreground/80 hover:bg-foreground/5',
                 )}
               >
-                {item.active && (
-                  <span
-                    aria-hidden
-                    className="absolute top-1/2 left-0 h-6 w-1 -translate-y-1/2 rounded-r-full bg-primary"
-                  />
-                )}
                 <Icon className="size-5" aria-hidden />
                 {t(item.key)}
               </Link>
             </li>
           )
         })}
-        <li>
-          <Link
-            href={`/groups/${groupId}/information`}
-            className={cn(LINK, 'text-body-lg text-foreground hover:bg-foreground/5')}
-          >
-            <Info className="size-5" aria-hidden />
-            {tForm('InformationField.label')}
-          </Link>
-        </li>
       </ul>
 
-      <Link
-        href="/settings"
-        className={cn(
-          LINK,
-          'mt-auto text-body-md text-muted-foreground hover:bg-foreground/5 hover:text-foreground',
-        )}
-      >
-        <Settings className="size-5" aria-hidden />
-        {t('settings')}
-      </Link>
+      <div className="flex-1" />
+      <ActiveUserCard chrome={chrome} />
     </nav>
   )
 }

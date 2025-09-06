@@ -1,15 +1,10 @@
+'use client'
+
+import { NAV_ICONS } from '@/components/core/templates/AppShell/navIcons'
 import type { NavItem } from '@/components/core/templates/AppShell/navigation'
 import { cn } from '@/lib/utils'
-import { BarChart3, History, Receipt, Scale } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-
-const ICONS = {
-  expenses: Receipt,
-  balances: Scale,
-  stats: BarChart3,
-  activity: History,
-}
 
 export function BottomNav({ items }: { items: NavItem[] }) {
   const t = useTranslations('Nav')
@@ -17,22 +12,22 @@ export function BottomNav({ items }: { items: NavItem[] }) {
   return (
     <nav
       aria-label={t('groupSections')}
-      className="fixed inset-x-0 bottom-0 z-40 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:hidden"
+      className="glass-modal fixed bottom-0 left-1/2 z-30 w-full max-w-[480px] -translate-x-1/2 rounded-none border-x-0 border-b-0 px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
     >
-      <ul className="glass-float mx-auto flex max-w-md gap-1 rounded-full p-1.5">
+      <ul className="flex">
         {items.map((item) => {
-          const Icon = ICONS[item.key]
+          const Icon = NAV_ICONS[item.key]
           return (
             <li key={item.key} className="flex-1">
               <Link
                 href={item.href}
                 aria-current={item.active ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-touch-min flex-col items-center justify-center gap-1 rounded-full text-label-sm',
+                  'flex min-h-touch-min flex-col items-center justify-center gap-1 rounded-control text-label-sm',
                   'transition-colors duration-150 ease-out-soft active:scale-[0.96]',
                   item.active
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground',
+                    ? 'font-extrabold text-primary-ink'
+                    : 'font-semibold text-muted-foreground',
                 )}
               >
                 <Icon className="size-5" aria-hidden />

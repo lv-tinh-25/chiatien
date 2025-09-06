@@ -1,7 +1,6 @@
 'use client'
 
-import { FormField } from '@/components/core/molecules/FormField'
-import { Select } from '@/components/core/molecules/Select'
+import { SegmentedControl } from '@/components/core/molecules/SegmentedControl'
 import {
   STATS_PERIODS,
   type StatsPeriod,
@@ -16,6 +15,9 @@ type Props = {
   onCustomRangeChange: (range: StatsRange) => void
 }
 
+/** Design order: nearest range first, everything last, custom at the end. */
+const ORDER: StatsPeriod[] = ['thisMonth', 'last30', 'thisYear', 'all', 'custom']
+
 const DATE_INPUT =
   'flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20'
 
@@ -28,28 +30,24 @@ export function StatsRangeSelector({
   const t = useTranslations('Stats.range')
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-      <FormField label={t('label')} className="sm:w-56">
-        {({ id }) => (
-          <Select
-            id={id}
-            value={period}
-            onValueChange={(value) => {
-              const next = STATS_PERIODS.find(
-                (candidate) => candidate === value,
-              )
-              if (next) onPeriodChange(next)
-            }}
-            options={STATS_PERIODS.map((candidate) => ({
-              value: candidate,
-              label: t(candidate),
-            }))}
-          />
-        )}
-      </FormField>
+    <div className="flex flex-col gap-3">
+      <SegmentedControl
+        ariaLabel={t('label')}
+        value={period}
+        onValueChange={(value) => {
+          const next = STATS_PERIODS.find((candidate) => candidate === value)
+          if (next) onPeriodChange(next)
+        }}
+        options={ORDER.map((candidate) => ({
+          value: candidate,
+          label: t(candidate),
+          shortLabel: t(`${candidate}Short`),
+        }))}
+        className="w-full justify-between overflow-x-auto lg:w-auto"
+      />
 
       {period === 'custom' && (
-        <>
+        <div className="flex flex-col gap-3 sm:flex-row">
           {/* The input sits inside its label rather than beside it: an implicit
               association keeps the pair addressable as one node. */}
           <label className="flex flex-1 flex-col gap-1.5">
@@ -77,7 +75,7 @@ export function StatsRangeSelector({
               }
             />
           </label>
-        </>
+        </div>
       )}
     </div>
   )

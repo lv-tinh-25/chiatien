@@ -7,7 +7,11 @@
       "description": "Đây là phương án chuyển tiền gọn nhất giữa các thành viên.",
       "noImbursements": "Nhóm của bạn không cần ai trả lại ai cả 😁",
       "owes": "<strong>{from}</strong> nợ <strong>{to}</strong>",
-      "markAsPaid": "Đánh dấu đã trả"
-    }
+      "markAsPaid": "Đánh dấu đã trả",
+      "markAsPaidShort": "Đã trả"
+    },
+    "seeAll": "Xem tất cả",
+    "owing": "Nợ",
+    "owed": "Được nhận"
   }
 }

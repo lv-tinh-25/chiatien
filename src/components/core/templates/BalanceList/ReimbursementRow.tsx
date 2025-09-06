@@ -35,15 +35,15 @@ export function ReimbursementRow({
       data-testid="reimbursement-row"
       data-from={fromName}
       data-to={toName}
-      className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-3"
+      className="glass-raised flex flex-col gap-2.5 rounded-card p-3.5 sm:flex-row sm:items-center sm:gap-3"
     >
       <span className="flex min-w-0 flex-1 items-center gap-2.5">
         <span aria-hidden className="flex shrink-0 items-center gap-1">
-          <Avatar name={fromName} size="sm" />
+          <Avatar name={fromName} size="lg" />
           <ArrowRight className="size-3.5 text-muted-foreground" />
-          <Avatar name={toName} size="sm" />
+          <Avatar name={toName} size="lg" />
         </span>
-        <span className="min-w-0 text-body-lg text-foreground">
+        <span className="min-w-0 text-body-md text-foreground">
           {t.rich('owes', {
             strong: (chunks) => (
               <strong className="font-semibold">{chunks}</strong>
@@ -59,7 +59,7 @@ export function ReimbursementRow({
           amount={amount}
           currency={currency}
           locale={locale}
-          className="whitespace-nowrap text-numeric-table-md"
+          className="text-numeric-table-md font-extrabold whitespace-nowrap"
         />
 
         <Button variant="settle" size="sm" asChild>

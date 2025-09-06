@@ -1,14 +1,16 @@
 'use client'
 
-import { Button } from '@/components/core/atoms/Button'
 import { Card } from '@/components/core/atoms/Card'
-import type { RecentGroup } from '@/lib/recent-groups'
-import { Archive, ArchiveRestore, Star, Trash2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { BalanceChip } from '@/components/core/molecules/BalanceChip'
+import { GroupCardMenu } from '@/components/core/templates/GroupList/GroupCardMenu'
+import type { GroupListEntry } from '@/hooks/groups/useGroupList'
+import { asLocale } from '@/i18n/locales'
+import { groupEmoji } from '@/lib/group-emoji'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 type GroupCardProps = {
-  group: RecentGroup
+  group: GroupListEntry
   starred: boolean
   archived: boolean
   onToggleStar: () => void
@@ -25,49 +27,56 @@ export function GroupCard({
   onForget,
 }: GroupCardProps) {
   const t = useTranslations('Groups')
+  const tNav = useTranslations('Nav')
+  const locale = asLocale(useLocale())
 
   return (
     <Card
       interactive
-      className="flex items-center gap-0.5 p-2 pl-4 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring"
+      data-testid="group-card"
+      className="relative flex flex-col gap-3 p-4 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring"
     >
-      <Link
-        href={`/groups/${group.id}/expenses`}
-        className="flex min-h-touch-min min-w-0 flex-1 items-center truncate text-headline-sm text-foreground outline-none"
-      >
-        {group.name}
-      </Link>
+      <div className="flex items-start justify-between gap-2">
+        <span
+          aria-hidden
+          className="glass-flush flex size-10 items-center justify-center rounded-control text-xl"
+        >
+          {groupEmoji(group.id)}
+        </span>
+        <div className="relative z-10 flex items-center gap-1">
+          {group.balance !== null && (
+            <BalanceChip
+              amount={group.balance.amount}
+              currency={group.balance.currency}
+              locale={locale}
+              settledLabel={t('settled')}
+            />
+          )}
+          <GroupCardMenu
+            starred={starred}
+            archived={archived}
+            onToggleStar={onToggleStar}
+            onToggleArchive={onToggleArchive}
+            onForget={onForget}
+          />
+        </div>
+      </div>
 
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t('starred')}
-        aria-pressed={starred}
-        onClick={onToggleStar}
-        className={starred ? 'text-accent' : 'text-muted-foreground'}
-      >
-        <Star aria-hidden fill={starred ? 'currentColor' : 'none'} />
-      </Button>
-
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={archived ? t('unarchive') : t('archive')}
-        onClick={onToggleArchive}
-        className="text-muted-foreground"
-      >
-        {archived ? <ArchiveRestore aria-hidden /> : <Archive aria-hidden />}
-      </Button>
-
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t('removeRecent')}
-        onClick={onForget}
-        className="text-muted-foreground hover:text-destructive"
-      >
-        <Trash2 aria-hidden />
-      </Button>
+      <div className="min-w-0">
+        {/* The link stretches over the card so the whole tile is one target,
+            while the menu button above keeps its own hit area by sitting later
+            in the stacking order. */}
+        <Link
+          href={`/groups/${group.id}/expenses`}
+          className="text-headline-sm font-bold text-foreground outline-none before:absolute before:inset-0 before:rounded-card before:content-['']"
+        >
+          {group.name}
+        </Link>
+        <p className="mt-0.5 text-body-sm text-muted-foreground">
+          {tNav('memberCount', { count: group.participantCount })} ·{' '}
+          {t('expenseCount', { count: group.expenseCount })}
+        </p>
+      </div>
     </Card>
   )
 }

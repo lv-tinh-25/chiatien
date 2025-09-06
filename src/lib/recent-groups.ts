@@ -29,22 +29,22 @@ export function toggleIn(ids: string[], id: string): string[] {
   return ids.includes(id) ? ids.filter((known) => known !== id) : [...ids, id]
 }
 
-export type PartitionedGroups = {
-  starred: RecentGroups
-  recent: RecentGroups
-  archived: RecentGroups
+export type PartitionedGroups<T = RecentGroup> = {
+  starred: T[]
+  recent: T[]
+  archived: T[]
 }
 
 /**
  * A group can be both starred and archived in storage. Starring wins, so a
  * group is never rendered in two sections at once.
  */
-export function partitionGroups(
-  groups: RecentGroups,
+export function partitionGroups<T extends { id: string }>(
+  groups: T[],
   starredIds: string[],
   archivedIds: string[],
-): PartitionedGroups {
-  const partitioned: PartitionedGroups = {
+): PartitionedGroups<T> {
+  const partitioned: PartitionedGroups<T> = {
     starred: [],
     recent: [],
     archived: [],

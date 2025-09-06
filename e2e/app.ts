@@ -109,7 +109,7 @@ export async function addExpense(
     shares?: Record<string, string>
     /** YYYY-MM-DD. Defaults to today. */
     date?: string
-    /** Visible category name, e.g. 'Groceries'. Defaults to General. */
+    /** Visible category name, e.g. 'Food'. Defaults to Other. */
     category?: string
     /** Visible label: 'None' | 'Daily' | 'Weekly' | 'Monthly'. Defaults to None. */
     recurrence?: Recurrence
@@ -126,7 +126,7 @@ export async function addExpense(
   // Amount before split mode: BY_AMOUNT re-distributes shares whenever the
   // amount changes, which would wipe values set beforehand.
   await fillStable(page.locator('input[name="amount"]'), expense.amount)
-  await selectRadixOption(page, page.getByTestId('paid-by'), expense.paidBy)
+  await selectPayer(page, expense.paidBy)
 
   if (expense.date) {
     // The date input spreads no RHF field, so it has no name attribute.
@@ -134,13 +134,10 @@ export async function addExpense(
   }
 
   if (expense.category) {
-    // A cmdk Command in a Popover, not a Radix Select, but the trigger is still
-    // role=combobox and the items are still role=option.
-    await selectRadixOption(
-      page,
-      fieldByLabel(page, 'Category').getByRole('combobox'),
-      expense.category,
-    )
+    // Six chips, no popover: the taxonomy was cut to what fits in one row.
+    await fieldByLabel(page, 'Category')
+      .getByRole('option', { name: expense.category, exact: true })
+      .click()
   }
 
   if (expense.recurrence) {
@@ -163,16 +160,9 @@ export async function addExpense(
 
   const splitMode = expense.splitMode ?? 'EVENLY'
   if (splitMode !== 'EVENLY') {
-    // Radix Collapsible unmounts its content, so the Split mode select does
-    // not exist in the DOM until this is opened.
-    await page
-      .getByRole('button', { name: /Advanced splitting options/ })
-      .click()
-    await selectRadixOption(
-      page,
-      page.getByTestId('split-mode'),
-      SPLIT_MODE_LABELS[splitMode],
-    )
+    // The split modes are a segmented control that is always on screen; the
+    // visible label is abbreviated, so the radio is selected by its aria-label.
+    await selectSplitMode(page, splitMode)
   }
 
   if (expense.shares) {
@@ -190,6 +180,40 @@ export async function addExpense(
 
   await submit.click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+}
+
+/**
+ * Picks who paid.
+ *
+ * The payer control shows up to four chips and collapses any remainder behind
+ * a pill: an option that is already a chip is clicked directly, otherwise the
+ * pill is opened first and the option picked from the searchable list.
+ */
+export async function selectPayer(page: Page, name: string): Promise<void> {
+  const field = page.getByTestId('paid-by')
+  await expect(async () => {
+    const chip = field.getByRole('option', { name, exact: true })
+    if (!(await chip.isVisible().catch(() => false))) {
+      await field
+        .getByRole('button', { name: 'Show all participants' })
+        .click({ timeout: 5_000 })
+    }
+    await page
+      .getByRole('option', { name, exact: true })
+      .first()
+      .click({ timeout: 5_000 })
+  }).toPass({ timeout: 20_000 })
+}
+
+/** Picks a split mode from the always-visible segmented control. */
+export async function selectSplitMode(
+  page: Page,
+  splitMode: SplitMode,
+): Promise<void> {
+  await page
+    .getByTestId('split-mode')
+    .getByRole('radio', { name: SPLIT_MODE_LABELS[splitMode] })
+    .click()
 }
 
 /**

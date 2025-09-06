@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
-import { CategoryIcon } from '@/components/core/atoms/CategoryIcon'
+import { CategoryEmoji } from '@/components/core/atoms/CategoryEmoji'
 import { Money } from '@/components/core/atoms/Money'
 import { useReceiptExtract } from '@/hooks/expenses/useReceiptExtract'
 import type { Locale } from '@/i18n/locales'
@@ -114,7 +114,7 @@ export function CreateFromReceipt({
                   <Unknown />
                 ) : (
                   <span className="flex items-center gap-2">
-                    <CategoryIcon category={category} className="size-4" />
+                    <CategoryEmoji categoryId={category.id} size="sm" />
                     {tCategories(`${category.grouping}.${category.name}`)}
                   </span>
                 )}

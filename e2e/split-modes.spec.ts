@@ -4,10 +4,12 @@ import {
   expectBalance,
   openTab,
   paidForRow,
+  selectPayer,
+  selectSplitMode,
   uniqueSuffix,
 } from './app'
 import { expect, test } from './fixtures'
-import { fillStable, selectRadixOption } from './ui'
+import { fillStable } from './ui'
 
 const PARTICIPANTS = ['Alice', 'Bob', 'Carol']
 
@@ -86,9 +88,8 @@ test('rejects percentages that do not add up to 100', async ({ page }) => {
 
   await fillStable(page.locator('input[name="title"]'), 'Invalid')
   await fillStable(page.locator('input[name="amount"]'), '100')
-  await selectRadixOption(page, page.getByTestId('paid-by'), 'Alice')
-  await page.getByRole('button', { name: /Advanced splitting options/ }).click()
-  await selectRadixOption(page, page.getByTestId('split-mode'), /By percentage/)
+  await selectPayer(page, 'Alice')
+  await selectSplitMode(page, 'BY_PERCENTAGE')
 
   const shares: Record<string, string> = { Alice: '50', Bob: '30', Carol: '10' }
   for (const name of Object.keys(shares)) {

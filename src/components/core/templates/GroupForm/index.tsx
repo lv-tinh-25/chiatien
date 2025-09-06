@@ -5,6 +5,7 @@ import { GroupFormFooter } from '@/components/core/templates/GroupForm/GroupForm
 import { GroupSettingsFields } from '@/components/core/templates/GroupForm/GroupSettingsFields'
 import { ParticipantList } from '@/components/core/templates/GroupForm/ParticipantList'
 import { useGroupForm } from '@/hooks/groups/useGroupForm'
+import { useTranslations } from 'next-intl'
 
 type ExistingGroup = {
   id: string
@@ -26,6 +27,8 @@ export function GroupForm({
   protectedParticipantIds,
   defaultCurrencyCode,
 }: GroupFormProps) {
+  const tNav = useTranslations('Nav')
+  const tGroups = useTranslations('Groups')
   const {
     form,
     isEdit,
@@ -41,10 +44,10 @@ export function GroupForm({
   } = useGroupForm({ group, protectedParticipantIds, defaultCurrencyCode })
 
   return (
-    <form
-      onSubmit={submit}
-      className="mx-auto flex w-full max-w-3xl flex-col gap-5"
-    >
+    <form onSubmit={submit} className="flex w-full max-w-180 flex-col gap-4">
+      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
+        {isEdit ? tNav('groupSettingsTitle') : tGroups('createGroup')}
+      </h1>
       <GroupDetailsFields
         form={form}
         isEdit={isEdit}

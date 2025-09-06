@@ -40,7 +40,7 @@ test('records a negative amount as an income', async ({ page }) => {
 
   await expect(expenseCard(page, 'Deposit refund')).toContainText(money(-90))
   await expect(expenseCard(page, 'Deposit refund')).toContainText(
-    'Received by Alice',
+    'Alice received',
   )
 
   // Income inverts the balances: Alice took the money in, so she owes it.
@@ -60,13 +60,13 @@ test('assigns a category to an expense', async ({ page }) => {
     title: 'Weekly shop',
     amount: '60',
     paidBy: 'Alice',
-    category: 'Groceries',
+    category: 'Food',
   })
 
   await openExpense(page, 'Weekly shop')
   await expect(
-    fieldByLabel(page, 'Category').getByRole('combobox'),
-  ).toContainText('Groceries')
+    fieldByLabel(page, 'Category').getByRole('option', { name: 'Food' }),
+  ).toHaveAttribute('aria-selected', 'true')
 })
 
 test('filters the expense list with the search bar', async ({ page }) => {
@@ -96,10 +96,14 @@ test('filters the expense list with the search bar', async ({ page }) => {
   await expect(expenseCard(page, 'Train fare')).toHaveCount(0)
 })
 
-test('searches the category list', async ({ page }) => {
+test('searches the payer list in a group too large to show as chips', async ({
+  page,
+}) => {
+  // Five participants: four fit as chips, so Erin is only reachable through
+  // the picker the fifth collapses into.
   const groupId = await createGroup(page, {
-    name: `E2E CategorySearch ${uniqueSuffix()}`,
-    participants: PARTICIPANTS,
+    name: `E2E PayerSearch ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob', 'Carol', 'Dave', 'Erin'],
   })
 
   await page.goto(`/groups/${groupId}/expenses/create`)
@@ -107,11 +111,22 @@ test('searches the category list', async ({ page }) => {
     page.getByRole('button', { name: 'Create', exact: true }),
   ).toBeVisible({ timeout: 30_000 })
 
-  await fieldByLabel(page, 'Category').getByRole('combobox').click()
-  await page.getByPlaceholder('Search category...').fill('taxi')
-  await expect(page.getByRole('option', { name: 'Taxi' })).toBeVisible()
-  await expect(page.getByRole('option', { name: 'Groceries' })).toBeHidden()
+  const field = page.getByTestId('paid-by')
+  await expect(field.getByRole('option', { name: 'Erin' })).toHaveCount(0)
 
-  await page.getByPlaceholder('Search category...').fill('qqqq')
-  await expect(page.getByText('No category found.')).toBeVisible()
+  await field.getByRole('button', { name: 'Show all participants' }).click()
+  const picker = page.getByTestId('payer-picker')
+  await page.getByPlaceholder('Search by name…').fill('eri')
+  await expect(picker.getByRole('option', { name: 'Erin' })).toBeVisible()
+  await expect(picker.getByRole('option', { name: 'Alice' })).toHaveCount(0)
+
+  await page.getByPlaceholder('Search by name…').fill('qqqq')
+  await expect(page.getByText('No participant found')).toBeVisible()
+
+  await page.getByPlaceholder('Search by name…').fill('eri')
+  await picker.getByRole('option', { name: 'Erin' }).click()
+  await expect(field.getByRole('option', { name: 'Erin' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  )
 })

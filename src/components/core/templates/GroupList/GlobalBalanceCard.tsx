@@ -47,17 +47,17 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
   if (totals.length === 0) return null
 
   return (
-    <Card tier="float" className="overflow-hidden p-6">
+    <Card tier="float" className="rounded-hero p-5">
       {/* The heading has to stay a real heading inside a header element: the
           ported `cardByTitle` helper finds a card by walking up two levels from
           its heading. */}
       <CardHeader className="p-0">
-        <CardTitle className="text-label-md font-semibold text-muted-foreground">
+        <CardTitle className="text-label-sm tracking-wider text-muted-foreground uppercase">
           {t('title')}
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="mt-5 flex flex-col gap-5 p-0">
+      <CardContent className="mt-3.5 flex flex-col gap-3 p-0">
         {totals.map(([key, { owed, owing, currency }]) => {
           const money = getCurrencyFromGroup(currency)
           if (owed === 0 && owing === 0) {
@@ -68,12 +68,9 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
             )
           }
           return (
-            <div
-              key={key}
-              className="grid grid-cols-2 gap-4 divide-x divide-border"
-            >
-              <div className="flex flex-col gap-1">
-                <span className="text-label-md text-muted-foreground">
+            <div key={key} className="flex gap-3">
+              <div className="flex flex-1 flex-col gap-0.5 rounded-control bg-credit-subtle/90 px-4 py-3 ring-1 ring-credit/20 ring-inset">
+                <span className="text-label-md font-semibold text-credit">
                   {t('owedToYou')}
                 </span>
                 <Money
@@ -81,11 +78,11 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
                   currency={money}
                   locale={locale}
                   tone="credit"
-                  className="text-headline-lg sm:text-display-currency"
+                  className="text-headline-lg font-extrabold lg:text-display-currency"
                 />
               </div>
-              <div className="flex flex-col gap-1 pl-4">
-                <span className="text-label-md text-muted-foreground">
+              <div className="flex flex-1 flex-col gap-0.5 rounded-control bg-debit-subtle/90 px-4 py-3 ring-1 ring-debit/20 ring-inset">
+                <span className="text-label-md font-semibold text-debit">
                   {t('youOwe')}
                 </span>
                 <Money
@@ -93,7 +90,7 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
                   currency={money}
                   locale={locale}
                   tone="debit"
-                  className="text-headline-lg sm:text-display-currency"
+                  className="text-headline-lg font-extrabold lg:text-display-currency"
                 />
               </div>
             </div>

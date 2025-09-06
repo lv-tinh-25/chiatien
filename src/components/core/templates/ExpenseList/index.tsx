@@ -18,11 +18,10 @@ export function ExpenseList({
   const t = useTranslations('Expenses')
   const {
     groupId,
+    group,
     currency,
     locale,
     activeUserId,
-    participantCount,
-    participantOrder,
     sections,
     isPending,
     isEmpty,
@@ -33,9 +32,12 @@ export function ExpenseList({
   } = useExpenseList()
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-2">
-        <div className="flex-1">
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-3.5">
+        <h1 className="hidden shrink-0 text-headline-lg font-extrabold text-foreground lg:block">
+          {t('title')}
+        </h1>
+        <div className="min-w-0 flex-1 lg:max-w-105">
           <SearchBar
             label={t('searchPlaceholder')}
             placeholder={t('searchPlaceholder')}
@@ -46,13 +48,17 @@ export function ExpenseList({
         {receiptExtractEnabled && currency && (
           <CreateFromReceipt currency={currency} locale={locale} />
         )}
-        <Button asChild className="hidden lg:inline-flex">
+        <Button asChild className="hidden shrink-0 lg:inline-flex">
           <Link href={`/groups/${groupId}/expenses/create`}>
             <Plus aria-hidden />
             {t('create')}
           </Link>
         </Button>
       </div>
+
+      {/* The group name is the page's own heading on a phone, where the shell
+          header shows it too; the empty-state spec looks for it here. */}
+      <h2 className="sr-only">{group?.name ?? ''}</h2>
 
       {isPending && (
         <p className="text-body-md text-muted-foreground">{t('title')}…</p>
@@ -74,13 +80,12 @@ export function ExpenseList({
       {isSearchMiss && <EmptyState title={t('noExpenses')} />}
 
       {currency &&
-        sections.map(({ group, expenses }) => (
-          <section key={group} className="flex flex-col gap-2">
-            <h2 className="flex items-center gap-3 text-label-sm tracking-wider text-muted-foreground uppercase">
-              {t(`Groups.${group}`)}
-              <span aria-hidden className="h-px flex-1 bg-border" />
-            </h2>
-            <div className="stagger-children flex flex-col gap-2">
+        sections.map(({ group: section, expenses }) => (
+          <section key={section} className="flex flex-col gap-2">
+            <h3 className="px-1 text-label-sm tracking-wider text-muted-foreground uppercase">
+              {t(`Groups.${section}`)}
+            </h3>
+            <div className="glass-raised divide-y divide-border/50 overflow-hidden rounded-card">
               {expenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
@@ -88,8 +93,6 @@ export function ExpenseList({
                   groupId={groupId}
                   currency={currency}
                   locale={locale}
-                  participantCount={participantCount}
-                  participantOrder={participantOrder}
                   activeUserId={activeUserId}
                 />
               ))}
@@ -103,17 +106,6 @@ export function ExpenseList({
           {t('title')}…
         </p>
       )}
-
-      <Button
-        asChild
-        size="lg"
-        className="fixed right-4 bottom-[calc(env(safe-area-inset-bottom)+6rem)] z-30 rounded-full lg:hidden"
-      >
-        <Link href={`/groups/${groupId}/expenses/create`}>
-          <Plus aria-hidden />
-          {t('create')}
-        </Link>
-      </Button>
     </div>
   )
 }

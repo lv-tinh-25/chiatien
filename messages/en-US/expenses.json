@@ -27,11 +27,11 @@
     }
   },
   "ExpenseCard": {
-    "paidBy": "Paid by <strong>{paidBy}</strong> for <paidFor></paidFor>",
-    "everyone": "everyone",
-    "receivedBy": "Received by <strong>{paidBy}</strong> for <paidFor></paidFor>",
     "yourBalance": "Your balance:",
-    "notInvolved": "You are not involved"
+    "notInvolved": "You are not involved",
+    "paidBySummary": "{paidBy} paid · {count} people",
+    "receivedBySummary": "{paidBy} received · {count} people",
+    "reimbursement": "Settlement"
   },
   "ExpenseForm": {
     "Income": {
@@ -144,7 +144,15 @@
       "byShares": "Unevenly – By shares",
       "byPercentage": "Unevenly – By percentage",
       "byAmount": "Unevenly – By amount",
-      "saveAsDefault": "Save as default splitting options"
+      "saveAsDefault": "Save as default splitting options",
+      "evenlyChip": "Evenly",
+      "bySharesChip": "Shares",
+      "byPercentageChip": "%",
+      "byAmountChip": "Amount",
+      "evenlyShort": "Even",
+      "bySharesShort": "Shares",
+      "byPercentageShort": "%",
+      "byAmountShort": "Amt"
     },
     "DeletePopup": {
       "label": "Delete",
@@ -159,7 +167,8 @@
     "save": "Save",
     "saving": "Saving…",
     "cancel": "Cancel",
-    "reimbursement": "Reimbursement"
+    "reimbursement": "Reimbursement",
+    "selectedCount": "{selected}/{total} people"
   },
   "ExpenseDocumentsInput": {
     "add": "Attach a document",
@@ -207,70 +216,36 @@
   "Categories": {
     "search": "Search category...",
     "noCategory": "No category found.",
-    "Uncategorized": {
-      "heading": "Uncategorized",
-      "General": "General",
-      "Payment": "Payment"
+    "Accommodation": {
+      "heading": "Accommodation",
+      "Accommodation": "Accommodation"
     },
-    "Entertainment": {
-      "heading": "Entertainment",
-      "Entertainment": "Entertainment",
-      "Games": "Games",
-      "Movies": "Movies",
-      "Music": "Music",
-      "Sports": "Sports"
+    "Food": {
+      "heading": "Food",
+      "Food": "Food"
     },
-    "Food and Drink": {
-      "heading": "Food and Drink",
-      "Food and Drink": "Food and Drink",
-      "Dining Out": "Dining Out",
-      "Groceries": "Groceries",
-      "Liquor": "Liquor"
+    "Transport": {
+      "heading": "Transport",
+      "Transport": "Transport"
     },
-    "Home": {
-      "heading": "Home",
-      "Home": "Home",
-      "Electronics": "Electronics",
-      "Furniture": "Furniture",
-      "Household Supplies": "Household Supplies",
-      "Maintenance": "Maintenance",
-      "Mortgage": "Mortgage",
-      "Pets": "Pets",
-      "Rent": "Rent",
-      "Services": "Services"
+    "Leisure": {
+      "heading": "Leisure",
+      "Leisure": "Leisure"
     },
-    "Life": {
-      "heading": "Life",
-      "Childcare": "Childcare",
-      "Clothing": "Clothing",
-      "Donation": "Donation",
-      "Education": "Education",
-      "Gifts": "Gifts",
-      "Insurance": "Insurance",
-      "Medical Expenses": "Medical Expenses",
-      "Taxes": "Taxes"
+    "Settlement": {
+      "heading": "Settlement",
+      "Settlement": "Settlement"
     },
-    "Transportation": {
-      "heading": "Transportation",
-      "Transportation": "Transportation",
-      "Bicycle": "Bicycle",
-      "Bus/Train": "Bus/Train",
-      "Car": "Car",
-      "Gas/Fuel": "Gas/Fuel",
-      "Hotel": "Hotel",
-      "Parking": "Parking",
-      "Plane": "Plane",
-      "Taxi": "Taxi"
-    },
-    "Utilities": {
-      "heading": "Utilities",
-      "Utilities": "Utilities",
-      "Cleaning": "Cleaning",
-      "Electricity": "Electricity",
-      "Heat/Gas": "Heat/Gas",
-      "Trash": "Trash",
-      "TV/Phone/Internet": "TV/Phone/Internet",
-      "Water": "Water"
+    "Other": {
+      "heading": "Other",
+      "Other": "Other"
     }
+  },
+  "PayerPicker": {
+    "title": "Who paid?",
+    "search": "Search by name…",
+    "empty": "No participant found",
+    "showAll": "Show all participants",
+    "count": "{count} members"
   }
 }

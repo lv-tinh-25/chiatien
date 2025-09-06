@@ -16,7 +16,7 @@ describe('navigationFor', () => {
     expect(navigationFor('/settings').scope).toBe('app')
   })
 
-  it('shows four destinations inside a group', () => {
+  it('shows five destinations inside a group', () => {
     const nav = navigationFor('/groups/abc123/expenses')
     expect(nav.scope).toBe('group')
     expect(nav.groupId).toBe('abc123')
@@ -25,6 +25,7 @@ describe('navigationFor', () => {
       'balances',
       'stats',
       'activity',
+      'information',
     ])
   })
 
@@ -43,8 +44,13 @@ describe('navigationFor', () => {
     expect(nav.items.find((item) => item.active)?.key).toBe('expenses')
   })
 
-  it('marks nothing active on a group section with no bottom entry', () => {
+  it('marks information active on the information screen', () => {
     const nav = navigationFor('/groups/abc123/information')
+    expect(nav.items.find((item) => item.active)?.key).toBe('information')
+  })
+
+  it('marks nothing active on a group section with no destination', () => {
+    const nav = navigationFor('/groups/abc123/edit')
     expect(nav.scope).toBe('group')
     expect(nav.items.some((item) => item.active)).toBe(false)
   })
@@ -57,6 +63,6 @@ describe('navigationFor', () => {
   })
 
   it('ignores a trailing slash', () => {
-    expect(navigationFor('/groups/abc123/').items).toHaveLength(4)
+    expect(navigationFor('/groups/abc123/').items).toHaveLength(5)
   })
 })

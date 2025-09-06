@@ -1,9 +1,10 @@
 'use client'
 
-import { CategorySelect } from '@/components/core/molecules/CategorySelect'
+import { CategoryChips } from '@/components/core/molecules/CategoryChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
-import { Select } from '@/components/core/molecules/Select'
+import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
+import { PayerPicker } from '@/components/core/molecules/PayerPicker'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
@@ -31,33 +32,35 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <FormField
-        label={t(`${scope}.DateField.label`)}
-        description={t(`${scope}.DateField.description`)}
-        errorKey={form.formState.errors.expenseDate?.message}
-      >
-        {({ id, describedBy }) => (
-          <input
-            id={id}
-            type="date"
-            aria-describedby={describedBy}
-            className="flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
-            value={toDateInputValue(expenseDate)}
-            onChange={(event) =>
-              form.setValue('expenseDate', new Date(event.target.value), {
-                shouldDirty: true,
-              })
-            }
-          />
-        )}
-      </FormField>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <FormField
+          label={t(`${scope}.DateField.label`)}
+          errorKey={form.formState.errors.expenseDate?.message}
+        >
+          {({ id, describedBy }) => (
+            <input
+              id={id}
+              type="date"
+              aria-describedby={describedBy}
+              className="flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
+              value={toDateInputValue(expenseDate)}
+              onChange={(event) =>
+                form.setValue('expenseDate', new Date(event.target.value), {
+                  shouldDirty: true,
+                })
+              }
+            />
+          )}
+        </FormField>
+        <ExpenseRecurrenceField form={form} />
+      </div>
 
       <FormField
         label={t('categoryField.label')}
         description={t(`${scope}.categoryFieldDescription`)}
       >
         {({ id, describedBy }) => (
-          <CategorySelect
+          <CategoryChips
             id={id}
             aria-describedby={describedBy}
             value={Number(category ?? 0)}
@@ -73,17 +76,15 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
         errorKey={form.formState.errors.paidBy?.message}
       >
         {({ id, describedBy }) => (
-          <Select
+          <PayerPicker
             id={id}
             testId="paid-by"
             aria-describedby={describedBy}
             value={String(paidBy ?? '')}
-            onValueChange={(value) => form.setValue('paidBy', value)}
-            options={participants.map((participant) => ({
-              value: participant.id,
-              label: participant.name,
-            }))}
-            placeholder={t(`${scope}.paidByField.placeholder`)}
+            participants={participants}
+            onValueChange={(value) =>
+              form.setValue('paidBy', value, { shouldValidate: true })
+            }
           />
         )}
       </FormField>

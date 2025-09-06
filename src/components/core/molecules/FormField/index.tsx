@@ -10,6 +10,8 @@ type FormFieldProps = {
   /** A message *key* from the Zod schemas, not a sentence. */
   errorKey?: string
   className?: string
+  /** Set to `sr-only` where the design places the label outside the field. */
+  labelClassName?: string
   children: (props: {
     id: string
     describedBy: string | undefined
@@ -26,6 +28,7 @@ export function FormField({
   description,
   errorKey,
   className,
+  labelClassName,
   children,
 }: FormFieldProps) {
   const t = useTranslations('SchemaErrors')
@@ -37,7 +40,10 @@ export function FormField({
 
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
-      <label htmlFor={id} className="text-label-md text-foreground">
+      <label
+        htmlFor={id}
+        className={cn('text-label-md text-foreground', labelClassName)}
+      >
         {label}
       </label>
       {children({ id, describedBy })}

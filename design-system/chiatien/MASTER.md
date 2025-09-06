@@ -13,18 +13,34 @@
 
 ---
 
+## Superseded by the owner's own design
+
+The interface no longer follows this file alone. On 2026-09-06 the repository
+owner supplied a full mockup of every screen — `ChiaTien Responsive.dc.html` —
+and the app was rebuilt against it. Where the two disagree the mockup wins; see
+`docs/superpowers/specs/2026-09-06-design-parity-rebuild-design.md`.
+
 ## Implementation deviations
 
-Two values in this file were changed on the way into `src/styles/globals.css`,
-both measured in Chrome rather than assumed:
+Measured in Chrome rather than assumed:
 
-- **Primary `#059669` → `hsl(162 94% 24%)` (`#047754`).** White on `#059669`
-  measures 3.86:1, under the 4.5:1 floor, and that token backs every primary
-  button and the active bottom-bar item. The darker value measures 5.57:1.
+- **Primary is `hsl(161 94% 30%)`, the mockup's green.** White on the primary
+  gradient measures 3.86:1 at its dark stop and 3.30:1 at its light stop, under
+  the 4.5:1 floor for normal text. The repository owner chose the mockup's value
+  over the floor, knowing the measurement. `--primary-ink` (`hsl(161 94% 24%)`,
+  5.09:1 on white) exists for primary-coloured *text*, which is held to the
+  floor; the flat colour is only used behind white as a button fill.
 - **Glass tint 10-20% → 55-85% white.** The glassmorphism reference assumes a
   dark or saturated backdrop. Over this light aurora a 15% tint drops body text
   under 4.5:1; the higher tint holds text at 17:1 and still carries the colour
   wash at the edges.
+- **Join-by-link card sits last on a phone.** The mockup places it between the
+  recent and archived sections. Rendering it twice — once per breakpoint — would
+  give the page two tablists and two inputs with the same name, so it is
+  rendered once and moved with `order`.
+- **Category and currency pickers keep a fallback.** The mockup's six category
+  chips are the whole taxonomy, but the currency toggle assumes two currencies;
+  the app supports the full ISO list, so currency stays a searchable select.
 
 ## Global Rules
 
