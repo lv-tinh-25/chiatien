@@ -8,6 +8,7 @@ import {
   CATEGORY_TRANSPORT,
   categoryEmoji,
   categoryToneIndex,
+  defaultCategoryFor,
 } from '@/lib/categories'
 
 describe('categories', () => {
@@ -32,5 +33,15 @@ describe('categories', () => {
   it('falls back to Other for an id the migration removed', () => {
     expect(categoryEmoji(34)).toBe(categoryEmoji(CATEGORY_OTHER))
     expect(categoryToneIndex(34)).toBe(categoryToneIndex(CATEGORY_OTHER))
+  })
+})
+
+describe('defaultCategoryFor', () => {
+  it('opens a new expense on food', () => {
+    expect(defaultCategoryFor(false)).toBe(CATEGORY_FOOD)
+  })
+
+  it('opens a repayment on settlement', () => {
+    expect(defaultCategoryFor(true)).toBe(CATEGORY_SETTLEMENT)
   })
 })

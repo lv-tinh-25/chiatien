@@ -40,7 +40,7 @@ test('edits an expense and recomputes balances', async ({ page }) => {
   await fillStable(page.locator('input[name="amount"]'), '90')
   await setChecked(paidForRow(page, 'Carol').getByRole('checkbox'), false)
 
-  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   const card = page

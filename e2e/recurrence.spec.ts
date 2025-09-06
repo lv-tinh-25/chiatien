@@ -26,19 +26,19 @@ test('round-trips a recurrence rule through the form', async ({ page }) => {
   })
 
   await openExpense(page, 'Netflix')
-  const field = fieldByLabel(page, 'Expense Recurrence').getByRole('combobox')
+  const field = fieldByLabel(page, 'Repeats').getByRole('combobox')
   await expect(field).toContainText('Monthly')
 
   // Turning a recurring expense back off is a distinct branch in
   // src/lib/api.ts, so assert the transition persists.
-  await selectRadixOption(page, field, 'None')
-  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  await selectRadixOption(page, field, 'Does not repeat')
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   await openExpense(page, 'Netflix')
   await expect(
-    fieldByLabel(page, 'Expense Recurrence').getByRole('combobox'),
-  ).toContainText('None')
+    fieldByLabel(page, 'Repeats').getByRole('combobox'),
+  ).toContainText('Does not repeat')
 })
 
 test('materialises past occurrences of a daily expense', async ({ page }) => {

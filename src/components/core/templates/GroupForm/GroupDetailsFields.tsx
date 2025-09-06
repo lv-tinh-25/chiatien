@@ -6,11 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/atoms/Card'
-import { CurrencySelect } from '@/components/core/molecules/CurrencySelect'
+import { CurrencyChips } from '@/components/core/molecules/CurrencyChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
 import { asLocale } from '@/i18n/locales'
+import { currencyChoicesWith } from '@/lib/currency-choices'
 import type { GroupFormValues } from '@/lib/schemas'
 import { useLocale, useTranslations } from 'next-intl'
 import type { UseFormReturn } from 'react-hook-form'
@@ -18,13 +19,11 @@ import { useWatch } from 'react-hook-form'
 
 type GroupDetailsFieldsProps = {
   form: UseFormReturn<GroupFormValues>
-  isEdit: boolean
   onCurrencyCodeChange: (code: string) => void
 }
 
 export function GroupDetailsFields({
   form,
-  isEdit,
   onCurrencyCodeChange,
 }: GroupDetailsFieldsProps) {
   const t = useTranslations('GroupForm')
@@ -41,49 +40,45 @@ export function GroupDetailsFields({
         <FormInput
           label={t('NameField.label')}
           placeholder={t('NameField.placeholder')}
-          description={t('NameField.description')}
           errorKey={errors.name?.message}
           {...form.register('name')}
         />
 
+        {/* The information field is on the create form too: the design writes
+            the group's rules down at the moment the group is made. */}
+        <FormTextarea
+          label={t('InformationField.label')}
+          placeholder={t('InformationField.placeholder')}
+          errorKey={errors.information?.message}
+          {...form.register('information')}
+        />
+
         <FormField
           label={t('CurrencyCodeField.label')}
-          description={t(
-            isEdit
-              ? 'CurrencyCodeField.editDescription'
-              : 'CurrencyCodeField.createDescription',
-          )}
           errorKey={errors.currencyCode?.message}
         >
           {({ id, describedBy }) => (
-            <CurrencySelect
+            <CurrencyChips
               id={id}
               aria-describedby={describedBy}
-              locale={locale}
+              variant="outline"
               value={currencyCode ?? ''}
-              customLabel={t('CurrencyCodeField.customOption')}
+              options={currencyChoicesWith(locale, currencyCode)}
               onValueChange={onCurrencyCodeChange}
+              label={t('CurrencyCodeField.label')}
             />
           )}
         </FormField>
 
+        {/* Only reachable for a group already stored on a custom symbol: the
+            chips above can no longer put one there. */}
         {(currencyCode ?? '') === '' && (
           <FormInput
             label={t('CurrencyField.label')}
             placeholder={t('CurrencyField.placeholder')}
-            description={t('CurrencyField.description')}
             maxLength={5}
             errorKey={errors.currency?.message}
             {...form.register('currency')}
-          />
-        )}
-
-        {isEdit && (
-          <FormTextarea
-            label={t('InformationField.label')}
-            placeholder={t('InformationField.placeholder')}
-            errorKey={errors.information?.message}
-            {...form.register('information')}
           />
         )}
       </CardContent>

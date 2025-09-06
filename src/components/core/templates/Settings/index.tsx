@@ -1,5 +1,6 @@
 'use client'
 
+import { BackButton } from '@/components/core/atoms/BackButton'
 import { Card } from '@/components/core/atoms/Card'
 import { asLocale, localeLabels, locales } from '@/i18n/locales'
 import { setUserLocale } from '@/lib/locale'
@@ -16,9 +17,10 @@ export function Settings() {
 
   return (
     <div className="flex max-w-160 flex-col gap-4">
-      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
-        {t('title')}
-      </h1>
+      <div className="hidden items-center gap-3 lg:flex">
+        <BackButton href="/groups" />
+        <h1 className="text-headline-lg text-foreground">{t('title')}</h1>
+      </div>
 
       <Card className="flex flex-col gap-2.5 p-4 lg:p-5">
         <span className="text-label-md font-bold text-muted-foreground">

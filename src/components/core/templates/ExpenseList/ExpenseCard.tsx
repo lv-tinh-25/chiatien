@@ -5,8 +5,9 @@ import { Money } from '@/components/core/atoms/Money'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
 import { getCurrency } from '@/lib/currency'
+import { formatExpenseDate } from '@/lib/expense-date'
 import { getParticipantShare } from '@/lib/shares'
-import { cn, formatDateOnly } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { Paperclip } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -58,12 +59,17 @@ export function ExpenseCard({
   const balance = paid - share
   const involved = share !== 0 || paid !== 0
 
+  const summaryKey = expense.amount > 0 ? 'paidBySummary' : 'receivedBySummary'
+  const summaryValues = {
+    paidBy: expense.paidBy.name,
+    count: expense.paidFor.length,
+  }
   const summary = expense.isReimbursement
     ? t('reimbursement')
-    : t(expense.amount > 0 ? 'paidBySummary' : 'receivedBySummary', {
-        paidBy: expense.paidBy.name,
-        count: expense.paidFor.length,
-      })
+    : t(summaryKey, summaryValues)
+  const summaryWide = expense.isReimbursement
+    ? t('reimbursement')
+    : t(`${summaryKey}Wide`, summaryValues)
 
   return (
     <Link
@@ -92,12 +98,11 @@ export function ExpenseCard({
           {expense.title}
         </span>
         <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
-          <span className="truncate">{summary}</span>
+          <span className="truncate lg:hidden">{summary}</span>
+          <span className="hidden truncate lg:inline">{summaryWide}</span>
           <span aria-hidden>·</span>
           <span className="whitespace-nowrap">
-            {formatDateOnly(expense.expenseDate, locale, {
-              dateStyle: 'medium',
-            })}
+            {formatExpenseDate(expense.expenseDate, locale)}
           </span>
           {expense._count.documents > 0 && (
             <span className="flex items-center gap-1">
@@ -126,35 +131,24 @@ export function ExpenseCard({
             className="text-body-sm whitespace-nowrap text-muted-foreground"
           />
         )}
-        {activeUserId !== null &&
-          (involved ? (
-            <span
-              className={cn(
-                'flex items-baseline gap-1 rounded-full px-2 py-0.5 text-label-sm font-bold whitespace-nowrap',
-                balance >= 0
+        {activeUserId !== null && (
+          <span
+            className={cn(
+              'rounded-full px-2 py-0.5 text-label-sm whitespace-nowrap tabular',
+              !involved && 'bg-muted text-muted-foreground',
+              involved &&
+                (balance >= 0
                   ? 'bg-credit-subtle text-credit'
-                  : 'bg-debit-subtle text-debit',
-              )}
-            >
-              {/* The label is what the ported spec matches on, but it doubles
-                  the chip's width on a phone, where the tone already says which
-                  way the money goes. */}
-              <span className="sr-only opacity-70 lg:not-sr-only">
-                {t('yourBalance')}
-              </span>
-              <Money
-                amount={balance}
-                currency={currency}
-                locale={locale}
-                tone={balance >= 0 ? 'credit' : 'debit'}
-                className="font-extrabold"
-              />
-            </span>
-          ) : (
-            <span className="rounded-full bg-muted px-2 py-0.5 text-label-sm font-bold whitespace-nowrap text-muted-foreground">
-              {t('notInvolved')}
-            </span>
-          ))}
+                  : 'bg-debit-subtle text-debit'),
+            )}
+          >
+            {involved
+              ? t(balance >= 0 ? 'credit' : 'debit', {
+                  amount: formatCurrency(currency, Math.abs(balance), locale),
+                })
+              : t('notInvolved')}
+          </span>
+        )}
       </span>
     </Link>
   )

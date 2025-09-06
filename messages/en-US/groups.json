@@ -38,8 +38,7 @@
         "stopScanning": "Stop Scanning",
         "permissionDenied": "Camera permission denied. Please allow camera access to scan QR codes.",
         "noCamera": "No camera found on this device.",
-        "cameraError": "Failed to start camera. Please try again.",
-        "permissionError": "Unable to access camera. Please check permissions."
+        "cameraError": "Failed to start camera. Please try again."
       },
       "placeholder": "Paste a group link to join…",
       "scanQr": "Scan QR code"
@@ -60,8 +59,7 @@
     "title": "Group information",
     "NameField": {
       "label": "Group name",
-      "placeholder": "Summer vacations",
-      "description": "Enter a name for your group."
+      "placeholder": "Summer vacations"
     },
     "InformationField": {
       "label": "Group information",
@@ -69,18 +67,13 @@
     },
     "CurrencyField": {
       "label": "Currency symbol",
-      "placeholder": "$, €, £…",
-      "description": "We’ll use it to display amounts."
+      "placeholder": "$, €, £…"
     },
     "CurrencyCodeField": {
-      "label": "Main currency",
-      "createDescription": "All amounts and balances will be in this currency.",
-      "editDescription": "All amounts and balances will be in this currency. Changing this will NOT convert expenses already entered, except when the currency has different \"minor units\" than the current one (e.g. changing from US Dollar to Japanese Yen)",
-      "customOption": "Custom"
+      "label": "Main currency"
     },
     "Participants": {
       "title": "Participants",
-      "description": "Enter the name for each participant.",
       "protectedParticipant": "This participant is part of expenses, and can not be removed.",
       "new": "New",
       "add": "Add participant",
@@ -97,17 +90,17 @@
         "none": "None",
         "description": "User used as default for paying expenses."
       },
-      "save": "Save",
+      "save": "Save group",
       "saving": "Saving…",
-      "create": "Create",
-      "creating": "Creating…",
-      "cancel": "Cancel"
+      "create": "Create group",
+      "creating": "Creating…"
     }
   },
   "Information": {
-    "title": "Information",
-    "description": "Use this place to add any information that can be relevant to the group participants.",
-    "empty": "No group information yet."
+    "title": "Group information",
+    "empty": "No group information yet.",
+    "edit": "Edit",
+    "meta": "Created {created}"
   },
   "Activity": {
     "title": "Activity",

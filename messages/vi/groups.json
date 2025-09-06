@@ -29,8 +29,7 @@
         "stopScanning": "Dừng quét",
         "permissionDenied": "Camera bị từ chối. Hãy cho phép truy cập camera để quét mã QR.",
         "noCamera": "Không tìm thấy camera trên thiết bị này.",
-        "cameraError": "Không bật được camera. Vui lòng thử lại.",
-        "permissionError": "Không truy cập được camera. Hãy kiểm tra lại quyền."
+        "cameraError": "Không bật được camera. Vui lòng thử lại."
       },
       "placeholder": "Dán link nhóm để tham gia…",
       "scanQr": "Quét mã QR"
@@ -60,8 +59,7 @@
     "title": "Thông tin nhóm",
     "NameField": {
       "label": "Tên nhóm",
-      "placeholder": "Kì nghỉ hè",
-      "description": "Đặt tên nhóm của bạn."
+      "placeholder": "Kì nghỉ hè"
     },
     "InformationField": {
       "label": "Thông tin nhóm",
@@ -69,18 +67,13 @@
     },
     "CurrencyField": {
       "label": "Biểu tượng tiền tệ",
-      "placeholder": "₫, $, €…",
-      "description": "Dùng để hiển thị các khoản tiền."
+      "placeholder": "₫, $, €…"
     },
     "CurrencyCodeField": {
-      "label": "Đơn vị tiền tệ chính",
-      "createDescription": "Tất cả các khoản tiền và số dư sẽ được thể hiện bằng loại tiền này.",
-      "editDescription": "Tất cả các khoản tiền và số dư sẽ được hiển thị bằng loại tiền tệ này. Việc thay đổi loại tiền tệ sẽ KHÔNG chuyển đổi các khoản chi phí đã nhập, trừ trường hợp loại tiền tệ đó có \"đơn vị nhỏ\" khác với loại tiền tệ hiện tại (ví dụ: chuyển đổi từ Đô la Mỹ sang Yên Nhật)",
-      "customOption": "Tùy chỉnh"
+      "label": "Đơn vị tiền tệ chính"
     },
     "Participants": {
       "title": "Thành viên",
-      "description": "Điền tên các thành viên.",
       "protectedParticipant": "Thành viên này đã tham gia chi tiêu, không thể xóa.",
       "new": "Thêm",
       "add": "Thêm thành viên",
@@ -97,17 +90,17 @@
         "none": "Không có",
         "description": "Người dùng này được sử dụng làm mặc định để thanh toán chi phí."
       },
-      "save": "Lưu",
+      "save": "Lưu nhóm",
       "saving": "Đang lưu…",
-      "create": "Tạo",
-      "creating": "Đang tạo…",
-      "cancel": "Hủy bỏ"
+      "create": "Tạo nhóm",
+      "creating": "Đang tạo…"
     }
   },
   "Information": {
-    "title": "Thông tin",
-    "description": "Ghi ở đây bất kỳ thông tin nào các thành viên trong nhóm cần biết.",
-    "empty": "Nhóm chưa có thông tin nào."
+    "title": "Thông tin nhóm",
+    "empty": "Nhóm chưa có thông tin nào.",
+    "edit": "Sửa",
+    "meta": "Tạo ngày {created}"
   },
   "Activity": {
     "title": "Hoạt động",

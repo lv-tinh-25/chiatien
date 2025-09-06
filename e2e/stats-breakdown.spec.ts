@@ -29,51 +29,21 @@ test('breaks spending down by participant and by category', async ({
 
   // Alice paid 90 and Bob 30, while all three share both, so every share is
   // 40 and only Carol paid nothing.
+  // The table became a bar per member, so the same four figures are read off
+  // the row: who, how much they paid, how many expenses, and their share.
   const byParticipant = cardByTitle(page, 'Spending by participant')
-  for (const heading of ['Participant', 'Paid', 'Count', 'Share']) {
-    await expect(
-      byParticipant.getByRole('columnheader', { name: heading }),
-    ).toBeVisible()
-  }
-  const alice = byParticipant.getByRole('row').filter({ hasText: 'Alice' })
+  const alice = byParticipant.getByRole('listitem').filter({ hasText: 'Alice' })
   await expect(alice).toContainText(money(90))
-  await expect(alice).toContainText(money(40))
-  const carol = byParticipant.getByRole('row').filter({ hasText: 'Carol' })
+  await expect(alice).toContainText(`1 expense · share ${money(40)}`)
+  const carol = byParticipant.getByRole('listitem').filter({ hasText: 'Carol' })
   await expect(carol).toContainText(money(0))
-  await expect(carol).toContainText(money(40))
+  await expect(carol).toContainText(`0 expenses · share ${money(40)}`)
 
   const byCategory = cardByTitle(page, 'Spending by category')
   await expect(byCategory).toContainText('Food')
   await expect(byCategory).toContainText(money(90))
   await expect(byCategory).toContainText('Transport')
   await expect(byCategory).toContainText(money(30))
-})
-
-test('summarises count, average and largest expense', async ({ page }) => {
-  const groupId = await createGroup(page, {
-    name: `E2E Summary ${uniqueSuffix()}`,
-    participants: PARTICIPANTS,
-  })
-
-  await addExpense(page, groupId, {
-    title: 'Dinner',
-    amount: '90',
-    paidBy: 'Alice',
-  })
-  await addExpense(page, groupId, {
-    title: 'Taxi',
-    amount: '30',
-    paidBy: 'Bob',
-  })
-
-  await openTab(page, 'Stats')
-
-  const summary = cardByTitle(page, 'Summary')
-  await expect(summary).toContainText('Expenses')
-  await expect(summary).toContainText('2')
-  // 120 across two expenses.
-  await expect(summary).toContainText(money(60))
-  await expect(summary).toContainText(money(90))
 })
 
 test('restricts the stats to the selected period', async ({ page }) => {
@@ -98,7 +68,7 @@ test('restricts the stats to the selected period', async ({ page }) => {
 
   await openTab(page, 'Stats')
 
-  const totals = cardByTitle(page, 'Totals')
+  const totals = cardByTitle(page, 'Total spending')
   await expect(totals).toContainText(money(70))
 
   await page.getByRole('radio', { name: 'This year' }).click()
@@ -187,7 +157,7 @@ test('scopes the stats to a custom date range', async ({ page }) => {
 
   await openTab(page, 'Stats')
 
-  const totals = cardByTitle(page, 'Totals')
+  const totals = cardByTitle(page, 'Total spending')
   await expect(totals).toContainText(money(125))
 
   await page.getByRole('radio', { name: 'Custom range' }).click()

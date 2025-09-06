@@ -3,40 +3,30 @@
     "title": "Thống kê",
     "range": {
       "label": "Khoảng thời gian",
-      "all": "Toàn bộ",
+      "all": "Tất cả",
       "thisMonth": "Tháng này",
-      "last30": "30 ngày qua",
       "thisYear": "Năm nay",
       "custom": "Tùy chọn",
       "from": "Từ",
       "to": "Đến",
       "allShort": "Tất cả",
       "thisMonthShort": "Tháng",
-      "last30Short": "30 ngày",
       "thisYearShort": "Năm",
-      "customShort": "Tuỳ chọn"
+      "customShort": "Tuỳ chọn",
+      "last3Months": "3 tháng",
+      "last3MonthsShort": "3 tháng"
     },
     "Totals": {
-      "title": "Tổng cộng",
-      "description": "Tổng quan chi tiêu của cả nhóm.",
+      "title": "Tổng chi tiêu",
       "groupSpendings": "Tổng chi cả nhóm",
       "groupEarnings": "Tổng thu cả nhóm",
-      "yourSpendings": "Tổng chi của bạn",
-      "yourEarnings": "Tổng thu của bạn",
-      "yourShare": "Phần của bạn"
-    },
-    "Summary": {
-      "title": "Tóm tắt",
-      "description": "Các con số chính trong khoảng thời gian đã chọn.",
-      "empty": "Chưa có khoản chi nào.",
-      "expenseCount": "Số khoản chi",
-      "averageExpense": "Trung bình mỗi khoản",
-      "largestExpense": "Khoản chi lớn nhất",
-      "activeSpan": "Khoảng có phát sinh"
+      "yourSpendings": "Bạn đã trả",
+      "yourEarnings": "Bạn đã nhận",
+      "yourShare": "Phần của bạn",
+      "difference": "Chênh lệch"
     },
     "OverTime": {
       "title": "Chi tiêu theo thời gian",
-      "description": "Tổng chi của nhóm theo từng tháng. Chọn một tháng để xem các khoản chi.",
       "empty": "Chưa có khoản chi nào.",
       "showExpenses": "Xem các khoản chi tháng {month}",
       "detailsDescription": "Các khoản chi trong tháng này, thuộc khoảng thời gian đã chọn.",
@@ -44,16 +34,11 @@
     },
     "ByParticipant": {
       "title": "Chi tiêu theo thành viên",
-      "description": "Mỗi thành viên đã trả bao nhiêu và phần họ phải chịu là bao nhiêu.",
       "empty": "Chưa có khoản chi nào.",
-      "participant": "Thành viên",
-      "paid": "Đã trả",
-      "count": "Số khoản",
-      "share": "Phần chịu"
+      "meta": "{count} khoản · phần phải chịu {share}"
     },
     "ByCategory": {
       "title": "Chi tiêu theo danh mục",
-      "description": "Tổng số tiền đã chi cho từng danh mục. Chọn một danh mục để xem các khoản chi.",
       "empty": "Chưa có khoản chi nào.",
       "showExpenses": "Xem các khoản chi thuộc {category}",
       "detailsDescription": "Các khoản chi thuộc danh mục này, trong khoảng thời gian đã chọn.",
@@ -61,7 +46,6 @@
     },
     "Recurring": {
       "title": "Khoản chi định kỳ",
-      "description": "Chi phí ước tính cho các khoản chi định kỳ đang chạy của nhóm.",
       "estimatedMonthly": "Ước tính mỗi tháng",
       "estimatedYearly": "{amount} mỗi năm",
       "period": {
@@ -69,6 +53,13 @@
         "WEEKLY": "{count, plural, other {# khoản chi hằng tuần}}",
         "MONTHLY": "{count, plural, other {# khoản chi hằng tháng}}"
       }
+    },
+    "Caption": {
+      "thisMonth": "Tháng này",
+      "last3Months": "3 tháng qua",
+      "thisYear": "Năm {year}",
+      "all": "Tất cả",
+      "custom": "Khoảng đã chọn"
     }
   }
 }

@@ -3,6 +3,7 @@
 import { useExpenseCurrencyConversion } from '@/hooks/expenses/useExpenseCurrencyConversion'
 import { useExpenseSplitBalancing } from '@/hooks/expenses/useExpenseSplitBalancing'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
+import { defaultCategoryFor } from '@/lib/categories'
 import { getCurrency } from '@/lib/currency'
 import { reconcileSplittingOptions } from '@/lib/expense-defaults'
 import { toExpensePayload } from '@/lib/expense-payload'
@@ -97,7 +98,9 @@ export function useExpenseForm(expense?: Expense) {
     : {
         expenseDate: receipt?.date ?? new Date(),
         title: settlement.active ? t('reimbursement') : (receipt?.title ?? ''),
-        category: receipt?.categoryId ?? 0,
+        // The design opens on Food, the category most expenses land in;
+        // Settlement is chosen for a repayment rather than typed.
+        category: receipt?.categoryId ?? defaultCategoryFor(settlement.active),
         amount: settlement.active
           ? String(amountAsDecimal(settlement.amount, groupCurrency))
           : (receipt?.amount ?? ''),

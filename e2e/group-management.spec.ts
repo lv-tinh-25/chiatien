@@ -38,7 +38,7 @@ test('renames a group and adds a participant afterwards', async ({ page }) => {
 
   // EditGroup saves in place rather than navigating. The group name is chrome
   // now — the breadcrumb and the sidebar carry it, not a heading on the form.
-  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  await page.getByRole('button', { name: 'Save group', exact: true }).click()
   await expect(
     page.getByRole('navigation', { name: 'Breadcrumb' }),
   ).toContainText(renamed, { timeout: 30_000 })
@@ -57,7 +57,7 @@ test('renames a group and adds a participant afterwards', async ({ page }) => {
   await expectBalance(page, 'Dave', 60)
 })
 
-test('lists visited groups under Recent groups', async ({ page }) => {
+test('lists visited groups under Recent', async ({ page }) => {
   const first = `E2E Recent A ${uniqueSuffix()}`
   const second = `E2E Recent B ${uniqueSuffix()}`
 
@@ -65,9 +65,7 @@ test('lists visited groups under Recent groups', async ({ page }) => {
   await createGroup(page, { name: second, participants: ['Alice', 'Bob'] })
 
   await page.goto('/groups')
-  await expect(
-    page.getByRole('heading', { name: 'Recent groups' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Recent' })).toBeVisible()
   await expect(page.getByRole('link', { name: first })).toBeVisible()
   await expect(page.getByRole('link', { name: second })).toBeVisible()
 })
@@ -143,35 +141,26 @@ test('exports the expenses as CSV', async ({ page }) => {
   expect(await response.text()).toContain('Parking')
 })
 
-test('searches the currency list and reports a miss', async ({ page }) => {
+test('offers the two group currencies as chips', async ({ page }) => {
   await page.goto('/groups/create')
   const currency = fieldByLabel(page, 'Main currency')
-  await currency.getByRole('combobox').click()
 
-  await page.getByPlaceholder('Search currency...').fill('dong')
-  await expect(
-    page.getByRole('option', { name: /Vietnamese Dong \(VND\)/ }),
-  ).toBeVisible()
-  await expect(page.getByRole('option', { name: /Euro/ })).toBeHidden()
-
-  await page.getByPlaceholder('Search currency...').fill('qqqq')
-  await expect(page.getByText('No currencies found.')).toBeVisible()
+  await expect(currency.getByRole('radio')).toHaveCount(2)
+  await expect(currency.getByRole('radio', { name: '₫ VND' })).toBeVisible()
+  await expect(currency.getByRole('radio', { name: '$ USD' })).toBeVisible()
 })
 
-test('accepts a custom currency symbol when no code fits', async ({ page }) => {
-  const name = `E2E Custom ${uniqueSuffix()}`
+test('renders amounts in the currency the group was created in', async ({
+  page,
+}) => {
+  const name = `E2E Dong ${uniqueSuffix()}`
   await page.goto('/groups/create')
 
   await fillStable(page.locator('input[name="name"]'), name)
-
-  const currency = fieldByLabel(page, 'Main currency')
-  await currency.getByRole('combobox').click()
-  await page.getByRole('option', { name: 'Custom', exact: true }).click()
-
-  // The symbol is derived from the code, so it is editable only for a custom
-  // currency -- and required, because nothing else can render an amount.
-  await fillStable(page.locator('input[name="currency"]'), 'sats')
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await fieldByLabel(page, 'Main currency')
+    .getByRole('radio', { name: '₫ VND' })
+    .click()
+  await page.getByRole('button', { name: 'Create group', exact: true }).click()
   await page.waitForURL(/\/groups\/[^/]+\/expenses$/, { timeout: 30_000 })
 
   await addExpense(page, page.url().split('/')[4], {
@@ -179,7 +168,7 @@ test('accepts a custom currency symbol when no code fits', async ({ page }) => {
     amount: '12',
     paidBy: 'John',
   })
-  await expect(page.getByTestId('expense-card').first()).toContainText('sats')
+  await expect(page.getByTestId('expense-card').first()).toContainText('₫')
 })
 
 test('shares a group as a link and as a QR code', async ({ page }) => {

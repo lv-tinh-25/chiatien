@@ -19,12 +19,14 @@ export function money(
   amount: number,
   currency = 'USD',
   locale = 'en-US',
+  /** Dong and yen carry no minor units, so their amounts print whole. */
+  digits = 2,
 ): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
   }).format(amount)
 }
 
@@ -117,4 +119,19 @@ export async function clickUntil(
     await action()
     await settled()
   }).toPass({ timeout: 20_000 })
+}
+
+/**
+ * The currency of an expense is two chips beside the amount, not a searchable
+ * list: the group settles in one currency, and an expense is entered in that
+ * one or in the other the design offers.
+ */
+export function chooseExpenseCurrency(
+  page: Page,
+  symbol: string,
+): Promise<void> {
+  return page
+    .getByRole('radiogroup', { name: 'Currency of expense' })
+    .getByRole('radio', { name: symbol })
+    .click()
 }

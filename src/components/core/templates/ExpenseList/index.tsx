@@ -34,7 +34,7 @@ export function ExpenseList({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3.5">
-        <h1 className="hidden shrink-0 text-headline-lg font-extrabold text-foreground lg:block">
+        <h1 className="hidden shrink-0 text-headline-lg text-foreground lg:block">
           {t('title')}
         </h1>
         <div className="min-w-0 flex-1 lg:max-w-105">
@@ -82,10 +82,10 @@ export function ExpenseList({
       {currency &&
         sections.map(({ group: section, expenses }) => (
           <section key={section} className="flex flex-col gap-2">
-            <h3 className="px-1 text-label-sm tracking-wider text-muted-foreground uppercase">
+            <h3 className="px-1 text-label-sm tracking-wide text-muted-foreground uppercase">
               {t(`Groups.${section}`)}
             </h3>
-            <div className="glass-raised divide-y divide-border/50 overflow-hidden rounded-card">
+            <div className="glass-raised overflow-hidden rounded-card">
               {expenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
@@ -102,8 +102,9 @@ export function ExpenseList({
 
       <div ref={sentinelRef} aria-hidden className="h-px" />
       {isFetchingNextPage && (
-        <p className="text-center text-body-sm text-muted-foreground">
-          {t('title')}…
+        <p className="text-center text-body-sm text-muted-foreground-subtle">
+          <span className="lg:hidden">{t('loadMore')}</span>
+          <span className="hidden lg:inline">{t('loadMoreWide')}</span>
         </p>
       )}
     </div>

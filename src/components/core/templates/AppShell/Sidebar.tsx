@@ -1,8 +1,10 @@
 'use client'
 
+import { toneAt } from '@/components/core/atoms/Avatar/tone'
 import { ActiveUserCard } from '@/components/core/templates/AppShell/ActiveUserCard'
 import { NAV_ICONS } from '@/components/core/templates/AppShell/navIcons'
 import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
+import { groupToneIndex } from '@/lib/group-emoji'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -18,7 +20,10 @@ export function Sidebar({ chrome }: { chrome: GroupChrome }) {
       <div className="flex items-center gap-3 px-2.5 pt-2.5 pb-4">
         <span
           aria-hidden
-          className="glass-flush flex size-10.5 items-center justify-center rounded-control text-xl"
+          className={cn(
+            'flex size-10.5 items-center justify-center rounded-control border border-white/90 text-xl',
+            toneAt(groupToneIndex(chrome.groupId ?? '')).surface,
+          )}
         >
           {chrome.emoji}
         </span>
@@ -44,8 +49,8 @@ export function Sidebar({ chrome }: { chrome: GroupChrome }) {
                 className={cn(
                   'flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-md transition-colors duration-150 ease-out-soft',
                   item.active
-                    ? 'glass-raised font-extrabold text-primary-ink'
-                    : 'font-semibold text-foreground/80 hover:bg-foreground/5',
+                    ? 'border border-white/95 bg-card/85 font-extrabold text-primary-ink shadow-card'
+                    : 'border border-transparent font-semibold text-foreground/80 hover:bg-foreground/5',
                 )}
               >
                 <Icon className="size-5" aria-hidden />

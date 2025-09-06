@@ -10,10 +10,10 @@ import {
   uniqueSuffix,
 } from './app'
 import { expect, test } from './fixtures'
-import { fieldByLabel, money, selectRadixOption } from './ui'
+import { chooseExpenseCurrency, money } from './ui'
 
-// Groups default to USD, so picking EUR forces a conversion. The rate is
-// mocked, so 1 EUR is always exactly 1.25 USD.
+// Groups default to USD, so picking dong forces a conversion. The rate is
+// mocked, so 1 VND is always exactly 1.25 USD.
 test.use({ exchangeRate: 1.25 })
 
 const PARTICIPANTS = ['Alice', 'Bob']
@@ -53,16 +53,12 @@ test('derives the transfer amount from the balance being settled', async ({
   // The balance is the authoritative figure and stays in the group currency.
   await expect(page.locator('input[name="amount"]')).toHaveValue(/^50/)
 
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
+  await chooseExpenseCurrency(page, '₫')
 
-  // 50 USD at 1 EUR = 1.25 USD is 40 EUR, filled in without the user typing.
+  // 50 USD at 1 VND = 1.25 USD is 40 VND, filled in without the user typing.
   // This is the reverse of the regular-expense direction, where the foreign
   // amount is what drives the group-currency one.
-  await expect(originalAmount(page)).toHaveValue('40.00')
+  await expect(originalAmount(page)).toHaveValue('40')
   await expect(page.getByText('Amount to transfer')).toBeVisible()
   // Derived, so it must not be editable.
   await expect(originalAmount(page)).toHaveAttribute('readonly', '')
@@ -73,20 +69,16 @@ test('settles the balance exactly and keeps the transferred amount', async ({
 }) => {
   await openRepaymentForm(page, 'E2E Repayment Settle')
 
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
-  await expect(originalAmount(page)).toHaveValue('40.00')
+  await chooseExpenseCurrency(page, '₫')
+  await expect(originalAmount(page)).toHaveValue('40')
 
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   // The card carries both figures: what settles the balance and what moved.
   const card = expenseCard(page, 'Reimbursement')
   await expect(card).toContainText(money(50))
-  await expect(card).toContainText(money(40, 'EUR'))
+  await expect(card).toContainText(money(40, 'VND', 'en-US', 0))
 
   // The point of keeping the group amount authoritative: the balance is zero,
   // not "zero apart from a rounding remainder".
@@ -105,12 +97,8 @@ test('refreshing the exchange rate does not submit the form', async ({
 }) => {
   const groupId = await openRepaymentForm(page, 'E2E Repayment Refresh')
 
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
-  await expect(originalAmount(page)).toHaveValue('40.00')
+  await chooseExpenseCurrency(page, '₫')
+  await expect(originalAmount(page)).toHaveValue('40')
 
   await page.getByRole('button', { name: 'Refresh' }).click()
 
@@ -122,5 +110,5 @@ test('refreshing the exchange rate does not submit the form', async ({
   ).rejects.toThrow()
 
   await expect(page).toHaveURL(new RegExp(`/groups/${groupId}/expenses/create`))
-  await expect(originalAmount(page)).toHaveValue('40.00')
+  await expect(originalAmount(page)).toHaveValue('40')
 })

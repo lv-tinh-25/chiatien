@@ -63,6 +63,6 @@ test('prefills the create form from a scanned receipt', async ({ page }) => {
     page.getByRole('button', { name: 'Remove this document' }),
   ).toBeVisible()
 
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 })

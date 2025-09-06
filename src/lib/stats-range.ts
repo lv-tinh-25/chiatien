@@ -1,11 +1,12 @@
-export type StatsPeriod = 'all' | 'thisMonth' | 'last30' | 'thisYear' | 'custom'
+export type StatsPeriod =
+  'all' | 'thisMonth' | 'last3Months' | 'thisYear' | 'custom'
 
 export type StatsRange = { from?: string; to?: string }
 
 export const STATS_PERIODS: StatsPeriod[] = [
   'all',
   'thisMonth',
-  'last30',
+  'last3Months',
   'thisYear',
   'custom',
 ]
@@ -32,9 +33,10 @@ export function getRangeForPeriod(
         from: toDateString(new Date(now.getFullYear(), now.getMonth(), 1)),
         to: toDateString(now),
       }
-    case 'last30': {
+    case 'last3Months': {
       const from = new Date(now)
-      from.setDate(from.getDate() - 29)
+      from.setMonth(from.getMonth() - 3)
+      from.setDate(from.getDate() + 1)
       return { from: toDateString(from), to: toDateString(now) }
     }
     case 'thisYear':

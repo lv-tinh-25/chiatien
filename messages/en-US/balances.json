@@ -1,17 +1,16 @@
 {
   "Balances": {
     "title": "Balances",
-    "description": "This is the amount that each participant paid or was paid for.",
     "Reimbursements": {
-      "title": "Suggested reimbursements",
-      "description": "Here are suggestions for optimized reimbursements between participants.",
+      "title": "Suggested reimbursements · {count} transfers",
       "noImbursements": "It looks like your group doesn’t need any reimbursement 😁",
-      "owes": "<strong>{from}</strong> owes <strong>{to}</strong>",
       "markAsPaid": "Mark as paid",
-      "markAsPaidShort": "Paid"
+      "markAsPaidShort": "Paid",
+      "row": "{from} pays {to}"
     },
     "seeAll": "See all",
     "owing": "Owes",
-    "owed": "Is owed"
+    "owed": "Is owed",
+    "you": "{name} (you)"
   }
 }

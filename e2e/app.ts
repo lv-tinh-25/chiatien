@@ -11,7 +11,7 @@ import {
 
 export type SplitMode = 'EVENLY' | 'BY_SHARES' | 'BY_PERCENTAGE' | 'BY_AMOUNT'
 
-export type Recurrence = 'None' | 'Daily' | 'Weekly' | 'Monthly'
+export type Recurrence = 'Does not repeat' | 'Daily' | 'Weekly' | 'Monthly'
 
 export type GroupTab =
   'Expenses' | 'Balances' | 'Information' | 'Stats' | 'Activity' | 'Settings'
@@ -85,7 +85,7 @@ export async function createGroup(
     )
   }
 
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Create group', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   const groupId = /\/groups\/([^/]+)\/expenses/.exec(page.url())
@@ -111,7 +111,7 @@ export async function addExpense(
     date?: string
     /** Visible category name, e.g. 'Food'. Defaults to Other. */
     category?: string
-    /** Visible label: 'None' | 'Daily' | 'Weekly' | 'Monthly'. Defaults to None. */
+    /** Visible label, e.g. 'Weekly'. Defaults to 'Does not repeat'. */
     recurrence?: Recurrence
   },
 ): Promise<void> {
@@ -119,7 +119,7 @@ export async function addExpense(
 
   // CreateExpenseForm returns null until its tRPC queries resolve, so the
   // submit button appearing means both hydrated and data-ready.
-  const submit = page.getByRole('button', { name: 'Create', exact: true })
+  const submit = page.getByRole('button', { name: 'Add expense', exact: true })
   await expect(submit).toBeVisible({ timeout: 30_000 })
 
   await fillStable(page.locator('input[name="title"]'), expense.title)
@@ -143,7 +143,7 @@ export async function addExpense(
   if (expense.recurrence) {
     await selectRadixOption(
       page,
-      fieldByLabel(page, 'Expense Recurrence').getByRole('combobox'),
+      fieldByLabel(page, 'Repeats').getByRole('combobox'),
       expense.recurrence,
     )
   }

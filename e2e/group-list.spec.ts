@@ -114,7 +114,7 @@ test('renaming a group updates the list', async ({ page }) => {
       response.request().method() === 'POST' &&
       response.status() === 200,
   )
-  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  await page.getByRole('button', { name: 'Save group', exact: true }).click()
   await saved
 
   await page.goto('/groups')

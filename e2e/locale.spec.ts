@@ -17,7 +17,7 @@ test('shows Vietnamese to a browser whose languages it cannot honour', async ({
   try {
     await page.goto('/groups')
     await expect(
-      page.getByRole('heading', { name: 'Nhóm của tôi' }),
+      page.getByRole('heading', { name: 'Nhóm của bạn' }),
     ).toBeVisible()
   } finally {
     await context.close()
@@ -32,7 +32,9 @@ test('honours an English browser', async ({ browser }) => {
   const page = await context.newPage()
   try {
     await page.goto('/groups')
-    await expect(page.getByRole('heading', { name: 'My groups' })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Your groups' }),
+    ).toBeVisible()
   } finally {
     await context.close()
   }
@@ -45,6 +47,6 @@ test('remembers the language picked in settings', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Cài đặt' })).toBeVisible()
   await page.goto('/groups')
   await expect(
-    page.getByRole('heading', { name: 'Nhóm của tôi' }),
+    page.getByRole('heading', { name: 'Nhóm của bạn' }),
   ).toBeVisible()
 })

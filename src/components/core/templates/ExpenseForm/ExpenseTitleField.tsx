@@ -31,7 +31,6 @@ export function ExpenseTitleField({
       <FormInput
         label={t(`${scope}.TitleField.label`)}
         placeholder={t(`${scope}.TitleField.placeholder`)}
-        description={t(`${scope}.TitleField.description`)}
         errorKey={form.formState.errors.title?.message}
         fieldClassName="flex-1"
         {...form.register('title')}

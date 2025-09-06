@@ -1,17 +1,16 @@
 {
   "Balances": {
     "title": "Số dư",
-    "description": "Đây là số tiền mỗi thành viên đã trả và phần họ phải chịu.",
     "Reimbursements": {
-      "title": "Gợi ý quyết toán",
-      "description": "Đây là phương án chuyển tiền gọn nhất giữa các thành viên.",
+      "title": "Gợi ý quyết toán · {count} lượt chuyển",
       "noImbursements": "Nhóm của bạn không cần ai trả lại ai cả 😁",
-      "owes": "<strong>{from}</strong> nợ <strong>{to}</strong>",
       "markAsPaid": "Đánh dấu đã trả",
-      "markAsPaidShort": "Đã trả"
+      "markAsPaidShort": "Đã trả",
+      "row": "{from} trả cho {to}"
     },
     "seeAll": "Xem tất cả",
     "owing": "Nợ",
-    "owed": "Được nhận"
+    "owed": "Được nhận",
+    "you": "{name} (bạn)"
   }
 }

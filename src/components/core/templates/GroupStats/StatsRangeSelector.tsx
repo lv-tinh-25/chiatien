@@ -18,14 +18,14 @@ type Props = {
 /** Design order: nearest range first, everything last, custom at the end. */
 const ORDER: StatsPeriod[] = [
   'thisMonth',
-  'last30',
+  'last3Months',
   'thisYear',
   'all',
   'custom',
 ]
 
 const DATE_INPUT =
-  'flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-lg text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20'
+  'flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-md font-semibold text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20'
 
 export function StatsRangeSelector({
   period,
@@ -57,7 +57,9 @@ export function StatsRangeSelector({
           {/* The input sits inside its label rather than beside it: an implicit
               association keeps the pair addressable as one node. */}
           <label className="flex flex-1 flex-col gap-1.5">
-            <span className="text-label-md text-foreground">{t('from')}</span>
+            <span className="text-label-md text-muted-foreground">
+              {t('from')}
+            </span>
             <input
               type="date"
               className={DATE_INPUT}
@@ -71,7 +73,9 @@ export function StatsRangeSelector({
             />
           </label>
           <label className="flex flex-1 flex-col gap-1.5">
-            <span className="text-label-md text-foreground">{t('to')}</span>
+            <span className="text-label-md text-muted-foreground">
+              {t('to')}
+            </span>
             <input
               type="date"
               className={DATE_INPUT}

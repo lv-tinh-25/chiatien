@@ -46,8 +46,8 @@ test('asks who you are and personalises the expense list', async ({ page }) => {
   // The dialog does not come back...
   await expect(page.getByRole('dialog')).toBeHidden()
   // ...and Bob now sees his own third of Alice's 90 on the card.
-  await expect(expenseCard(page, 'Dinner')).toContainText('Your balance:')
-  await expect(expenseCard(page, 'Dinner')).toContainText(money(-30))
+  await expect(expenseCard(page, 'Dinner')).toContainText('You owe')
+  await expect(expenseCard(page, 'Dinner')).toContainText(money(30))
 })
 
 test('pre-fills "Paid by" with the active user', async ({ page }) => {
@@ -90,7 +90,7 @@ test('lets you decline to pick anyone', async ({ page }) => {
   await expect(dialog).toBeHidden()
 
   // With nobody selected there is no personalised balance on the card...
-  await expect(expenseCard(page, 'Taxi')).not.toContainText('Your balance:')
+  await expect(expenseCard(page, 'Taxi')).not.toContainText('You owe')
   // ...and the dialog does not come back.
   await page.reload()
   await expect(page.getByRole('dialog')).toBeHidden()
@@ -119,7 +119,5 @@ test('says so when the active user has no stake in an expense', async ({
   await dialog.getByRole('button', { name: 'Save changes' }).click()
   await expect(dialog).toBeHidden()
 
-  await expect(expenseCard(page, 'Solo lunch')).toContainText(
-    'You are not involved',
-  )
+  await expect(expenseCard(page, 'Solo lunch')).toContainText('Not involved')
 })

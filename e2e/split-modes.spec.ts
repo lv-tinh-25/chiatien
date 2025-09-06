@@ -83,7 +83,7 @@ test('rejects percentages that do not add up to 100', async ({ page }) => {
   // Driven inline rather than through addExpense, which waits for a successful
   // navigation -- the whole point here is that submitting must not navigate.
   await page.goto(`/groups/${groupId}/expenses/create`)
-  const submit = page.getByRole('button', { name: 'Create', exact: true })
+  const submit = page.getByRole('button', { name: 'Add expense', exact: true })
   await expect(submit).toBeVisible({ timeout: 30_000 })
 
   await fillStable(page.locator('input[name="title"]'), 'Invalid')

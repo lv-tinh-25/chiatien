@@ -5,8 +5,11 @@ import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { SegmentedControl } from '@/components/core/molecules/SegmentedControl'
 import { PaidForRow } from '@/components/core/templates/ExpenseForm/PaidForRow'
 import type { SplitMode } from '@/generated/prisma/browser'
+import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
+import { distributeAmount } from '@/lib/shares'
+import { amountAsMinorUnits, formatCurrency } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import type { UseFormReturn } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
@@ -35,6 +38,14 @@ const CHIP_KEYS: Record<SplitMode, string> = {
   BY_AMOUNT: 'byAmountChip',
 }
 
+/** The design spells the rule out under the rows rather than in a tooltip. */
+const HINT_KEYS: Record<SplitMode, string> = {
+  EVENLY: 'evenly',
+  BY_SHARES: 'byShares',
+  BY_PERCENTAGE: 'byPercentage',
+  BY_AMOUNT: 'byAmount',
+}
+
 const SHORT_KEYS: Record<SplitMode, string> = {
   EVENLY: 'evenlyShort',
   BY_SHARES: 'bySharesShort',
@@ -46,6 +57,7 @@ type Props = {
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>
   participants: { id: string; name: string }[]
   currency: Currency
+  locale: Locale
   isIncome: boolean
   onShareEdited: (participantId: string) => void
 }
@@ -54,6 +66,7 @@ export function PaidForList({
   form,
   participants,
   currency,
+  locale,
   isIncome,
   onShareEdited,
 }: Props) {
@@ -68,6 +81,7 @@ export function PaidForList({
     control: form.control,
     name: 'saveDefaultSplittingOptions',
   })
+  const amount = useWatch({ control: form.control, name: 'amount' })
   const errorKey = form.formState.errors.paidFor?.message
 
   const rowFor = (participantId: string) =>
@@ -75,6 +89,14 @@ export function PaidForList({
 
   const allChecked =
     participants.length > 0 && paidFor.length === participants.length
+
+  const total = amountAsMinorUnits(Number(amount) || 0, currency)
+  const evenShares = distributeAmount(Math.abs(total), paidFor.length || 1)
+  const shareDisplay = (participantId: string) => {
+    const index = paidFor.findIndex((row) => row.participant === participantId)
+    if (index < 0) return ''
+    return formatCurrency(currency, evenShares[index] ?? 0, locale)
+  }
 
   const setAll = (checked: boolean) =>
     form.setValue(
@@ -137,7 +159,7 @@ export function PaidForList({
         />
       </div>
 
-      <div className="flex items-center justify-between gap-3 border-b border-border/50 pb-2">
+      <div className="flex items-center justify-between gap-3">
         <span className="text-body-sm font-bold text-muted-foreground">
           {t('selectedCount', {
             selected: paidFor.length,
@@ -168,6 +190,7 @@ export function PaidForList({
               splitMode={splitMode}
               currency={currency}
               shares={String(row?.shares ?? '')}
+              shareDisplay={shareDisplay(participant.id)}
               onToggle={(checked) => toggle(participant.id, checked)}
               onSharesChange={(shares) => setShares(participant.id, shares)}
             />
@@ -175,9 +198,14 @@ export function PaidForList({
         })}
       </ul>
 
-      <p className="text-body-sm text-muted-foreground">
-        {t(`${scope}.paidFor.description`)}
-      </p>
+      <div className="flex items-center justify-between gap-3 text-body-sm font-semibold text-muted-foreground">
+        <span>
+          {t(`splitHint.${HINT_KEYS[splitMode]}`, { count: paidFor.length })}
+        </span>
+        <span className="text-numeric-table-md text-credit tabular">
+          {formatCurrency(currency, Math.abs(total), locale)}
+        </span>
+      </div>
 
       <label className="flex min-h-touch-min items-center gap-3">
         <Checkbox

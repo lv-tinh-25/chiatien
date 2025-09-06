@@ -95,7 +95,7 @@ test('caches static assets but never API responses', async ({ page }) => {
 
 test('titles every page with the app name', async ({ page }) => {
   await page.goto('/groups')
-  await expect(page).toHaveTitle('My groups · ChiaTien')
+  await expect(page).toHaveTitle('Your groups · ChiaTien')
 
   await page.goto('/settings')
   await expect(page).toHaveTitle('Settings · ChiaTien')

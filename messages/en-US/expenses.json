@@ -1,8 +1,7 @@
 {
   "Expenses": {
     "title": "Expenses",
-    "description": "Here are the expenses that you created for your group.",
-    "create": "Create expense",
+    "create": "Add expense",
     "createFirst": "Create the first one",
     "noExpenses": "Your group doesn’t contain any expense yet.",
     "export": "Export",
@@ -24,79 +23,69 @@
       "earlierThisYear": "Earlier this year",
       "lastYear": "Last year",
       "older": "Older"
-    }
+    },
+    "loadMore": "Pull down to load more…",
+    "loadMoreWide": "Scroll down to load more…"
   },
   "ExpenseCard": {
-    "yourBalance": "Your balance:",
-    "notInvolved": "You are not involved",
+    "notInvolved": "Not involved",
     "paidBySummary": "{paidBy} paid · {count} people",
     "receivedBySummary": "{paidBy} received · {count} people",
-    "reimbursement": "Settlement"
+    "reimbursement": "Settlement",
+    "credit": "You get +{amount}",
+    "debit": "You owe −{amount}",
+    "paidBySummaryWide": "{paidBy} paid · split {count} ways",
+    "receivedBySummaryWide": "{paidBy} received · split {count} ways"
   },
   "ExpenseForm": {
     "Income": {
-      "create": "Create income",
+      "create": "New income",
       "edit": "Edit income",
       "TitleField": {
         "label": "Income title",
-        "placeholder": "Monday evening restaurant",
-        "description": "Enter a description for the income."
+        "placeholder": "Monday evening restaurant"
       },
       "DateField": {
-        "label": "Income date",
-        "description": "Enter the date the income was received."
+        "label": "Income date"
       },
       "currencyField": {
-        "label": "Currency of income",
-        "description": "The currency in which the income was received."
+        "label": "Currency of income"
       },
-      "categoryFieldDescription": "Select the income category.",
       "paidByField": {
-        "label": "Received by",
-        "description": "Select the participant who received the income."
+        "label": "Received by"
       },
       "paidFor": {
-        "title": "Received for",
-        "description": "Select who the income was received for."
+        "title": "Received for"
       },
-      "splitModeDescription": "Select how to split the income.",
       "attachDescription": "See and attach receipts to the income."
     },
     "Expense": {
-      "create": "Create expense",
+      "create": "New expense",
       "edit": "Edit expense",
       "TitleField": {
         "label": "Expense title",
-        "placeholder": "Monday evening restaurant",
-        "description": "Enter a description for the expense."
+        "placeholder": "Monday evening restaurant"
       },
       "DateField": {
-        "label": "Expense date",
-        "description": "Enter the date the expense was paid."
+        "label": "Date"
       },
       "currencyField": {
-        "label": "Currency of expense",
-        "description": "The currency in which the expense was paid."
+        "label": "Currency of expense"
       },
-      "categoryFieldDescription": "Select the expense category.",
       "paidByField": {
         "label": "Paid by",
-        "placeholder": "Select a participant",
-        "description": "Select the participant who paid the expense."
+        "placeholder": "Select a participant"
       },
       "recurrenceRule": {
-        "label": "Expense Recurrence",
-        "description": "Select how often the expense should repeat.",
-        "none": "None",
+        "label": "Repeats",
+        "none": "Does not repeat",
         "daily": "Daily",
         "weekly": "Weekly",
         "monthly": "Monthly"
       },
       "paidFor": {
-        "title": "Paid for",
-        "description": "Select who the expense was paid for."
+        "title": "Paid for"
       },
-      "splitModeDescription": "Select how to split the expense.",
       "attachDescription": "See and attach receipts to the expense."
     },
     "amountField": {
@@ -125,9 +114,6 @@
       "refresh": "Refresh",
       "customRate": "Using custom rate"
     },
-    "isReimbursementField": {
-      "label": "This is a reimbursement"
-    },
     "categoryField": {
       "label": "Category"
     },
@@ -137,7 +123,6 @@
     "selectNone": "Select none",
     "selectAll": "Select all",
     "shares": "share(s)",
-    "advancedOptions": "Advanced splitting options…",
     "SplitModeField": {
       "label": "Split mode",
       "evenly": "Evenly",
@@ -162,13 +147,18 @@
       "cancel": "Cancel"
     },
     "attachDocuments": "Attach documents",
-    "create": "Create",
+    "create": "Add expense",
     "creating": "Creating…",
-    "save": "Save",
+    "save": "Save changes",
     "saving": "Saving…",
-    "cancel": "Cancel",
     "reimbursement": "Reimbursement",
-    "selectedCount": "{selected}/{total} people"
+    "selectedCount": "{selected}/{total} people",
+    "splitHint": {
+      "evenly": "Split evenly between {count} people",
+      "byShares": "{count} shares in total",
+      "byPercentage": "Must add up to 100%",
+      "byAmount": "Must add up to the amount"
+    }
   },
   "ExpenseDocumentsInput": {
     "add": "Attach a document",
@@ -215,7 +205,6 @@
   },
   "Categories": {
     "search": "Search category...",
-    "noCategory": "No category found.",
     "Accommodation": {
       "heading": "Accommodation",
       "Accommodation": "Accommodation"

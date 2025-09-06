@@ -1,5 +1,6 @@
 'use client'
 
+import { BackButton } from '@/components/core/atoms/BackButton'
 import { GroupDetailsFields } from '@/components/core/templates/GroupForm/GroupDetailsFields'
 import { GroupFormFooter } from '@/components/core/templates/GroupForm/GroupFormFooter'
 import { GroupSettingsFields } from '@/components/core/templates/GroupForm/GroupSettingsFields'
@@ -45,12 +46,16 @@ export function GroupForm({
 
   return (
     <form onSubmit={submit} className="flex w-full max-w-180 flex-col gap-4">
-      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
-        {isEdit ? tNav('groupSettingsTitle') : tGroups('createGroup')}
-      </h1>
+      <div className="hidden items-center gap-3 lg:flex">
+        <BackButton
+          href={group ? `/groups/${group.id}/information` : '/groups'}
+        />
+        <h1 className="text-headline-lg text-foreground">
+          {isEdit ? tNav('groupSettingsTitle') : tGroups('createGroup')}
+        </h1>
+      </div>
       <GroupDetailsFields
         form={form}
-        isEdit={isEdit}
         onCurrencyCodeChange={onCurrencyCodeChange}
       />
       <ParticipantList
@@ -67,11 +72,7 @@ export function GroupForm({
           onActiveUserChange={setActiveUser}
         />
       )}
-      <GroupFormFooter
-        isEdit={isEdit}
-        isSubmitting={isSubmitting}
-        cancelHref={group ? `/groups/${group.id}/expenses` : '/groups'}
-      />
+      <GroupFormFooter isEdit={isEdit} isSubmitting={isSubmitting} />
     </form>
   )
 }
