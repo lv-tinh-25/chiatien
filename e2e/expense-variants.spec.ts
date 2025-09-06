@@ -20,7 +20,7 @@ test('records a negative amount as an income', async ({ page }) => {
 
   await page.goto(`/groups/${groupId}/expenses/create`)
   await expect(
-    page.getByRole('button', { name: 'Create', exact: true }),
+    page.getByRole('button', { name: 'Add expense', exact: true }),
   ).toBeVisible({ timeout: 30_000 })
 
   await fillStable(page.locator('input[name="title"]'), 'Deposit refund')
@@ -28,14 +28,12 @@ test('records a negative amount as an income', async ({ page }) => {
 
   // A negative amount re-labels the whole form: the heading and the payer
   // field switch from expense wording to income wording.
-  await expect(
-    page.getByRole('heading', { name: 'Create income' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'New income' })).toBeVisible()
   await expect(page.getByText('Received by')).toBeVisible()
 
   await page.getByTestId('paid-by').click()
   await page.getByRole('option', { name: 'Alice' }).click()
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(/\/groups\/[^/]+\/expenses(\?|$)/, { timeout: 30_000 })
 
   await expect(expenseCard(page, 'Deposit refund')).toContainText(money(-90))
@@ -108,7 +106,7 @@ test('searches the payer list in a group too large to show as chips', async ({
 
   await page.goto(`/groups/${groupId}/expenses/create`)
   await expect(
-    page.getByRole('button', { name: 'Create', exact: true }),
+    page.getByRole('button', { name: 'Add expense', exact: true }),
   ).toBeVisible({ timeout: 30_000 })
 
   const field = page.getByTestId('paid-by')

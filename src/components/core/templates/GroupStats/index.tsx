@@ -1,23 +1,25 @@
 'use client'
 
+import { toneAt } from '@/components/core/atoms/Avatar/tone'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/core/atoms/Card'
-import { Money } from '@/components/core/atoms/Money'
 import { CategoryEmoji } from '@/components/core/atoms/CategoryEmoji'
+import { Money } from '@/components/core/atoms/Money'
 import { CategoryDrilldown } from '@/components/core/templates/GroupStats/CategoryDrilldown'
+import { MemberBars } from '@/components/core/templates/GroupStats/MemberBars'
 import { MonthDrilldown } from '@/components/core/templates/GroupStats/MonthDrilldown'
-import { ParticipantTable } from '@/components/core/templates/GroupStats/ParticipantTable'
 import { StatBar } from '@/components/core/templates/GroupStats/StatBar'
 import { StatsRangeSelector } from '@/components/core/templates/GroupStats/StatsRangeSelector'
+import { TimeColumnChart } from '@/components/core/templates/GroupStats/TimeColumnChart'
 import { TotalsCard } from '@/components/core/templates/GroupStats/TotalsCard'
 import { useGroupStats } from '@/hooks/stats/useGroupStats'
+import { categoryToneIndex } from '@/lib/categories'
 import { formatMonth } from '@/lib/format-month'
-import { formatCurrency, formatDateOnly } from '@/lib/utils'
+import { formatCurrency } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 export function GroupStats() {
@@ -50,7 +52,7 @@ export function GroupStats() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="hidden shrink-0 text-headline-lg font-extrabold text-foreground lg:block">
+        <h1 className="hidden shrink-0 text-headline-lg text-foreground lg:block">
           {t('title')}
         </h1>
         <StatsRangeSelector
@@ -63,10 +65,15 @@ export function GroupStats() {
 
       {/* A bento of independent readings of the same range: the two that carry
           a chart take a full row so no bar is squeezed into a third. */}
-      <div className="grid items-start gap-4 lg:grid-cols-3">
+      <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-3">
         <TotalsCard
           className={
             stats.recurring.count > 0 ? 'lg:col-span-2' : 'lg:col-span-3'
+          }
+          rangeCaption={
+            period === 'thisYear'
+              ? t('Caption.thisYear', { year: new Date().getFullYear() })
+              : t(`Caption.${period}`)
           }
           totalGroupSpendings={stats.totalGroupSpendings}
           totalParticipantSpendings={
@@ -81,9 +88,10 @@ export function GroupStats() {
 
         {stats.recurring.count > 0 && (
           <Card>
-            <CardHeader>
-              <CardTitle>{t('Recurring.title')}</CardTitle>
-              <CardDescription>{t('Recurring.description')}</CardDescription>
+            <CardHeader className="pb-1">
+              <CardTitle className="text-label-md text-muted-foreground">
+                {t('Recurring.title')}
+              </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
               <div>
@@ -125,9 +133,10 @@ export function GroupStats() {
         )}
 
         <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>{t('OverTime.title')}</CardTitle>
-            <CardDescription>{t('OverTime.description')}</CardDescription>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-label-md text-muted-foreground">
+              {t('OverTime.title')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {stats.months.length === 0 ? (
@@ -135,38 +144,38 @@ export function GroupStats() {
                 {t('OverTime.empty')}
               </p>
             ) : (
-              <ul>
-                {stats.months.map((month) => (
+              <TimeColumnChart
+                columns={stats.months.map((month, index) => ({
+                  key: month.month,
+                  label: formatMonth(month.month, locale),
+                  value: money(month.total),
+                  fill: monthMax === 0 ? 0 : month.total / monthMax,
+                  current: index === stats.months.length - 1,
+                  selectLabel: t('OverTime.showExpenses', {
+                    month: formatMonth(month.month, locale),
+                  }),
+                }))}
+                renderTrigger={(column, trigger) => (
                   <MonthDrilldown
-                    key={month.month}
                     groupId={groupId}
-                    month={month.month}
-                    monthLabel={formatMonth(month.month, locale)}
+                    month={column.key}
+                    monthLabel={column.label}
                     range={range}
                     currency={currency}
                     locale={locale}
-                    trigger={
-                      <StatBar
-                        label={formatMonth(month.month, locale)}
-                        value={money(month.total)}
-                        fill={monthMax === 0 ? 0 : month.total / monthMax}
-                        selectLabel={t('OverTime.showExpenses', {
-                          month: formatMonth(month.month, locale),
-                        })}
-                        asButton
-                      />
-                    }
+                    trigger={trigger}
                   />
-                ))}
-              </ul>
+                )}
+              />
             )}
           </CardContent>
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>{t('ByParticipant.title')}</CardTitle>
-            <CardDescription>{t('ByParticipant.description')}</CardDescription>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-label-md text-muted-foreground">
+              {t('ByParticipant.title')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {stats.participants.length === 0 ? (
@@ -174,7 +183,7 @@ export function GroupStats() {
                 {t('ByParticipant.empty')}
               </p>
             ) : (
-              <ParticipantTable
+              <MemberBars
                 participants={stats.participants}
                 currency={currency}
                 locale={locale}
@@ -184,9 +193,10 @@ export function GroupStats() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>{t('ByCategory.title')}</CardTitle>
-            <CardDescription>{t('ByCategory.description')}</CardDescription>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-label-md text-muted-foreground">
+              {t('ByCategory.title')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {stats.categories.length === 0 ? (
@@ -208,9 +218,15 @@ export function GroupStats() {
                       locale={locale}
                       trigger={
                         <StatBar
-                          icon={<CategoryEmoji categoryId={row.categoryId} size="sm" />}
+                          icon={
+                            <CategoryEmoji
+                              categoryId={row.categoryId}
+                              size="sm"
+                            />
+                          }
                           label={label}
                           value={money(row.total)}
+                          tone={toneAt(categoryToneIndex(row.categoryId)).fill}
                           fill={categoryMax === 0 ? 0 : row.total / categoryMax}
                           selectLabel={t('ByCategory.showExpenses', {
                             category: label,
@@ -222,72 +238,6 @@ export function GroupStats() {
                   )
                 })}
               </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>{t('Summary.title')}</CardTitle>
-            <CardDescription>{t('Summary.description')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {stats.summary.expenseCount === 0 ? (
-              <p className="text-body-md text-muted-foreground">
-                {t('Summary.empty')}
-              </p>
-            ) : (
-              <dl className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <dt className="text-label-md text-muted-foreground">
-                    {t('Summary.expenseCount')}
-                  </dt>
-                  <dd className="text-numeric-table-md tabular">
-                    {stats.summary.expenseCount}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-label-md text-muted-foreground">
-                    {t('Summary.averageExpense')}
-                  </dt>
-                  <dd>{money(stats.summary.averageExpense)}</dd>
-                </div>
-                {stats.summary.largestExpense && (
-                  <div>
-                    <dt className="text-label-md text-muted-foreground">
-                      {t('Summary.largestExpense')}
-                    </dt>
-                    <dd>
-                      {stats.summary.largestExpense.title} ·{' '}
-                      {money(stats.summary.largestExpense.amount)}
-                    </dd>
-                  </div>
-                )}
-                {stats.summary.firstDate && stats.summary.lastDate && (
-                  <div>
-                    <dt className="text-label-md text-muted-foreground">
-                      {t('Summary.activeSpan')}
-                    </dt>
-                    <dd className="tabular">
-                      {formatDateOnly(
-                        new Date(stats.summary.firstDate),
-                        locale,
-                        {
-                          dateStyle: 'medium',
-                        },
-                      )}{' '}
-                      –{' '}
-                      {formatDateOnly(
-                        new Date(stats.summary.lastDate),
-                        locale,
-                        {
-                          dateStyle: 'medium',
-                        },
-                      )}
-                    </dd>
-                  </div>
-                )}
-              </dl>
             )}
           </CardContent>
         </Card>

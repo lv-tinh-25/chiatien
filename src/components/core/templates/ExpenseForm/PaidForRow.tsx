@@ -5,13 +5,17 @@ import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { ShareInput } from '@/components/core/templates/ExpenseForm/ShareInput'
 import type { SplitMode } from '@/generated/prisma/browser'
 import type { Currency } from '@/lib/currency'
+import { cn } from '@/lib/utils'
 
 type PaidForRowProps = {
   participant: { id: string; name: string }
+  peers: readonly string[]
   checked: boolean
   splitMode: SplitMode
   currency: Currency
   shares: string
+  /** What this person carries, shown when the mode has nothing to type into. */
+  shareDisplay: string
   onToggle: (checked: boolean) => void
   onSharesChange: (value: string) => void
 }
@@ -28,20 +32,27 @@ type PaidForRowProps = {
  */
 export function PaidForRow({
   participant,
+  peers,
   checked,
   splitMode,
   currency,
   shares,
+  shareDisplay,
   onToggle,
   onSharesChange,
 }: PaidForRowProps) {
   return (
     <li
       data-id={participant.id}
-      className="flex items-center justify-between gap-3 border-b border-border/50 py-2 last:border-b-0"
+      className="flex items-center justify-between gap-3 py-1.5"
     >
       <label className="flex min-h-touch-min flex-1 items-center gap-3">
-        <span className="min-w-0 flex-1 truncate text-body-lg font-semibold text-foreground">
+        <span
+          className={cn(
+            'min-w-0 flex-1 truncate text-body-lg font-semibold',
+            checked ? 'text-foreground' : 'text-muted-foreground',
+          )}
+        >
           {participant.name}
         </span>
         <Checkbox
@@ -52,12 +63,13 @@ export function PaidForRow({
         />
         <Avatar
           name={participant.name}
+          peers={peers}
           size="lg"
-          className="order-first size-7.5"
+          className={cn('order-first size-7.5', !checked && 'opacity-40')}
         />
       </label>
 
-      {checked && splitMode !== 'EVENLY' && (
+      {checked && splitMode !== 'EVENLY' ? (
         <ShareInput
           splitMode={splitMode}
           currency={currency}
@@ -65,6 +77,15 @@ export function PaidForRow({
           participantName={participant.name}
           onChange={onSharesChange}
         />
+      ) : (
+        <span
+          className={cn(
+            'shrink-0 rounded-[0.5625rem] px-2.5 py-1 text-numeric-table-md tabular',
+            checked ? 'text-foreground' : 'text-muted-foreground',
+          )}
+        >
+          {checked ? shareDisplay : '—'}
+        </span>
       )}
     </li>
   )

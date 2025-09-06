@@ -1,30 +1,7 @@
-import { initialsOf } from '@/components/core/atoms/Avatar/initials'
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
 const atomsDir = join(process.cwd(), 'src/components/core/atoms')
-
-describe('initialsOf', () => {
-  it('takes the first letter of the first and last word', () => {
-    expect(initialsOf('Nguyễn Văn Nam')).toBe('NN')
-  })
-
-  it('takes two letters from a single word', () => {
-    expect(initialsOf('Nam')).toBe('NA')
-  })
-
-  it('uppercases and keeps diacritics', () => {
-    expect(initialsOf('đức minh')).toBe('ĐM')
-  })
-
-  it('collapses repeated whitespace', () => {
-    expect(initialsOf('  Thảo   My  ')).toBe('TM')
-  })
-
-  it('returns a placeholder for an empty name', () => {
-    expect(initialsOf('   ')).toBe('?')
-  })
-})
 
 describe('atom styling', () => {
   const files = readdirSync(atomsDir, { recursive: true, encoding: 'utf8' })

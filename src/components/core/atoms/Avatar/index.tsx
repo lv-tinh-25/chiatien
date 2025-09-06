@@ -1,9 +1,11 @@
-import { initialsOf } from '@/components/core/atoms/Avatar/initials'
 import { participantTone } from '@/components/core/atoms/Avatar/tone'
+import { avatarInitials } from '@/lib/avatar'
 import { cn } from '@/lib/utils'
 
 type AvatarProps = {
   name: string
+  /** Everyone else on screen, so a shared first letter can be disambiguated. */
+  peers?: readonly string[]
   size?: 'xs' | 'sm' | 'md' | 'lg'
   /** `solid` fills with the participant's hue, as the design draws it. */
   variant?: 'tinted' | 'solid'
@@ -24,6 +26,7 @@ const SIZES = {
  */
 export function Avatar({
   name,
+  peers,
   size = 'md',
   variant = 'solid',
   className,
@@ -41,7 +44,7 @@ export function Avatar({
         className,
       )}
     >
-      {initialsOf(name)}
+      {avatarInitials(name, peers)}
     </span>
   )
 }

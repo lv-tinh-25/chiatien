@@ -1,6 +1,6 @@
 {
   "Groups": {
-    "myGroups": "My groups",
+    "myGroups": "Your groups",
     "create": "Create",
     "createGroup": "Create group",
     "loadingRecent": "Loading recent groups…",
@@ -11,14 +11,15 @@
     },
     "GlobalBalance": {
       "title": "Your total balance",
-      "description": "Your combined balance across all your groups.",
-      "owedToYou": "You are owed",
+      "owedToYou": "Owed to you",
       "youOwe": "You owe",
-      "settledUp": "You are all settled up across your groups."
+      "settledUp": "You are all settled up across your groups.",
+      "titleWide": "Your total balance · all groups",
+      "groupCount": "{count, plural, one {# group} other {# groups}}"
     },
-    "recent": "Recent groups",
-    "starred": "Starred groups",
-    "archived": "Archived groups",
+    "recent": "Recent",
+    "starred": "Starred",
+    "archived": "Archived",
     "archive": "Archive group",
     "unarchive": "Unarchive group",
     "removeRecent": "Remove from recent groups",
@@ -29,20 +30,18 @@
       "undo": "Undo"
     },
     "AddByURL": {
-      "button": "Add by URL",
       "title": "Add a group by URL",
-      "description": "If a group was shared with you, you can paste its URL here to add it to your list.",
+      "description": "Paste a shared link, or scan a QR code from your phone.",
       "error": "Oops, we are not able to find the group from the URL you provided…",
-      "urlMode": "Enter URL",
-      "qrMode": "Scan QR",
       "scanner": {
         "startCamera": "Start Camera",
         "stopScanning": "Stop Scanning",
         "permissionDenied": "Camera permission denied. Please allow camera access to scan QR codes.",
         "noCamera": "No camera found on this device.",
-        "cameraError": "Failed to start camera. Please try again.",
-        "permissionError": "Unable to access camera. Please check permissions."
-      }
+        "cameraError": "Failed to start camera. Please try again."
+      },
+      "placeholder": "Paste a group link to join…",
+      "scanQr": "Scan QR code"
     },
     "NotFound": {
       "text": "This group does not exist.",
@@ -51,33 +50,29 @@
     "settled": "Settled up",
     "expenseCount": "{count} expenses",
     "subtitle": "No account needed — every group is just a link.",
-    "joinTitle": "Join an existing group"
+    "joinTitle": "Join an existing group",
+    "settledShort": "settled up",
+    "star": "Star",
+    "unstar": "Unstar"
   },
   "GroupForm": {
-    "title": "Group information",
     "NameField": {
       "label": "Group name",
-      "placeholder": "Summer vacations",
-      "description": "Enter a name for your group."
+      "placeholder": "Summer vacations"
     },
     "InformationField": {
       "label": "Group information",
-      "placeholder": "What information is relevant to group participants?"
+      "placeholder": "Notes, house rules, bank details…"
     },
     "CurrencyField": {
       "label": "Currency symbol",
-      "placeholder": "$, €, £…",
-      "description": "We’ll use it to display amounts."
+      "placeholder": "$, €, £…"
     },
     "CurrencyCodeField": {
-      "label": "Main currency",
-      "createDescription": "All amounts and balances will be in this currency.",
-      "editDescription": "All amounts and balances will be in this currency. Changing this will NOT convert expenses already entered, except when the currency has different \"minor units\" than the current one (e.g. changing from US Dollar to Japanese Yen)",
-      "customOption": "Custom"
+      "label": "Main currency"
     },
     "Participants": {
       "title": "Participants",
-      "description": "Enter the name for each participant.",
       "protectedParticipant": "This participant is part of expenses, and can not be removed.",
       "new": "New",
       "add": "Add participant",
@@ -94,17 +89,18 @@
         "none": "None",
         "description": "User used as default for paying expenses."
       },
-      "save": "Save",
+      "save": "Save group",
       "saving": "Saving…",
-      "create": "Create",
-      "creating": "Creating…",
-      "cancel": "Cancel"
-    }
+      "create": "Create group",
+      "creating": "Creating…"
+    },
+    "createTitle": "New group"
   },
   "Information": {
-    "title": "Information",
-    "description": "Use this place to add any information that can be relevant to the group participants.",
-    "empty": "No group information yet."
+    "title": "Group information",
+    "empty": "No group information yet.",
+    "edit": "Edit",
+    "meta": "Created {created}"
   },
   "Activity": {
     "title": "Activity",

@@ -3,13 +3,13 @@ import { createGroup, uniqueSuffix } from './app'
 import { expect, test } from './fixtures'
 import { fillStable } from './ui'
 
-/** Opens the overflow menu on the card for `name`. */
-async function openCardMenu(page: Page, name: string): Promise<void> {
-  await page
-    .getByTestId('group-card')
-    .filter({ has: page.getByRole('link', { name, exact: true }) })
-    .getByRole('button', { name: 'More' })
-    .click()
+/**
+ * Opens the group's own overflow menu. The design draws no controls on the
+ * group cards, so star, archive and forget are reached from inside the group.
+ */
+async function openGroupMenu(page: Page, groupId: string): Promise<void> {
+  await page.goto(`/groups/${groupId}/expenses`)
+  await page.getByRole('button', { name: 'This group' }).click()
 }
 
 test('a fresh profile shows the empty state', async ({ page }) => {
@@ -29,9 +29,7 @@ test('creating a group lands on its expenses and remembers it', async ({
   })
 
   await page.goto('/groups')
-  await expect(
-    page.getByRole('heading', { name: 'Recent groups' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Recent' })).toBeVisible()
   await expect(page.getByRole('link', { name })).toBeVisible()
   expect(groupId).not.toHaveLength(0)
 })
@@ -68,35 +66,33 @@ test('starring moves a group into the starred section and survives a reload', as
   page,
 }) => {
   const name = `E2E Star ${uniqueSuffix()}`
-  await createGroup(page, { name, participants: ['Alice', 'Bob'] })
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Star', exact: true }).click()
 
   await page.goto('/groups')
-  // Star, archive and forget live behind the card's overflow menu so the card
-  // itself is one link.
-  await openCardMenu(page, name)
-  await page.getByRole('button', { name: 'Starred groups' }).click()
-
-  await expect(
-    page.getByRole('heading', { name: 'Starred groups' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Starred' })).toBeVisible()
 
   await page.reload()
-  await expect(
-    page.getByRole('heading', { name: 'Starred groups' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Starred' })).toBeVisible()
 })
 
 test('archiving moves a group into the archived section', async ({ page }) => {
   const name = `E2E Archive ${uniqueSuffix()}`
-  await createGroup(page, { name, participants: ['Alice', 'Bob'] })
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
 
-  await page.goto('/groups')
-  await openCardMenu(page, name)
+  await openGroupMenu(page, groupId)
   await page.getByRole('button', { name: 'Archive group' }).click()
 
-  await expect(
-    page.getByRole('heading', { name: 'Archived groups' }),
-  ).toBeVisible()
+  await page.goto('/groups')
+  await expect(page.getByRole('heading', { name: 'Archived' })).toBeVisible()
 })
 
 test('renaming a group updates the list', async ({ page }) => {
@@ -118,7 +114,7 @@ test('renaming a group updates the list', async ({ page }) => {
       response.request().method() === 'POST' &&
       response.status() === 200,
   )
-  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  await page.getByRole('button', { name: 'Save group', exact: true }).click()
   await saved
 
   await page.goto('/groups')
@@ -127,16 +123,24 @@ test('renaming a group updates the list', async ({ page }) => {
 
 test('offers to undo forgetting a group', async ({ page }) => {
   const name = `E2E Undo ${uniqueSuffix()}`
-  await createGroup(page, { name, participants: ['Alice', 'Bob'] })
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
 
   await page.goto('/groups')
   await expect(page.getByRole('link', { name })).toBeVisible()
-  await openCardMenu(page, name)
-  await page.getByRole('button', { name: 'Remove from recent groups' }).click()
-  await expect(page.getByRole('link', { name })).toBeHidden()
 
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Remove from recent groups' }).click()
   await page.getByRole('button', { name: 'Undo' }).click()
+  await page.goto('/groups')
   await expect(page.getByRole('link', { name })).toBeVisible()
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Remove from recent groups' }).click()
+  await page.goto('/groups')
+  await expect(page.getByRole('link', { name })).toBeHidden()
 })
 
 test('offers a QR scanner as a second way to add a group', async ({ page }) => {
@@ -145,14 +149,9 @@ test('offers a QR scanner as a second way to add a group', async ({ page }) => {
     page.getByRole('textbox', { name: 'Add a group by URL' }),
   ).toBeVisible()
 
-  await page.getByRole('tab', { name: 'Scan QR' }).click()
-  await expect(
-    page.getByRole('textbox', { name: 'Add a group by URL' }),
-  ).toBeHidden()
+  await page.getByRole('button', { name: 'Scan QR code' }).click()
   await expect(page.getByRole('button', { name: 'Start Camera' })).toBeVisible()
 
-  await page.getByRole('tab', { name: 'Enter URL' }).click()
-  await expect(
-    page.getByRole('textbox', { name: 'Add a group by URL' }),
-  ).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: 'Start Camera' })).toBeHidden()
 })

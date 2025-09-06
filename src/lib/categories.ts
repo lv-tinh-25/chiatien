@@ -50,3 +50,11 @@ export function categoryEmoji(categoryId: number): string {
 export function categoryToneIndex(categoryId: number): number {
   return TONE_INDEX[categoryId] ?? TONE_INDEX[CATEGORY_OTHER]
 }
+
+/**
+ * What a blank expense form opens on. Food is where most expenses land; a
+ * repayment is a settlement and nothing else.
+ */
+export function defaultCategoryFor(isSettlement: boolean): number {
+  return isSettlement ? CATEGORY_SETTLEMENT : CATEGORY_FOOD
+}

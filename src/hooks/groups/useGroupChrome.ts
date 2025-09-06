@@ -1,10 +1,10 @@
 'use client'
 
+import type { NavItem } from '@/components/core/templates/AppShell/navigation'
 import {
   BOTTOM_DESTINATIONS,
   navigationFor,
 } from '@/components/core/templates/AppShell/navigation'
-import type { NavItem } from '@/components/core/templates/AppShell/navigation'
 import type { Currency } from '@/lib/currency'
 import { groupEmoji } from '@/lib/group-emoji'
 import { getCurrencyFromGroup } from '@/lib/utils'
@@ -56,8 +56,9 @@ export function useGroupChrome(): GroupChrome {
 
   const group = data?.group ?? null
   const activeUser =
-    group?.participants.find((participant) => participant.id === activeUserId) ??
-    null
+    group?.participants.find(
+      (participant) => participant.id === activeUserId,
+    ) ?? null
 
   const fab = (() => {
     if (pathname === '/groups')

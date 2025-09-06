@@ -3,21 +3,14 @@
 import { Button } from '@/components/core/atoms/Button'
 import { ConfirmDialog } from '@/components/core/molecules/ConfirmDialog'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
 
 type Props = {
   isCreate: boolean
   isSubmitting: boolean
-  cancelHref: string
   onDelete: () => void
 }
 
-export function ExpenseFormFooter({
-  isCreate,
-  isSubmitting,
-  cancelHref,
-  onDelete,
-}: Props) {
+export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
   const t = useTranslations('ExpenseForm')
 
   const label = isCreate
@@ -52,6 +45,8 @@ export function ExpenseFormFooter({
         </div>
       )}
 
+      {/* No cancel: the header's back button is the design's way out, and a
+          second full-width control below the primary one reads as a peer. */}
       <Button
         type="submit"
         size="lg"
@@ -59,10 +54,6 @@ export function ExpenseFormFooter({
         className="flex-2 shadow-action"
       >
         {label}
-      </Button>
-
-      <Button variant="ghost" className="w-full" asChild>
-        <Link href={cancelHref}>{t('cancel')}</Link>
       </Button>
     </div>
   )

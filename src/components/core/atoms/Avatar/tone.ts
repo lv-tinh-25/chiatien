@@ -10,7 +10,7 @@ export type ParticipantTone = {
 }
 
 /**
- * Eight hues, assigned by hashing the name, so a participant keeps the same
+ * Ten hues, assigned by hashing the name, so a participant keeps the same
  * colour on every screen without anything being stored. The classes are written
  * out rather than interpolated because Tailwind only sees literal strings.
  */
@@ -62,6 +62,18 @@ const TONES: readonly ParticipantTone[] = [
     text: 'text-participant-8',
     edge: 'bg-participant-8',
     fill: 'bg-participant-8',
+  },
+  {
+    surface: 'bg-participant-9/12 text-participant-9',
+    text: 'text-participant-9',
+    edge: 'bg-participant-9',
+    fill: 'bg-participant-9',
+  },
+  {
+    surface: 'bg-participant-10/12 text-participant-10',
+    text: 'text-participant-10',
+    edge: 'bg-participant-10',
+    fill: 'bg-participant-10',
   },
 ]
 

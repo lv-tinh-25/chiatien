@@ -29,7 +29,7 @@ test('settles a debt through "Mark as paid"', async ({ page }) => {
   await expectBalance(page, 'Bob', -50)
 
   const row = reimbursementRow(page, 'Bob', 'Alice')
-  await expect(row).toContainText('Bob owes Alice')
+  await expect(row).toContainText('Bob pays Alice')
   await expect(row).toContainText(money(50))
 
   await row.getByRole('link', { name: 'Mark as paid' }).click()
@@ -50,7 +50,7 @@ test('settles a debt through "Mark as paid"', async ({ page }) => {
     'false',
   )
 
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   await expect(

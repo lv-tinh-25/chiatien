@@ -4,11 +4,14 @@ import type { ReactNode } from 'react'
 export function GroupSection({
   title,
   icon,
+  layout = 'cards',
   className,
   children,
 }: {
   title: string
   icon?: ReactNode
+  /** Archived groups are single lines, not tiles. */
+  layout?: 'cards' | 'rows'
   className?: string
   children: ReactNode
 }) {
@@ -18,7 +21,14 @@ export function GroupSection({
         {icon}
         {title}
       </h2>
-      <div className="stagger-children grid grid-cols-2 gap-3 lg:grid-cols-[repeat(auto-fill,minmax(14.375rem,1fr))] lg:gap-3.5">
+      <div
+        className={cn(
+          'stagger-children gap-3 lg:gap-3.5',
+          layout === 'cards'
+            ? 'grid grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(14.375rem,1fr))]'
+            : 'flex flex-col gap-2',
+        )}
+      >
         {children}
       </div>
     </section>

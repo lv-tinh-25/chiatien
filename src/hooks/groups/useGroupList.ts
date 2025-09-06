@@ -1,7 +1,7 @@
 'use client'
 
-import { partitionGroups, type RecentGroup } from '@/lib/recent-groups'
 import type { Currency } from '@/lib/currency'
+import { partitionGroups, type RecentGroup } from '@/lib/recent-groups'
 import { getCurrencyFromGroup } from '@/lib/utils'
 import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'

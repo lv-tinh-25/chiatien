@@ -2,7 +2,7 @@ import { addExpense, createGroup, setActiveUser, uniqueSuffix } from './app'
 import { expect, test } from './fixtures'
 import { cardByTitle, money } from './ui'
 
-const CARD_TITLE = 'Your total balance'
+const CARD_TITLE = 'Your total balance · all groups'
 
 /**
  * The card reads `<groupId>-activeUser` for every group in the recent list,
@@ -42,7 +42,7 @@ test('sums balances across groups once you are identified in them', async ({
 
   const card = cardByTitle(page, CARD_TITLE)
   await expect(card).toBeVisible()
-  await expect(card).toContainText('You are owed')
+  await expect(card).toContainText('Owed to you')
   await expect(card).toContainText(money(80))
 })
 

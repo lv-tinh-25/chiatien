@@ -8,6 +8,9 @@ import type { Currency } from '@/lib/currency'
 
 type BalanceRowProps = {
   name: string
+  /** How the name reads once the viewer has said which participant they are. */
+  label: string
+  peers: readonly string[]
   total: number
   currency: Currency
   locale: Locale
@@ -17,6 +20,8 @@ type BalanceRowProps = {
 
 export function BalanceRow({
   name,
+  label,
+  peers,
   total,
   currency,
   locale,
@@ -28,19 +33,20 @@ export function BalanceRow({
     <li
       data-testid="balance-row"
       data-participant={name}
-      className="flex flex-col gap-2 py-2.5"
+      className="flex flex-col gap-1.5 py-2 lg:py-2.5"
     >
-      <div className="flex items-center gap-3">
-        <Avatar name={name} size="sm" />
-        <span className="min-w-0 flex-1 truncate text-body-lg text-foreground">
-          {name}
+      <div className="flex items-center gap-2.5">
+        <Avatar name={name} peers={peers} size="sm" />
+        <span className="min-w-0 flex-1 truncate text-headline-sm font-bold text-foreground">
+          {label}
         </span>
         <Money
           amount={total}
           currency={currency}
           locale={locale}
           tone={credit ? 'credit' : 'debit'}
-          className="text-numeric-table-md"
+          sign="always"
+          className="text-numeric-table-lg"
         />
       </div>
 

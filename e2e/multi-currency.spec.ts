@@ -8,10 +8,15 @@ import {
   uniqueSuffix,
 } from './app'
 import { expect, test } from './fixtures'
-import { fieldByLabel, fillStable, money, selectRadixOption } from './ui'
+import {
+  chooseExpenseCurrency,
+  fillStable,
+  money,
+  selectRadixOption,
+} from './ui'
 
-// Groups default to USD, so picking EUR for an expense forces a conversion.
-// The rate is mocked, so 80 EUR is always exactly 100 USD.
+// Groups default to USD, so picking dong for an expense forces a conversion.
+// The rate is mocked, so 80 VND is always exactly 100 USD.
 test.use({ exchangeRate: 1.25 })
 
 const PARTICIPANTS = ['Alice', 'Bob']
@@ -21,8 +26,12 @@ type Page = import('@playwright/test').Page
 async function openExpenseForm(page: Page, id: string) {
   await page.goto(`/groups/${id}/expenses/create`)
   await expect(
-    page.getByRole('button', { name: 'Create', exact: true }),
+    page.getByRole('button', { name: 'Add expense', exact: true }),
   ).toBeVisible({ timeout: 30_000 })
+}
+
+function currencyChips(page: Page) {
+  return page.getByRole('radiogroup', { name: 'Currency of expense' })
 }
 
 /**
@@ -53,11 +62,7 @@ test('converts a foreign-currency expense into the group currency', async ({
   await expect(page.locator('input[name="originalAmount"]')).toBeHidden()
 
   await fillStable(page.locator('input[name="title"]'), 'Paris hotel')
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
+  await chooseExpenseCurrency(page, '₫')
 
   await expect(page.locator('input[name="originalAmount"]')).toBeVisible()
 
@@ -66,10 +71,10 @@ test('converts a foreign-currency expense into the group currency', async ({
   await expect(page.locator('input[name="amount"]')).toHaveValue('100')
 
   // The fetched rate is surfaced to the user (with non-breaking spaces).
-  await expect(page.getByText(/EUR\s*1\s*=\s*USD\s*1\.25/)).toBeVisible()
+  await expect(page.getByText(/VND\s*1\s*=\s*USD\s*1\.25/)).toBeVisible()
 
   await selectRadixOption(page, page.getByTestId('paid-by'), 'Alice')
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   // The list and the balances are all in the group currency.
@@ -83,8 +88,8 @@ test('converts a foreign-currency expense into the group currency', async ({
   await openExpense(page, 'Paris hotel')
   await expect(page.locator('input[name="originalAmount"]')).toHaveValue(/^80/)
   await expect(
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-  ).toContainText('EUR')
+    currencyChips(page).getByRole('radio', { name: '₫' }),
+  ).toBeChecked()
   await expect(page.locator('input[name="amount"]')).toHaveValue(/^100/)
 })
 
@@ -97,11 +102,7 @@ test('lets a custom rate override the fetched one', async ({ page }) => {
   await openExpenseForm(page, groupId)
 
   await fillStable(page.locator('input[name="title"]'), 'Berlin train')
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
+  await chooseExpenseCurrency(page, '₫')
   await setOriginalAmount(page, '80')
   await expect(page.locator('input[name="amount"]')).toHaveValue('100')
 
@@ -111,7 +112,7 @@ test('lets a custom rate override the fetched one', async ({ page }) => {
   await expect(page.locator('input[name="amount"]')).toHaveValue('160')
 
   await selectRadixOption(page, page.getByTestId('paid-by'), 'Alice')
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   await expect(expenseCard(page, 'Berlin train')).toContainText(money(160))
@@ -128,15 +129,11 @@ test('exports the original currency and rate to CSV', async ({ page }) => {
 
   await openExpenseForm(page, groupId)
   await fillStable(page.locator('input[name="title"]'), 'Rome dinner')
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
+  await chooseExpenseCurrency(page, '₫')
   await setOriginalAmount(page, '80')
   await expect(page.locator('input[name="amount"]')).toHaveValue('100')
   await selectRadixOption(page, page.getByTestId('paid-by'), 'Alice')
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   const response = await page.request.get(
@@ -148,7 +145,7 @@ test('exports the original currency and rate to CSV', async ({ page }) => {
   expect(csv).toContain('Rome dinner')
   // Original cost, original currency and conversion rate are dedicated
   // columns, and are only populated for converted expenses.
-  expect(csv).toContain('EUR')
+  expect(csv).toContain('VND')
   expect(csv).toContain('1.25')
 })
 
@@ -159,11 +156,7 @@ test('names the rate it obtained', async ({ page }) => {
   })
 
   await openExpenseForm(page, groupId)
-  await selectRadixOption(
-    page,
-    fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-    /Euro \(EUR\)/,
-  )
+  await chooseExpenseCurrency(page, '₫')
 
   await expect(page.getByText('Obtained rates:')).toBeVisible()
   await expect(
@@ -186,11 +179,7 @@ test.describe('with the rate service unreachable', () => {
     })
 
     await openExpenseForm(page, groupId)
-    await selectRadixOption(
-      page,
-      fieldByLabel(page, 'Currency of expense').getByRole('combobox'),
-      /Euro \(EUR\)/,
-    )
+    await chooseExpenseCurrency(page, '₫')
 
     await expect(
       page.getByText('Oops, we could not get the most recent rates.'),
@@ -199,27 +188,27 @@ test.describe('with the rate service unreachable', () => {
   })
 })
 
-test('explains that a custom group currency cannot be converted', async ({
+test('offers the group currency and dong, and hides conversion for the group one', async ({
   page,
 }) => {
-  await page.goto('/groups/create')
-  await fillStable(
-    page.locator('input[name="name"]'),
-    `E2E NoCode ${uniqueSuffix()}`,
-  )
-  await fieldByLabel(page, 'Main currency').getByRole('combobox').click()
-  await page.getByRole('option', { name: 'Custom', exact: true }).click()
-  await fillStable(page.locator('input[name="currency"]'), 'sats')
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
-  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+  const groupId = await createGroup(page, {
+    name: `E2E Chips ${uniqueSuffix()}`,
+    participants: PARTICIPANTS,
+  })
 
-  await openExpenseForm(page, page.url().split('/')[4])
-  const currency = fieldByLabel(page, 'Currency of expense')
-  await expect(currency.getByRole('combobox')).toBeHidden()
-  await expect(currency.locator('input')).toBeDisabled()
+  await openExpenseForm(page, groupId)
+
+  // Two chips, and the group's own currency starts selected.
+  await expect(currencyChips(page).getByRole('radio')).toHaveCount(2)
   await expect(
-    page.getByText(
-      'To set a different currency per expense and convert amounts, select a non-custom currency for the group.',
-    ),
-  ).toBeVisible()
+    currencyChips(page).getByRole('radio', { name: '$' }),
+  ).toBeChecked()
+  await expect(page.locator('input[name="originalAmount"]')).toBeHidden()
+
+  await chooseExpenseCurrency(page, '₫')
+  await expect(page.locator('input[name="originalAmount"]')).toBeVisible()
+
+  // Switching back to the group currency puts the conversion away again.
+  await chooseExpenseCurrency(page, '$')
+  await expect(page.locator('input[name="originalAmount"]')).toBeHidden()
 })

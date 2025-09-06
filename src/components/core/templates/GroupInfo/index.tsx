@@ -3,12 +3,13 @@
 import { Button } from '@/components/core/atoms/Button'
 import { Card } from '@/components/core/atoms/Card'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
-import { useTranslations } from 'next-intl'
+import { formatDate } from '@/lib/utils'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 export function GroupInfo() {
   const t = useTranslations('Information')
-  const tNav = useTranslations('Nav')
+  const locale = useLocale()
   const { groupId, group, isPending } = useCurrentGroup()
 
   if (isPending) return null
@@ -17,12 +18,10 @@ export function GroupInfo() {
 
   return (
     <div className="flex max-w-190 flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
-          {t('title')}
-        </h1>
-        <Button variant="outline" className="hidden lg:inline-flex" asChild>
-          <Link href={`/groups/${groupId}/edit`}>{tNav('groupSettings')}</Link>
+      <div className="hidden items-center justify-between gap-3 lg:flex">
+        <h1 className="text-headline-lg text-foreground">{t('title')}</h1>
+        <Button variant="outline" size="sm" asChild>
+          <Link href={`/groups/${groupId}/edit`}>{t('edit')}</Link>
         </Button>
       </div>
 
@@ -36,12 +35,19 @@ export function GroupInfo() {
         )}
       </Card>
 
-      <p className="px-1 text-body-sm text-muted-foreground">
-        {t('description')}
-      </p>
+      {/* The only provenance the ported schema records. */}
+      {group && (
+        <p className="px-1 text-body-sm text-muted-foreground">
+          {t('meta', {
+            created: formatDate(new Date(group.createdAt), locale, {
+              dateStyle: 'medium',
+            }),
+          })}
+        </p>
+      )}
 
       <Button variant="outline" className="w-full lg:hidden" asChild>
-        <Link href={`/groups/${groupId}/edit`}>{tNav('groupSettings')}</Link>
+        <Link href={`/groups/${groupId}/edit`}>{t('edit')}</Link>
       </Button>
     </div>
   )

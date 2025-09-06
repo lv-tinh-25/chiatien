@@ -4,7 +4,6 @@ import { Button } from '@/components/core/atoms/Button'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/core/atoms/Card'
@@ -13,6 +12,7 @@ import type { GroupFormValues } from '@/lib/schemas'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { FieldArrayWithId, UseFormReturn } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 type ParticipantListProps = {
   form: UseFormReturn<GroupFormValues>
@@ -31,19 +31,25 @@ export function ParticipantList({
 }: ParticipantListProps) {
   const t = useTranslations('GroupForm.Participants')
   const errors = form.formState.errors.participants
+  const names = (
+    useWatch({ control: form.control, name: 'participants' }) ?? []
+  ).map((participant) => participant?.name ?? '')
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
-        <CardDescription>{t('description')}</CardDescription>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-body-lg font-extrabold">
+          {t('title')}
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className="flex flex-col divide-y divide-border/50">
+        <ul className="flex flex-col">
           {fields.map((field, index) => (
             <ParticipantRow
               key={field.id}
               index={index}
+              name={names[index] ?? ''}
+              peers={names}
               registration={form.register(`participants.${index}.name`)}
               errorKey={errors?.[index]?.name?.message}
               removable={fields.length > 1 && !isProtected(index)}

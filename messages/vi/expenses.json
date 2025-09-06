@@ -1,14 +1,13 @@
 {
   "Expenses": {
     "title": "Chi tiêu",
-    "description": "Đây là các khoản chi tiêu bạn đã tạo cho nhóm của mình.",
-    "create": "Tạo chi tiêu",
+    "create": "Thêm khoản chi",
     "createFirst": "Tạo chi tiêu đầu tiên",
     "noExpenses": "Nhóm của bạn chưa có chi tiêu nào.",
     "export": "Xuất",
     "exportJson": "Xuất JSON",
     "exportCsv": "Xuất CSV",
-    "searchPlaceholder": "Tìm kiếm chi tiêu…",
+    "searchPlaceholder": "Tìm khoản chi…",
     "ActiveUserModal": {
       "title": "Bạn là ai?",
       "description": "Hãy cho chúng tôi biết bạn là thành viên nào để chúng tôi có thể tùy chỉnh cách hiển thị thông tin.",
@@ -24,79 +23,69 @@
       "earlierThisYear": "Trong năm nay",
       "lastYear": "Năm trước",
       "older": "Cũ hơn"
-    }
+    },
+    "loadMore": "Kéo xuống để tải thêm…",
+    "loadMoreWide": "Cuộn xuống để tải thêm…"
   },
   "ExpenseCard": {
-    "yourBalance": "Số dư của bạn:",
-    "notInvolved": "Bạn chưa tham gia",
+    "notInvolved": "Không liên quan",
     "paidBySummary": "{paidBy} trả · {count} người",
     "receivedBySummary": "{paidBy} nhận · {count} người",
-    "reimbursement": "Trả nợ"
+    "reimbursement": "Trả nợ",
+    "credit": "Bạn nhận +{amount}",
+    "debit": "Bạn nợ −{amount}",
+    "paidBySummaryWide": "{paidBy} trả · chia {count} người",
+    "receivedBySummaryWide": "{paidBy} nhận · chia {count} người"
   },
   "ExpenseForm": {
     "Income": {
-      "create": "Tạo khoản thu",
+      "create": "Khoản thu mới",
       "edit": "Sửa khoản thu",
       "TitleField": {
         "label": "Tên khoản thu",
-        "placeholder": "Nhà hàng tối thứ Hai",
-        "description": "Nhập mô tả cho khoản thu."
+        "placeholder": "Nhà hàng tối thứ Hai"
       },
       "DateField": {
-        "label": "Ngày",
-        "description": "Nhập ngày nhận được khoản thu."
+        "label": "Ngày"
       },
       "currencyField": {
-        "label": "Đơn vị tiền tệ",
-        "description": "Đơn vị tiền tệ mà khoản thu được nhận."
+        "label": "Đơn vị tiền tệ"
       },
-      "categoryFieldDescription": "Chọn hạng mục cho khoản thu.",
       "paidByField": {
-        "label": "Nhận bởi",
-        "description": "Chọn thành viên đã nhận khoản thu."
+        "label": "Nhận bởi"
       },
       "paidFor": {
-        "title": "Nhận cho",
-        "description": "Chọn thành viên được nhận khoản thu."
+        "title": "Nhận cho"
       },
-      "splitModeDescription": "Chọn cách chia khoản thu.",
       "attachDescription": "Xem và đính kèm biên lai vào khoản thu."
     },
     "Expense": {
-      "create": "Tạo khoản chi",
+      "create": "Khoản chi mới",
       "edit": "Sửa khoản chi",
       "TitleField": {
         "label": "Tên khoản chi",
-        "placeholder": "Nhà hàng tối thứ Hai",
-        "description": "Điền mô tả cho khoản chi."
+        "placeholder": "Nhà hàng tối thứ Hai"
       },
       "DateField": {
-        "label": "Ngày chi",
-        "description": "Điền ngày chi tiêu."
+        "label": "Ngày"
       },
       "currencyField": {
-        "label": "Đơn vị tiền tệ",
-        "description": "Đơn vị tiền tệ khoản chi đã thanh toán."
+        "label": "Đơn vị tiền tệ"
       },
-      "categoryFieldDescription": "Chọn hạng mục cho khoản chi.",
       "paidByField": {
-        "label": "Thanh toán bởi",
-        "placeholder": "Chọn thành viên",
-        "description": "Chọn thành viên đã thanh toán khoản chi."
+        "label": "Người trả",
+        "placeholder": "Chọn thành viên"
       },
       "recurrenceRule": {
-        "label": "Chi tiêu định kỳ",
-        "description": "Chọn tần suất lặp lại của khoản chi.",
-        "none": "Không có",
+        "label": "Định kỳ",
+        "none": "Không lặp lại",
         "daily": "Hàng ngày",
         "weekly": "Hàng tuần",
         "monthly": "Hàng tháng"
       },
       "paidFor": {
-        "title": "Chi cho",
-        "description": "Chọn thành viên nhận khoản chi."
+        "title": "Chi cho"
       },
-      "splitModeDescription": "Chọn cách chia khoản chi.",
       "attachDescription": "Xem và đính kèm biên lai vào khoản chi."
     },
     "amountField": {
@@ -125,19 +114,15 @@
       "refresh": "Làm mới",
       "customRate": "Đang dùng tỷ giá tự nhập"
     },
-    "isReimbursementField": {
-      "label": "Đây là khoản hoàn trả"
-    },
     "categoryField": {
       "label": "Danh mục"
     },
     "notesField": {
       "label": "Ghi chú"
     },
-    "selectNone": "Bỏ chọn hết",
+    "selectNone": "Bỏ chọn tất cả",
     "selectAll": "Chọn tất cả",
     "shares": "phần",
-    "advancedOptions": "Tùy chọn chia nâng cao…",
     "SplitModeField": {
       "label": "Cách chia",
       "evenly": "Chia đều",
@@ -162,13 +147,18 @@
       "cancel": "Huỷ"
     },
     "attachDocuments": "Đính kèm chứng từ",
-    "create": "Tạo",
+    "create": "Thêm khoản chi",
     "creating": "Đang tạo…",
-    "save": "Lưu",
+    "save": "Lưu thay đổi",
     "saving": "Đang lưu…",
-    "cancel": "Huỷ",
     "reimbursement": "Hoàn trả",
-    "selectedCount": "{selected}/{total} người"
+    "selectedCount": "{selected}/{total} người",
+    "splitHint": {
+      "evenly": "Chia đều cho {count} người",
+      "byShares": "Tổng {count} phần",
+      "byPercentage": "Tổng phải đủ 100%",
+      "byAmount": "Tổng phải khớp số tiền"
+    }
   },
   "ExpenseDocumentsInput": {
     "add": "Đính kèm chứng từ",
@@ -215,7 +205,6 @@
   },
   "Categories": {
     "search": "Tìm danh mục...",
-    "noCategory": "Không tìm thấy danh mục nào.",
     "Accommodation": {
       "heading": "Chỗ ở",
       "Accommodation": "Chỗ ở"

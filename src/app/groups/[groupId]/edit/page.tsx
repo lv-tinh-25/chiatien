@@ -2,8 +2,8 @@ import { EditGroupPageClient } from '@/app/groups/[groupId]/edit/page.client'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
-  const t = await getTranslations('GroupForm')
-  return { title: t('title') }
+  const t = await getTranslations('Nav')
+  return { title: t('groupSettingsTitle') }
 }
 
 export default async function EditGroupPage({

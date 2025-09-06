@@ -8,6 +8,11 @@ type MoneyProps = {
   tone?: 'neutral' | 'credit' | 'debit'
   /** Set when `amount` is a decimal rather than the minor units used elsewhere. */
   fractions?: boolean
+  /**
+   * `always` writes the leading + the design puts on a positive balance, so
+   * direction is legible without the colour.
+   */
+  sign?: 'auto' | 'always'
   className?: string
 }
 
@@ -27,11 +32,13 @@ export function Money({
   locale,
   tone = 'neutral',
   fractions = false,
+  sign = 'auto',
   className,
 }: MoneyProps) {
+  const formatted = formatCurrency(currency, amount, locale, fractions)
   return (
     <span className={cn('tabular', TONES[tone], className)}>
-      {formatCurrency(currency, amount, locale, fractions)}
+      {sign === 'always' && amount > 0 ? `+${formatted}` : formatted}
     </span>
   )
 }

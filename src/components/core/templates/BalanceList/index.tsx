@@ -15,6 +15,7 @@ export function BalanceList() {
     balances,
     reimbursements,
     participantName,
+    activeUserId,
     isPending,
     isSettled,
   } = useBalanceList()
@@ -25,6 +26,7 @@ export function BalanceList() {
     0,
     ...balances.map((balance) => Math.abs(balance.total)),
   )
+  const peers = balances.map((balance) => balance.name)
 
   /**
    * Settling opens a prefilled reimbursement rather than writing one directly:
@@ -36,23 +38,29 @@ export function BalanceList() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
+      <h1 className="hidden text-headline-lg text-foreground lg:block">
         {t('title')}
       </h1>
 
-      <div className="grid items-start gap-4 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
+      <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
         <Card className="p-4 lg:p-5">
           {/* The bars diverge from a centre axis, so the two directions need
               naming once rather than a legend per row. */}
-          <div className="flex items-center justify-between text-label-sm tracking-wider text-muted-foreground uppercase">
+          <div className="flex items-center justify-between text-label-sm tracking-wide text-muted-foreground uppercase">
             <span>← {t('owing')}</span>
             <span>{t('owed')} →</span>
           </div>
-          <ul className="mt-2 flex flex-col">
+          <ul className="mt-1.5 flex flex-col">
             {balances.map((balance) => (
               <BalanceRow
                 key={balance.participantId}
                 name={balance.name}
+                label={
+                  balance.participantId === activeUserId
+                    ? t('you', { name: balance.name })
+                    : balance.name
+                }
+                peers={peers}
                 total={balance.total}
                 currency={currency}
                 locale={locale}
@@ -60,14 +68,11 @@ export function BalanceList() {
               />
             ))}
           </ul>
-          <p className="mt-3 text-body-sm text-muted-foreground">
-            {t('description')}
-          </p>
         </Card>
 
         <div className="flex flex-col gap-2.5">
           <h2 className="px-1 text-body-md font-bold text-muted-foreground">
-            {t('Reimbursements.title')}
+            {t('Reimbursements.title', { count: reimbursements.length })}
           </h2>
           {isSettled ? (
             <Card className="p-4 text-body-md text-muted-foreground">
@@ -82,6 +87,7 @@ export function BalanceList() {
                   toId={reimbursement.to}
                   fromName={participantName(reimbursement.from)}
                   toName={participantName(reimbursement.to)}
+                  peers={peers}
                   amount={reimbursement.amount}
                   currency={currency}
                   locale={locale}
@@ -94,9 +100,6 @@ export function BalanceList() {
               ))}
             </ul>
           )}
-          <p className="px-1 text-body-sm text-muted-foreground">
-            {t('Reimbursements.description')}
-          </p>
         </div>
       </div>
     </div>

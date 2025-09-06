@@ -79,7 +79,36 @@ and the aurora. The mockup changes these values:
   `--radius-card` `1.125rem`, `--radius-hero` `1.25rem`, `--radius-sheet`
   `1.5rem`.
 
-Everything else — type scale, glass tiers, motion — stays as it is.
+### Type scale (corrected 2026-09-06, pass 2)
+
+The first pass left the old scale in place, which is what made every phone
+screen read a size too large. The mockup's own values, mobile → desktop:
+
+| Utility | Mobile | Desktop | Weight |
+| ------- | ------ | ------- | ------ |
+| `text-display-currency` | 34 px | 44 px | 800 |
+| `text-numeric-hero` | 22 px | 30 px | 800 |
+| `text-headline-lg` | 26 px | 28 px | 800 |
+| `text-headline-md` | 18 px | 19 px | 800 |
+| `text-headline-sm` | 14 px | 15 px | 700 |
+| `text-body-lg` | 14.5 px | 15 px | 400 |
+| `text-body-md` | 13.5 px | 14 px | 400 |
+| `text-body-sm` | 11.5 px | 12 px | 400 |
+| `text-numeric-table-lg` | 14.5 px | 15 px | 800 |
+| `text-numeric-table-md` | 13 px | 14 px | 700 |
+| `text-label-md` | 12 px | 12.5 px | 700 |
+| `text-label-sm` | 10.5 px | 11 px | 700 |
+
+Each size comes through an `--fs-*` variable so one `@media (min-width: 64rem)`
+block steps the whole scale up; `@theme inline` copies the value it is given, so
+without that indirection every utility would freeze at its mobile size.
+
+Two colour tiers, not one: `--muted-foreground` at `215 19% 45%` — a shade
+darker than the mockup's `#64748B`, which measures 4.45:1 over the aurora — and
+`--muted-foreground-subtle` at `215 20% 65%`, which clears no threshold and is
+therefore used only for glyphs that carry no words.
+
+Glass tiers and motion stay as they are.
 
 ## Shell
 

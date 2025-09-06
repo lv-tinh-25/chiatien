@@ -3,8 +3,8 @@ import { env } from '@/lib/env'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
-  const t = await getTranslations('Groups')
-  return { title: t('createGroup') }
+  const t = await getTranslations('GroupForm')
+  return { title: t('createTitle') }
 }
 
 export default function CreateGroupPage() {

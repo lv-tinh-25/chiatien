@@ -3,32 +3,19 @@
 import { Button } from '@/components/core/atoms/Button'
 import { EmptyState } from '@/components/core/molecules/EmptyState'
 import { AddGroupByUrl } from '@/components/core/templates/GroupList/AddGroupByUrl'
+import { ArchivedGroupRow } from '@/components/core/templates/GroupList/ArchivedGroupRow'
 import { GlobalBalanceCard } from '@/components/core/templates/GroupList/GlobalBalanceCard'
 import { GroupCard } from '@/components/core/templates/GroupList/GroupCard'
 import { GroupSection } from '@/components/core/templates/GroupList/GroupSection'
-import type { GroupListEntry } from '@/hooks/groups/useGroupList'
 import { useGroupList } from '@/hooks/groups/useGroupList'
 import { trpc } from '@/trpc/client'
 import { Plus, Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import type { ReactNode } from 'react'
 
 export function GroupList() {
   const t = useTranslations('Groups')
-  const {
-    status,
-    starred,
-    recent,
-    archived,
-    balances,
-    toggleStar,
-    toggleArchive,
-    forget,
-    visit,
-    isStarred,
-    isArchived,
-  } = useGroupList()
+  const { status, starred, recent, archived, balances, visit } = useGroupList()
   const utils = trpc.useUtils()
 
   const addByUrl = async (groupId: string) => {
@@ -38,34 +25,11 @@ export function GroupList() {
     return true
   }
 
-  const renderSection = (
-    title: string,
-    groups: GroupListEntry[],
-    icon?: ReactNode,
-  ) =>
-    groups.length === 0 ? null : (
-      <GroupSection key={title} title={title} icon={icon} className="lg:col-span-2">
-        {groups.map((group) => (
-          <GroupCard
-            key={group.id}
-            group={group}
-            starred={isStarred(group.id)}
-            archived={isArchived(group.id)}
-            onToggleStar={() => toggleStar(group.id)}
-            onToggleArchive={() => toggleArchive(group.id)}
-            onForget={() => forget(group)}
-          />
-        ))}
-      </GroupSection>
-    )
-
   return (
-    <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[repeat(2,minmax(0,1fr))] lg:items-start lg:gap-4">
+    <div className="flex flex-col gap-5 *:min-w-0 lg:grid lg:grid-cols-[repeat(2,minmax(0,1fr))] lg:items-start lg:gap-4">
       <header className="hidden items-end justify-between gap-4 lg:col-span-2 lg:flex">
         <div>
-          <h1 className="text-headline-lg font-extrabold text-foreground">
-            {t('myGroups')}
-          </h1>
+          <h1 className="text-headline-lg text-foreground">{t('myGroups')}</h1>
           <p className="mt-1 text-body-md text-muted-foreground">
             {t('subtitle')}
           </p>
@@ -80,9 +44,9 @@ export function GroupList() {
 
       <GlobalBalanceCard balances={balances} />
 
-      {/* One instance only: a second copy for the other breakpoint would give
-          the page two tablists and two inputs with the same name. */}
-      <div className="order-last lg:order-none">
+      {/* The design puts this between the last group section and the archived
+          list on a phone, and beside the balance card on a desktop. */}
+      <div className="order-3 lg:order-none">
         <AddGroupByUrl onAdd={addByUrl} />
       </div>
 
@@ -108,13 +72,42 @@ export function GroupList() {
 
       {status === 'ready' && (
         <>
-          {renderSection(
-            t('starred'),
-            starred,
-            <Star className="size-3.5 fill-accent text-accent" aria-hidden />,
+          {starred.length > 0 && (
+            <GroupSection
+              title={t('starred')}
+              icon={
+                <Star
+                  className="size-3.5 fill-accent text-accent"
+                  aria-hidden
+                />
+              }
+              className="order-1 lg:col-span-2"
+            >
+              {starred.map((group) => (
+                <GroupCard key={group.id} group={group} />
+              ))}
+            </GroupSection>
           )}
-          {renderSection(t('recent'), recent)}
-          {renderSection(t('archived'), archived)}
+
+          {recent.length > 0 && (
+            <GroupSection title={t('recent')} className="order-2 lg:col-span-2">
+              {recent.map((group) => (
+                <GroupCard key={group.id} group={group} />
+              ))}
+            </GroupSection>
+          )}
+
+          {archived.length > 0 && (
+            <GroupSection
+              title={t('archived')}
+              layout="rows"
+              className="order-4 lg:col-span-2"
+            >
+              {archived.map((group) => (
+                <ArchivedGroupRow key={group.id} group={group} />
+              ))}
+            </GroupSection>
+          )}
         </>
       )}
     </div>

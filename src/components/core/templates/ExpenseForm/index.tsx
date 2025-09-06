@@ -1,7 +1,7 @@
 'use client'
 
+import { BackButton } from '@/components/core/atoms/BackButton'
 import { Card } from '@/components/core/atoms/Card'
-import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { ExpenseAmountField } from '@/components/core/templates/ExpenseForm/ExpenseAmountField'
 import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/ExpenseCurrencyBlock'
 import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/ExpenseDocumentsField'
@@ -61,35 +61,38 @@ function ExpenseFormFields({
   } = useExpenseForm(expense)
 
   const amount = useWatch({ control: form.control, name: 'amount' })
-  const isReimbursement = useWatch({
-    control: form.control,
-    name: 'isReimbursement',
-  })
 
   const isIncome = Number(amount) < 0
   const scope = isIncome ? 'Income' : 'Expense'
 
   return (
     <form onSubmit={submit} className="flex w-full flex-col gap-4">
-      <h1 className="hidden text-headline-lg font-extrabold text-foreground lg:block">
-        {isCreate ? t(`${scope}.create`) : t(`${scope}.edit`)}
-      </h1>
+      {/* The phone gets its back button from the shell header; the desktop
+          header has no back affordance of its own, so the title carries one. */}
+      <div className="hidden items-center gap-3 lg:flex">
+        <BackButton href={`/groups/${groupId}/expenses`} />
+        <h1 className="text-headline-lg text-foreground">
+          {isCreate ? t(`${scope}.create`) : t(`${scope}.edit`)}
+        </h1>
+      </div>
 
-      <div className="grid items-start gap-4 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,22.5rem),1fr))]">
-        <Card className="flex flex-col gap-4 p-4 lg:p-5">
+      <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,22.5rem),1fr))]">
+        <Card className="flex flex-col gap-3.5 p-4 lg:gap-4 lg:p-5">
           <ExpenseTitleField
             form={form}
             isIncome={isIncome}
             categoryExtractEnabled={categoryExtractEnabled}
           />
-          <ExpenseAmountField form={form} currency={groupCurrency} />
+          <ExpenseAmountField
+            form={form}
+            currency={groupCurrency}
+            locale={locale}
+            convertible={groupCurrency.code !== ''}
+          />
 
           <ExpenseCurrencyBlock
             form={form}
-            locale={locale}
-            groupCurrency={groupCurrency}
             originalCurrency={originalCurrency}
-            isIncome={isIncome}
             conversionRequired={conversionRequired}
             usingCustomRate={usingCustomRate}
             notice={notice}
@@ -104,18 +107,6 @@ function ExpenseFormFields({
             participants={participants}
           />
 
-          <label className="flex min-h-touch-min items-center gap-3">
-            <Checkbox
-              checked={Boolean(isReimbursement)}
-              onCheckedChange={(state) =>
-                form.setValue('isReimbursement', state === true)
-              }
-            />
-            <span className="text-body-md text-foreground">
-              {t('isReimbursementField.label')}
-            </span>
-          </label>
-
           {documentsEnabled && (
             <ExpenseDocumentsField form={form} isIncome={isIncome} />
           )}
@@ -126,6 +117,7 @@ function ExpenseFormFields({
             form={form}
             participants={participants}
             currency={groupCurrency}
+            locale={locale}
             isIncome={isIncome}
             onShareEdited={markEdited}
           />
@@ -133,7 +125,6 @@ function ExpenseFormFields({
           <ExpenseFormFooter
             isCreate={isCreate}
             isSubmitting={isSubmitting}
-            cancelHref={`/groups/${groupId}/expenses`}
             onDelete={() => void remove()}
           />
         </div>

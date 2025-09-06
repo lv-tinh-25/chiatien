@@ -12,6 +12,7 @@ import type { Currency } from '@/lib/currency'
 import { useTranslations } from 'next-intl'
 
 type TotalsCardProps = {
+  rangeCaption: string
   totalGroupSpendings: number
   totalParticipantSpendings?: number
   totalParticipantShare?: number
@@ -20,35 +21,38 @@ type TotalsCardProps = {
   className?: string
 }
 
-function Total({
+function Metric({
   label,
   amount,
   currency,
   locale,
   tone,
+  sign,
 }: {
   label: string
   amount: number
   currency: Currency
   locale: Locale
   tone?: 'credit' | 'debit'
+  sign?: 'auto' | 'always'
 }) {
   return (
-    <div className="flex flex-col">
-      <span className="text-label-md text-muted-foreground">{label}</span>
-      <span className="text-numeric-table-md font-bold">
-        <Money
-          amount={Math.abs(amount)}
-          currency={currency}
-          locale={locale}
-          tone={tone}
-        />
-      </span>
-    </div>
+    <span className="flex items-baseline gap-1.5 whitespace-nowrap">
+      <span className="text-muted-foreground">{label}</span>
+      <Money
+        amount={amount}
+        currency={currency}
+        locale={locale}
+        tone={tone}
+        sign={sign}
+        className="font-extrabold"
+      />
+    </span>
   )
 }
 
 export function TotalsCard({
+  rangeCaption,
   totalGroupSpendings,
   totalParticipantSpendings,
   totalParticipantShare,
@@ -57,60 +61,69 @@ export function TotalsCard({
   className,
 }: TotalsCardProps) {
   const t = useTranslations('Stats.Totals')
+  const personalised =
+    totalParticipantSpendings !== undefined &&
+    totalParticipantShare !== undefined
 
   return (
     <Card className={className}>
       {/* The heading stays a real heading inside a header: `cardByTitle` finds
           this card by walking up two levels from it. */}
-      <CardHeader className="gap-0 pb-1">
-        <CardTitle className="text-label-md font-bold text-muted-foreground">
-          {t('title')}
+      <CardHeader className="flex-row items-baseline gap-1.5 pb-1">
+        <CardTitle className="text-label-md text-muted-foreground">
+          {t(totalGroupSpendings < 0 ? 'groupEarnings' : 'title')}
         </CardTitle>
+        <span className="text-label-md text-muted-foreground">
+          · {rangeCaption}
+        </span>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-3 pt-0">
-        <div className="flex flex-col">
-          <span className="text-label-md text-muted-foreground">
-            {t(totalGroupSpendings < 0 ? 'groupEarnings' : 'groupSpendings')}
-          </span>
-          <span className="text-headline-lg font-extrabold text-foreground lg:text-display-currency">
-            <Money
-              amount={Math.abs(totalGroupSpendings)}
+        <span className="text-display-currency text-foreground">
+          <Money
+            amount={Math.abs(totalGroupSpendings)}
+            currency={currency}
+            locale={locale}
+          />
+        </span>
+
+        {personalised && (
+          <div className="flex flex-wrap gap-x-7 gap-y-2 text-body-md font-semibold">
+            <Metric
+              label={t(
+                totalParticipantSpendings < 0
+                  ? 'yourEarnings'
+                  : 'yourSpendings',
+              )}
+              amount={Math.abs(totalParticipantSpendings)}
               currency={currency}
               locale={locale}
             />
-          </span>
-        </div>
-
-        {(totalParticipantSpendings !== undefined ||
-          totalParticipantShare !== undefined) && (
-          <div className="flex flex-wrap gap-x-7 gap-y-2">
-            {totalParticipantSpendings !== undefined && (
-              <Total
-                label={t(
-                  totalParticipantSpendings < 0
-                    ? 'yourEarnings'
-                    : 'yourSpendings',
-                )}
-                amount={totalParticipantSpendings}
+            <Metric
+              label={t('yourShare')}
+              amount={Math.abs(totalParticipantShare)}
+              currency={currency}
+              locale={locale}
+            />
+            {/* What the viewer would get back or still owe if the group
+                settled at this instant. Desktop only: on a phone the design
+                keeps the row to one line, and the balances screen says it. */}
+            <span className="hidden lg:contents">
+              <Metric
+                label={t('difference')}
+                amount={totalParticipantSpendings - totalParticipantShare}
                 currency={currency}
                 locale={locale}
-                tone={totalParticipantSpendings < 0 ? 'credit' : 'debit'}
+                tone={
+                  totalParticipantSpendings - totalParticipantShare >= 0
+                    ? 'credit'
+                    : 'debit'
+                }
+                sign="always"
               />
-            )}
-            {totalParticipantShare !== undefined && (
-              <Total
-                label={t('yourShare')}
-                amount={totalParticipantShare}
-                currency={currency}
-                locale={locale}
-                tone={totalParticipantShare < 0 ? 'credit' : 'debit'}
-              />
-            )}
+            </span>
           </div>
         )}
-
-        <p className="text-body-sm text-muted-foreground">{t('description')}</p>
       </CardContent>
     </Card>
   )

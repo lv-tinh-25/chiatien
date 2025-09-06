@@ -25,7 +25,7 @@ test('attaches a document to an expense and removes it again', async ({
 
   await page.goto(`/groups/${groupId}/expenses/create`)
   await expect(
-    page.getByRole('button', { name: 'Create', exact: true }),
+    page.getByRole('button', { name: 'Add expense', exact: true }),
   ).toBeVisible({ timeout: 30_000 })
 
   await expect(page.getByText('Attach documents')).toBeVisible()
@@ -37,7 +37,7 @@ test('attaches a document to an expense and removes it again', async ({
   await fillStable(page.locator('input[name="title"]'), 'Taxi')
   await fillStable(page.locator('input[name="amount"]'), '30')
   await selectRadixOption(page, page.getByTestId('paid-by'), 'Alice')
-  await page.getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('button', { name: 'Add expense', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 
   // The card counts what is attached.
@@ -50,6 +50,6 @@ test('attaches a document to an expense and removes it again', async ({
   await expect(
     page.getByRole('button', { name: 'Remove this document' }),
   ).toBeHidden()
-  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click()
   await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
 })

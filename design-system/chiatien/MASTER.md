@@ -38,9 +38,30 @@ Measured in Chrome rather than assumed:
   recent and archived sections. Rendering it twice — once per breakpoint — would
   give the page two tablists and two inputs with the same name, so it is
   rendered once and moved with `order`.
-- **Category and currency pickers keep a fallback.** The mockup's six category
-  chips are the whole taxonomy, but the currency toggle assumes two currencies;
-  the app supports the full ISO list, so currency stays a searchable select.
+- **Currency is two chips, not a searchable list.** Superseding the pass-1
+  entry that kept a select: on 2026-09-06 the owner chose the mockup's control
+  outright. `CURRENCY_CHOICES` in `src/lib/currency-choices.ts` is `VND` and
+  `USD`; a group already stored on another ISO code still renders and is still
+  offered its own code, but no new group can be put on a third one, and the
+  custom-symbol field is only reachable for a group that already has one.
+  `CurrencySelect` and the `Currencies.*` keys are gone.
+- **`tailwind-merge` is configured with the project's font sizes.** It only
+  recognises t-shirt sizes as font sizes, so `text-headline-sm` was classified
+  as a text *colour* and silently dropped from any class string that also
+  carried one. Naming the scale in `cn()` is what makes the type scale reach
+  the DOM at all.
+- **Star, archive and forget moved off the group cards.** The mockup draws no
+  controls on a card, so they live in the group's own overflow menu with every
+  other group-level action.
+- **The stats summary card is gone.** The mockup has no `Tóm tắt`; the figures
+  it showed stay covered by `src/lib/totals.test.ts`.
+- **`--muted-foreground-subtle` never carries text.** The mockup's `#94A3B8`
+  measures 2.5:1 on these surfaces. It is kept for the arrow between two avatars
+  and the remove ✕, and every string that used it reads at
+  `--muted-foreground` instead.
+- **The segmented control's inactive label is `--chip-foreground`.** On the
+  mockup's own inset track `#64748B` measures 4.1:1; the chip ink clears the
+  floor and reads as the same grey.
 
 ## Global Rules
 

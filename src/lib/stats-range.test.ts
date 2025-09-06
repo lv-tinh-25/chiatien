@@ -22,9 +22,9 @@ describe('getRangeForPeriod', () => {
     })
   })
 
-  it('covers the last 30 days inclusively', () => {
-    expect(getRangeForPeriod('last30', now)).toEqual({
-      from: '2026-06-10',
+  it('covers the last three months inclusively', () => {
+    expect(getRangeForPeriod('last3Months', now)).toEqual({
+      from: '2026-04-10',
       to: '2026-07-09',
     })
   })

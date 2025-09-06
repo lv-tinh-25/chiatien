@@ -14,6 +14,7 @@ type ReimbursementRowProps = {
   toId: string
   fromName: string
   toName: string
+  peers: readonly string[]
   amount: number
   currency: Currency
   locale: Locale
@@ -23,6 +24,7 @@ type ReimbursementRowProps = {
 export function ReimbursementRow({
   fromName,
   toName,
+  peers,
   amount,
   currency,
   locale,
@@ -35,37 +37,30 @@ export function ReimbursementRow({
       data-testid="reimbursement-row"
       data-from={fromName}
       data-to={toName}
-      className="glass-raised flex flex-col gap-2.5 rounded-card p-3.5 sm:flex-row sm:items-center sm:gap-3"
+      className="glass-raised flex items-center gap-2.5 rounded-card p-3.5 lg:gap-3 lg:px-4"
     >
-      <span className="flex min-w-0 flex-1 items-center gap-2.5">
-        <span aria-hidden className="flex shrink-0 items-center gap-1">
-          <Avatar name={fromName} size="lg" />
-          <ArrowRight className="size-3.5 text-muted-foreground" />
-          <Avatar name={toName} size="lg" />
-        </span>
-        <span className="min-w-0 text-body-md text-foreground">
-          {t.rich('owes', {
-            strong: (chunks) => (
-              <strong className="font-semibold">{chunks}</strong>
-            ),
-            from: fromName,
-            to: toName,
-          })}
-        </span>
+      <span aria-hidden className="flex shrink-0 items-center gap-1">
+        <Avatar name={fromName} peers={peers} size="lg" />
+        <ArrowRight className="size-3.5 text-muted-foreground-subtle" />
+        <Avatar name={toName} peers={peers} size="lg" />
       </span>
 
-      <span className="flex items-center justify-between gap-3 sm:justify-end">
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-headline-sm font-bold text-foreground">
+          {t('row', { from: fromName, to: toName })}
+        </span>
         <Money
           amount={amount}
           currency={currency}
           locale={locale}
-          className="text-numeric-table-md font-extrabold whitespace-nowrap"
+          tone="credit"
+          className="block text-numeric-table-lg"
         />
-
-        <Button variant="settle" size="sm" asChild>
-          <Link href={settleHref}>{t('markAsPaid')}</Link>
-        </Button>
       </span>
+
+      <Button variant="settle" size="sm" className="shrink-0" asChild>
+        <Link href={settleHref}>{t('markAsPaid')}</Link>
+      </Button>
     </li>
   )
 }

@@ -24,19 +24,6 @@
       "download": "Download QR Code"
     }
   },
-  "Currencies": {
-    "search": "Search currency...",
-    "noCurrency": "No currencies found.",
-    "custom": {
-      "heading": "Custom"
-    },
-    "common": {
-      "heading": "Most common"
-    },
-    "other": {
-      "heading": "Other currencies"
-    }
-  },
   "Pwa": {
     "updateTitle": "Update available",
     "updateDescription": "A new version of ChiaTien is available.",
@@ -51,7 +38,6 @@
     "activity": "Activity",
     "groups": "Groups",
     "settings": "Settings",
-    "backToGroups": "Back to groups",
     "more": "More",
     "groupSettings": "Group settings",
     "information": "Information",
@@ -65,7 +51,6 @@
     "activitySubtitle": "Activity log",
     "memberCount": "{count} members",
     "groupSettingsTitle": "Group settings",
-    "createGroupTitle": "New group",
     "back": "Back",
     "breadcrumb": "Breadcrumb"
   }

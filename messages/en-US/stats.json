@@ -5,38 +5,27 @@
       "label": "Period",
       "all": "All time",
       "thisMonth": "This month",
-      "last30": "Last 30 days",
       "thisYear": "This year",
       "custom": "Custom range",
       "from": "From",
       "to": "To",
       "allShort": "All",
       "thisMonthShort": "Month",
-      "last30Short": "30d",
       "thisYearShort": "Year",
-      "customShort": "Custom"
+      "customShort": "Custom",
+      "last3Months": "3 months",
+      "last3MonthsShort": "3M"
     },
     "Totals": {
-      "title": "Totals",
-      "description": "Spending summary of the entire group.",
-      "groupSpendings": "Total group spendings",
+      "title": "Total spending",
       "groupEarnings": "Total group earnings",
-      "yourSpendings": "Your total spendings",
-      "yourEarnings": "Your total earnings",
-      "yourShare": "Your total share"
-    },
-    "Summary": {
-      "title": "Summary",
-      "description": "Key figures for the selected period.",
-      "empty": "There are no expenses yet.",
-      "expenseCount": "Expenses",
-      "averageExpense": "Average expense",
-      "largestExpense": "Largest expense",
-      "activeSpan": "Active period"
+      "yourSpendings": "You paid",
+      "yourEarnings": "You received",
+      "yourShare": "Your total share",
+      "difference": "Difference"
     },
     "OverTime": {
       "title": "Spending over time",
-      "description": "Total group spending per month. Select a month to see its expenses.",
       "empty": "There are no expenses yet.",
       "showExpenses": "Show expenses for {month}",
       "detailsDescription": "Expenses in this month for the selected period.",
@@ -44,16 +33,11 @@
     },
     "ByParticipant": {
       "title": "Spending by participant",
-      "description": "How much each participant paid and their share of the expenses.",
       "empty": "There are no expenses yet.",
-      "participant": "Participant",
-      "paid": "Paid",
-      "count": "Count",
-      "share": "Share"
+      "meta": "{count, plural, one {# expense} other {# expenses}} · share {share}"
     },
     "ByCategory": {
       "title": "Spending by category",
-      "description": "Total amount spent in each category. Select a category to see its expenses.",
       "empty": "There are no expenses yet.",
       "showExpenses": "Show expenses for {category}",
       "detailsDescription": "Expenses in this category for the selected period.",
@@ -61,7 +45,6 @@
     },
     "Recurring": {
       "title": "Recurring expenses",
-      "description": "Estimated cost of the group's active recurring expenses.",
       "estimatedMonthly": "Estimated monthly cost",
       "estimatedYearly": "{amount} per year",
       "period": {
@@ -69,6 +52,13 @@
         "WEEKLY": "{count, plural, one {# weekly expense} other {# weekly expenses}}",
         "MONTHLY": "{count, plural, one {# monthly expense} other {# monthly expenses}}"
       }
+    },
+    "Caption": {
+      "thisMonth": "This month",
+      "last3Months": "Last 3 months",
+      "thisYear": "{year}",
+      "all": "All time",
+      "custom": "Selected range"
     }
   }
 }

@@ -11,6 +11,11 @@ export type ShellTitle = {
   showBack: boolean
   /** False on the settings screen itself. */
   showSettings: boolean
+  /**
+   * The design hangs the group menu off the section screens only: a form is a
+   * task, and its header carries nothing but a way back out.
+   */
+  showGroupMenu: boolean
 }
 
 /**
@@ -21,7 +26,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
   const pathname = usePathname()
   const t = useTranslations('Nav')
   const tExpense = useTranslations('ExpenseForm.Expense')
-  const tGroups = useTranslations('Groups')
+  const tGroupForm = useTranslations('GroupForm')
   const tInfo = useTranslations('Information')
 
   const none = {
@@ -29,11 +34,18 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
     subtitle: null,
     showBack: false,
     showSettings: true,
+    showGroupMenu: false,
   }
 
   if (pathname === '/groups') return none
+  // A form's header carries a way back out and nothing else.
   if (pathname === '/groups/create')
-    return { ...none, title: tGroups('createGroup'), showBack: true }
+    return {
+      ...none,
+      title: tGroupForm('createTitle'),
+      showBack: true,
+      showSettings: false,
+    }
   if (pathname === '/settings')
     return {
       ...none,
@@ -57,6 +69,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
           ? null
           : `${t('memberCount', { count: chrome.participantCount })} · ${chrome.currency}`,
       showBack: true,
+      showGroupMenu: true,
     }
   }
 
@@ -66,6 +79,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
       title: chrome.name,
       subtitle: t('balancesSubtitle'),
       showBack: true,
+      showGroupMenu: true,
     }
   if (section === 'stats')
     return {
@@ -73,6 +87,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
       title: chrome.name,
       subtitle: t('statsSubtitle'),
       showBack: true,
+      showGroupMenu: true,
     }
   if (section === 'activity')
     return {
@@ -80,6 +95,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
       title: chrome.name,
       subtitle: t('activitySubtitle'),
       showBack: true,
+      showGroupMenu: true,
     }
   if (section === 'information')
     return {
@@ -87,6 +103,7 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
       title: tInfo('title'),
       subtitle: chrome.name,
       showBack: true,
+      showGroupMenu: true,
     }
   if (section === 'edit')
     return { ...none, title: t('groupSettingsTitle'), showBack: true }
