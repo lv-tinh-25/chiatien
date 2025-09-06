@@ -38,8 +38,14 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
   }
 
   if (pathname === '/groups') return none
+  // A form's header carries a way back out and nothing else.
   if (pathname === '/groups/create')
-    return { ...none, title: tGroupForm('createTitle'), showBack: true }
+    return {
+      ...none,
+      title: tGroupForm('createTitle'),
+      showBack: true,
+      showSettings: false,
+    }
   if (pathname === '/settings')
     return {
       ...none,
