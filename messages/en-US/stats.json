@@ -9,7 +9,12 @@
       "thisYear": "This year",
       "custom": "Custom range",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "allShort": "All",
+      "thisMonthShort": "Month",
+      "last30Short": "30d",
+      "thisYearShort": "Year",
+      "customShort": "Custom"
     },
     "Totals": {
       "title": "Totals",

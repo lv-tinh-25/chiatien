@@ -17,7 +17,7 @@ export function AppTopBar({ chrome }: { chrome: GroupChrome }) {
 
       {chrome.groupId !== null && (
         <nav
-          aria-label={t('groupSections')}
+          aria-label={t('breadcrumb')}
           className="flex min-w-0 items-center gap-2 text-body-md font-semibold text-muted-foreground"
         >
           <span aria-hidden className="text-border">
@@ -40,15 +40,24 @@ export function AppTopBar({ chrome }: { chrome: GroupChrome }) {
 
       <div className="flex-1" />
 
-      {chrome.groupId !== null && (
-        <GroupOverflowMenu groupId={chrome.groupId} variant="menu" />
-      )}
-
-      <Button variant="outline" size="icon" className="min-h-9.5 w-9.5" asChild>
-        <Link href="/settings" aria-label={t('settings')}>
-          <Settings aria-hidden />
-        </Link>
-      </Button>
+      <nav
+        aria-label={t('mainSections')}
+        className="flex shrink-0 items-center gap-2"
+      >
+        {chrome.groupId !== null && (
+          <GroupOverflowMenu groupId={chrome.groupId} variant="menu" />
+        )}
+        <Button
+          variant="outline"
+          size="icon"
+          className="min-h-9.5 w-9.5"
+          asChild
+        >
+          <Link href="/settings" aria-label={t('settings')}>
+            <Settings aria-hidden />
+          </Link>
+        </Button>
+      </nav>
     </header>
   )
 }

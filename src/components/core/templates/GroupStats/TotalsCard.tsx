@@ -18,6 +18,7 @@ type TotalsCardProps = {
   totalParticipantShare?: number
   currency: Currency
   locale: Locale
+  className?: string
 }
 
 function Total({
@@ -36,7 +37,7 @@ function Total({
   return (
     <div className="flex flex-col">
       <span className="text-label-md text-muted-foreground">{label}</span>
-      <span className="text-numeric-table-lg">
+      <span className="text-numeric-table-md font-bold">
         <Money
           amount={Math.abs(amount)}
           currency={currency}
@@ -54,24 +55,31 @@ export function TotalsCard({
   totalParticipantShare,
   currency,
   locale,
+  className,
 }: TotalsCardProps) {
   const t = useTranslations('Stats.Totals')
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
-        <CardDescription>{t('description')}</CardDescription>
+    <Card className={className}>
+      <CardHeader className="gap-0 pb-2">
+        <CardTitle className="text-label-md font-bold text-muted-foreground">
+          {t('title')}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-3 sm:grid-cols-3">
-        <Total
-          label={t(
-            totalGroupSpendings < 0 ? 'groupEarnings' : 'groupSpendings',
-          )}
-          amount={totalGroupSpendings}
-          currency={currency}
-          locale={locale}
-        />
+      <CardContent className="flex flex-col gap-3 pt-0">
+        <div className="flex flex-col">
+          <span className="text-display-currency font-extrabold text-foreground">
+            <Money
+              amount={Math.abs(totalGroupSpendings)}
+              currency={currency}
+              locale={locale}
+            />
+          </span>
+          <span className="text-body-sm text-muted-foreground">
+            {t('description')}
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-x-7 gap-y-2">
         {totalParticipantSpendings !== undefined && (
           <Total
             label={t(
@@ -92,6 +100,7 @@ export function TotalsCard({
             tone={totalParticipantShare < 0 ? 'credit' : 'debit'}
           />
         )}
+        </div>
       </CardContent>
     </Card>
   )

@@ -26,12 +26,17 @@ export function GroupFormFooter({
       : t('create')
 
   return (
-    <div className="glass-float sticky bottom-[calc(env(safe-area-inset-bottom)+1rem)] z-10 flex items-center gap-2 rounded-card p-3 lg:bottom-4">
-      <Button type="submit" disabled={isSubmitting}>
-        {label}
-      </Button>
+    <div className="flex items-center gap-2.5 lg:justify-end">
       <Button variant="ghost" asChild>
         <Link href={cancelHref}>{t('cancel')}</Link>
+      </Button>
+      <Button
+        type="submit"
+        size="lg"
+        disabled={isSubmitting}
+        className="flex-1 shadow-action lg:flex-none"
+      >
+        {label}
       </Button>
     </div>
   )

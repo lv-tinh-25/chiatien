@@ -51,15 +51,17 @@ export function MobileTopBar({
 
         <div className="flex-1" />
 
-        {chrome.groupId === null ? (
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/settings" aria-label={t('settings')}>
-              <Settings aria-hidden />
-            </Link>
-          </Button>
-        ) : (
-          <GroupOverflowMenu groupId={chrome.groupId} variant="sheet" />
-        )}
+        <nav aria-label={t('mainSections')} className="flex shrink-0">
+          {chrome.groupId === null ? (
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/settings" aria-label={t('settings')}>
+                <Settings aria-hidden />
+              </Link>
+            </Button>
+          ) : (
+            <GroupOverflowMenu groupId={chrome.groupId} variant="sheet" />
+          )}
+        </nav>
       </div>
     </div>
   )

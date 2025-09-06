@@ -125,6 +125,12 @@
       "earlierThisYear": "Đầu năm nay",
       "lastYear": "Năm ngoái",
       "older": "Cũ hơn"
+    },
+    "Tags": {
+      "UPDATE_GROUP": "Cài đặt",
+      "CREATE_EXPENSE": "Tạo",
+      "UPDATE_EXPENSE": "Sửa",
+      "DELETE_EXPENSE": "Xoá"
     }
   }
 }

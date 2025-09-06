@@ -39,7 +39,7 @@ export function ParticipantList({
         <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col divide-y divide-border/50">
           {fields.map((field, index) => (
             <ParticipantRow
               key={field.id}
