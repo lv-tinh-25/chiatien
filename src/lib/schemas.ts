@@ -153,7 +153,10 @@ export const expenseFormSchema = z
         break // noop
       case 'BY_AMOUNT': {
         const sum = expense.paidFor.reduce(
-          (sum, { shares }) => new Decimal(shares).add(sum),
+          // A field the user has just cleared is an empty string, which Decimal
+          // rejects outright; it counts as nothing, and the sum check then
+          // reports the mismatch instead of the parse throwing.
+          (sum, { shares }) => new Decimal(Number(shares) || 0).add(sum),
           new Decimal(0),
         )
         if (!sum.equals(new Decimal(expense.amount))) {
