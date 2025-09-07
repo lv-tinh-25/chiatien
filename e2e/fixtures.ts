@@ -26,7 +26,7 @@ type Options = {
   seedActiveUser: boolean
 
   /**
-   * Rate returned for every api.frankfurter.dev request, so currency
+   * Rate returned for every api.fxratesapi.com request, so currency
    * conversion is deterministic and offline. Null (the default) aborts the
    * request instead, which is what every non-currency spec wants.
    */
@@ -66,22 +66,23 @@ export const test = base.extend<Options>({
 
     // The suite must never depend on a third-party API. useCurrencyRate calls
     // this only when the expense currency differs from the group currency.
-    await page.route('https://api.frankfurter.dev/**', (route) => {
+    await page.route('https://api.fxratesapi.com/**', (route) => {
       if (exchangeRate === null) return route.abort()
 
-      // Request shape: /v1/<YYYY-MM-DD>?base=<CODE>. The hook turns the
-      // response into a RangeError unless `date` echoes the requested date
-      // exactly, so mirror it back rather than inventing one.
+      // Request shape: /historical?date=<YYYY-MM-DD>&base=<CODE>&currencies=…
+      // The hook turns the response into a RangeError unless `date` echoes the
+      // requested day, so mirror it back rather than inventing one.
       const url = new URL(route.request().url())
-      const date = url.pathname.split('/').pop() ?? ''
+      const date = url.searchParams.get('date') ?? ''
       const base = url.searchParams.get('base') ?? ''
 
       return route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({
+          success: true,
           base,
-          date,
+          date: `${date}T00:00:00.000Z`,
           rates: { USD: exchangeRate, EUR: exchangeRate, GBP: exchangeRate },
         }),
       })
