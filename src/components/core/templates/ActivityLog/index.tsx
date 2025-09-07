@@ -2,6 +2,7 @@
 
 import { Avatar } from '@/components/core/atoms/Avatar'
 import { Card } from '@/components/core/atoms/Card'
+import { ActivityLogSkeleton } from '@/components/core/templates/ActivityLog/Skeleton'
 import { useActivityLog } from '@/hooks/activities/useActivityLog'
 import type { ActivityDateGroup } from '@/lib/activity-groups'
 import { cn, formatDate } from '@/lib/utils'
@@ -39,7 +40,7 @@ export function ActivityLog() {
     sentinelRef,
   } = useActivityLog()
 
-  if (isPending) return null
+  if (isPending) return <ActivityLogSkeleton />
 
   return (
     <div className="flex w-full max-w-190 flex-col gap-4">

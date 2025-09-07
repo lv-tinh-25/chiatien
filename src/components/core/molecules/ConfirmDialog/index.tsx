@@ -62,16 +62,21 @@ export function ConfirmDialog({
             </DialogPrimitive.Description>
           )}
           <div className="mt-5 flex justify-end gap-2">
+            {/* Inert while the request runs, but without a spinner of its own:
+                only one control is busy. */}
             <Button
               variant="ghost"
-              disabled={pending}
-              onClick={() => setOpen(false)}
+              aria-disabled={pending || undefined}
+              className={pending ? 'pointer-events-none opacity-50' : undefined}
+              onClick={() => {
+                if (!pending) setOpen(false)
+              }}
             >
               {cancelLabel}
             </Button>
             <Button
               variant={destructive ? 'destructive' : 'primary'}
-              disabled={pending}
+              pending={pending}
               onClick={() => void confirm()}
             >
               {confirmLabel}

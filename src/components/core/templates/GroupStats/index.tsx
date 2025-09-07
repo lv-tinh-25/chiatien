@@ -13,6 +13,7 @@ import { CategoryDrilldown } from '@/components/core/templates/GroupStats/Catego
 import { MemberBars } from '@/components/core/templates/GroupStats/MemberBars'
 import { MonthDrilldown } from '@/components/core/templates/GroupStats/MonthDrilldown'
 import { StatBar } from '@/components/core/templates/GroupStats/StatBar'
+import { GroupStatsSkeleton } from '@/components/core/templates/GroupStats/Skeleton'
 import { StatsRangeSelector } from '@/components/core/templates/GroupStats/StatsRangeSelector'
 import { TimeColumnChart } from '@/components/core/templates/GroupStats/TimeColumnChart'
 import { TotalsCard } from '@/components/core/templates/GroupStats/TotalsCard'
@@ -39,7 +40,8 @@ export function GroupStats() {
     isPending,
   } = useGroupStats()
 
-  if (isPending || !stats || !currency) return null
+  if (isPending) return <GroupStatsSkeleton />
+  if (!stats || !currency) return null
 
   const money = (amount: number) => (
     <Money amount={amount} currency={currency} locale={locale} />

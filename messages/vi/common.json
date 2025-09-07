@@ -1,7 +1,8 @@
 {
   "App": {
     "name": "ChiaTiền",
-    "description": "Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản."
+    "description": "Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản.",
+    "loading": "Đang tải…"
   },
   "Settings": {
     "title": "Cài đặt",

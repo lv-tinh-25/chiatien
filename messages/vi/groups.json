@@ -2,7 +2,6 @@
   "Groups": {
     "myGroups": "Nhóm của bạn",
     "create": "Tạo",
-    "loadingRecent": "Đang tải các nhóm gần đây…",
     "NoRecent": {
       "description": "Bạn chưa xem nhóm nào gần đây.",
       "create": "Tạo nhóm",

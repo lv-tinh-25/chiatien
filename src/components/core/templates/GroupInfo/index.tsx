@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/core/atoms/Button'
 import { Card } from '@/components/core/atoms/Card'
+import { GroupInfoSkeleton } from '@/components/core/templates/GroupInfo/Skeleton'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import { formatDate } from '@/lib/utils'
 import { useLocale, useTranslations } from 'next-intl'
@@ -12,7 +13,7 @@ export function GroupInfo() {
   const locale = useLocale()
   const { groupId, group, isPending } = useCurrentGroup()
 
-  if (isPending) return null
+  if (isPending) return <GroupInfoSkeleton />
 
   const information = group?.information?.trim() ?? ''
 

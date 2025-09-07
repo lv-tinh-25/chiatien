@@ -7,6 +7,7 @@ import { ArchivedGroupRow } from '@/components/core/templates/GroupList/Archived
 import { GlobalBalanceCard } from '@/components/core/templates/GroupList/GlobalBalanceCard'
 import { GroupCard } from '@/components/core/templates/GroupList/GroupCard'
 import { GroupSection } from '@/components/core/templates/GroupList/GroupSection'
+import { GroupListSkeleton } from '@/components/core/templates/GroupList/Skeleton'
 import { useGroupList } from '@/hooks/groups/useGroupList'
 import { trpc } from '@/trpc/client'
 import { Plus, Star } from 'lucide-react'
@@ -50,11 +51,7 @@ export function GroupList() {
         <AddGroupByUrl onAdd={addByUrl} />
       </div>
 
-      {status === 'pending' && (
-        <p className="text-body-md text-muted-foreground lg:col-span-2">
-          {t('loadingRecent')}
-        </p>
-      )}
+      {status === 'pending' && <GroupListSkeleton />}
 
       {status === 'empty' && (
         <div className="lg:col-span-2">

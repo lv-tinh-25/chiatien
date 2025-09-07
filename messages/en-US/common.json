@@ -1,7 +1,8 @@
 {
   "App": {
     "name": "ChiaTien",
-    "description": "Split expenses with friends and family. No ads, no account needed."
+    "description": "Split expenses with friends and family. No ads, no account needed.",
+    "loading": "Loading…"
   },
   "Settings": {
     "title": "Settings",

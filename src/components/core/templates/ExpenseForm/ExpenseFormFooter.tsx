@@ -30,7 +30,7 @@ export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
               <Button
                 type="button"
                 variant="outline"
-                disabled={isSubmitting}
+                pending={isSubmitting}
                 className="w-full text-destructive"
               >
                 {t('DeletePopup.label')}
@@ -51,7 +51,7 @@ export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
       <Button
         type="submit"
         size="lg"
-        disabled={isSubmitting}
+        pending={isSubmitting}
         className="flex-2 shadow-action"
       >
         {label}

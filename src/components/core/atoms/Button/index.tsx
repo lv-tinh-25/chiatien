@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Loader2 } from 'lucide-react'
 import { forwardRef, type ButtonHTMLAttributes } from 'react'
 
 const buttonVariants = cva(
@@ -44,20 +45,62 @@ const buttonVariants = cva(
 )
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof buttonVariants> & { asChild?: boolean }
+  VariantProps<typeof buttonVariants> & { asChild?: boolean; pending?: boolean }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
-    { className, variant, size, asChild = false, ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      pending = false,
+      children,
+      onClick,
+      ...props
+    },
     ref,
   ) {
-    const Component = asChild ? Slot : 'button'
+    // `aria-disabled` rather than `disabled`: a button that goes natively
+    // disabled under the pointer loses focus, and inside a Radix dialog that
+    // reads as the focus leaving the layer, which closes it. The click guard is
+    // what actually stops the second press.
+    if (asChild) {
+      const Slotted = Slot
+      return (
+        <Slotted
+          ref={ref}
+          className={cn(buttonVariants({ variant, size }), className)}
+          onClick={onClick}
+          {...props}
+        >
+          {children}
+        </Slotted>
+      )
+    }
+
     return (
-      <Component
+      <button
         ref={ref}
-        className={cn(buttonVariants({ variant, size }), className)}
+        aria-disabled={pending || undefined}
+        aria-busy={pending || undefined}
+        className={cn(
+          buttonVariants({ variant, size }),
+          pending && 'pointer-events-none opacity-70',
+          className,
+        )}
+        onClick={(event) => {
+          if (pending) {
+            event.preventDefault()
+            return
+          }
+          onClick?.(event)
+        }}
         {...props}
-      />
+      >
+        {pending && <Loader2 aria-hidden className="animate-spin" />}
+        {children}
+      </button>
     )
   },
 )

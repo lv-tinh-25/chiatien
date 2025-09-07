@@ -6,6 +6,7 @@ import { ExpenseAmountField } from '@/components/core/templates/ExpenseForm/Expe
 import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/ExpenseCurrencyBlock'
 import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/ExpenseDocumentsField'
 import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/ExpenseFormFooter'
+import { ExpenseFormSkeleton } from '@/components/core/templates/ExpenseForm/Skeleton'
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
 import { ExpenseTitleField } from '@/components/core/templates/ExpenseForm/ExpenseTitleField'
 import { PaidForList } from '@/components/core/templates/ExpenseForm/PaidForList'
@@ -31,7 +32,7 @@ type ExpenseFormProps = {
  */
 export function ExpenseForm(props: ExpenseFormProps) {
   const { group } = useCurrentGroup()
-  if (!group) return null
+  if (!group) return <ExpenseFormSkeleton />
   return <ExpenseFormFields {...props} />
 }
 

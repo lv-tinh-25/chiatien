@@ -5,6 +5,7 @@ import { Button } from '@/components/core/atoms/Button'
 import { Card } from '@/components/core/atoms/Card'
 import { Money } from '@/components/core/atoms/Money'
 import { DivergingBar } from '@/components/core/molecules/DivergingBar'
+import { GroupSummaryAsideSkeleton } from '@/components/core/templates/GroupScreen/AsideSkeleton'
 import { useBalanceList } from '@/hooks/balances/useBalanceList'
 import { ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -29,7 +30,8 @@ export function GroupSummaryAside() {
     isSettled,
   } = useBalanceList()
 
-  if (isPending || !currency) return null
+  if (isPending) return <GroupSummaryAsideSkeleton />
+  if (!currency) return null
 
   const scale = Math.max(
     0,
