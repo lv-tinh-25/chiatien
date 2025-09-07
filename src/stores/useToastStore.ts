@@ -15,6 +15,8 @@ export type Toast = {
   title: string
   description?: string
   action?: ToastAction
+  /** Absent keeps the neutral card the undo toasts use. */
+  variant?: 'success' | 'error'
 }
 
 type ToastState = {

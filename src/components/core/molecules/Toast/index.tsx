@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
+import { cn } from '@/lib/utils'
 import { useToastStore } from '@/stores/useToastStore'
 import * as ToastPrimitive from '@radix-ui/react-toast'
 import { X } from 'lucide-react'
@@ -19,10 +20,17 @@ export function ToastViewport() {
         <ToastPrimitive.Root
           key={toast.id}
           open
+          // A failure has to interrupt; a confirmation must not.
+          type={toast.variant === 'error' ? 'foreground' : 'background'}
           onOpenChange={(open) => {
             if (!open) dismiss(toast.id)
           }}
-          className="glass-float flex items-start gap-3 rounded-card p-4 transition-opacity duration-200 ease-out-soft data-[state=closed]:opacity-0"
+          className={cn(
+            'glass-float flex items-start gap-3 rounded-card border-l-4 p-4 transition-opacity duration-200 ease-out-soft data-[state=closed]:opacity-0',
+            toast.variant === 'success' && 'border-l-credit',
+            toast.variant === 'error' && 'border-l-destructive',
+            toast.variant === undefined && 'border-l-transparent',
+          )}
         >
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             <ToastPrimitive.Title className="text-headline-sm text-foreground">

@@ -10,7 +10,13 @@
     "language": "Ngôn ngữ"
   },
   "Toast": {
-    "dismiss": "Bỏ qua"
+    "dismiss": "Bỏ qua",
+    "expenseCreated": "Đã thêm khoản chi",
+    "expenseUpdated": "Đã lưu khoản chi",
+    "expenseDeleted": "Đã xoá khoản chi",
+    "groupCreated": "Đã tạo nhóm",
+    "groupUpdated": "Đã lưu nhóm",
+    "failed": "Không lưu được. Vui lòng thử lại."
   },
   "Share": {
     "title": "Chia sẻ",

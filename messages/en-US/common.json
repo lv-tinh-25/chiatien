@@ -10,7 +10,13 @@
     "language": "Language"
   },
   "Toast": {
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "expenseCreated": "Expense created",
+    "expenseUpdated": "Expense saved",
+    "expenseDeleted": "Expense deleted",
+    "groupCreated": "Group created",
+    "groupUpdated": "Group saved",
+    "failed": "That could not be saved. Try again."
   },
   "Share": {
     "title": "Share",
