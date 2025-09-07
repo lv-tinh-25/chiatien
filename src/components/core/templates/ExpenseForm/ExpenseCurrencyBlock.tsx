@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/core/atoms/Button'
 import { FormInput } from '@/components/core/molecules/FormInput'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { ConversionRateNotice } from '@/lib/conversion-rate-notice'
 import type { Currency } from '@/lib/currency'
 import { enforceCurrencyPattern } from '@/lib/currency-input'
@@ -34,6 +35,7 @@ export function ExpenseCurrencyBlock({
 }: Props) {
   const t = useTranslations('ExpenseForm')
   const tRate = useTranslations('ExpenseForm.conversionRateState')
+  const errors = useFormErrors(form.control)
   const isReimbursement = useWatch({
     control: form.control,
     name: 'isReimbursement',
@@ -60,7 +62,7 @@ export function ExpenseCurrencyBlock({
         // On a repayment this field is derived from the balance being settled,
         // so typing into it would be overwritten on the next render.
         readOnly={Boolean(isReimbursement)}
-        errorKey={form.formState.errors.originalAmount?.message}
+        errorKey={errors.originalAmount?.message}
         {...originalAmount}
         onChange={(event) => {
           event.target.value = enforceCurrencyPattern(event.target.value)
@@ -108,7 +110,7 @@ export function ExpenseCurrencyBlock({
           <FormInput
             label={t('conversionRateField.label')}
             inputMode="decimal"
-            errorKey={form.formState.errors.conversionRate?.message}
+            errorKey={errors.conversionRate?.message}
             {...form.register('conversionRate')}
           />
         </Collapsible.Content>

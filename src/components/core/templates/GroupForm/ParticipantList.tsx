@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@/components/core/atoms/Card'
 import { ParticipantRow } from '@/components/core/templates/GroupForm/ParticipantRow'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { GroupFormValues } from '@/lib/schemas'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -30,7 +31,7 @@ export function ParticipantList({
   onRemove,
 }: ParticipantListProps) {
   const t = useTranslations('GroupForm.Participants')
-  const errors = form.formState.errors.participants
+  const errors = useFormErrors(form.control).participants
   const names = (
     useWatch({ control: form.control, name: 'participants' }) ?? []
   ).map((participant) => participant?.name ?? '')

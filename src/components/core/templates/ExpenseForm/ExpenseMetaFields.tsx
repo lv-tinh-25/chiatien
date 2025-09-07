@@ -1,10 +1,12 @@
 'use client'
 
+import { DateInput } from '@/components/core/atoms/DateInput'
 import { CategoryChips } from '@/components/core/molecules/CategoryChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
 import { PayerPicker } from '@/components/core/molecules/PayerPicker'
 import { ExpenseRecurrenceField } from '@/components/core/templates/ExpenseForm/ExpenseRecurrenceField'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
@@ -24,6 +26,7 @@ function toDateInputValue(value: unknown): string {
 
 export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
   const t = useTranslations('ExpenseForm')
+  const errors = useFormErrors(form.control)
   const scope = isIncome ? 'Income' : 'Expense'
   const { data } = trpc.categories.list.useQuery()
   const expenseDate = useWatch({ control: form.control, name: 'expenseDate' })
@@ -35,14 +38,12 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
       <div className="grid grid-cols-2 gap-2.5">
         <FormField
           label={t(`${scope}.DateField.label`)}
-          errorKey={form.formState.errors.expenseDate?.message}
+          errorKey={errors.expenseDate?.message}
         >
           {({ id, describedBy }) => (
-            <input
+            <DateInput
               id={id}
-              type="date"
               aria-describedby={describedBy}
-              className="flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-md font-semibold text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
               value={toDateInputValue(expenseDate)}
               onChange={(event) =>
                 form.setValue('expenseDate', new Date(event.target.value), {
@@ -69,7 +70,7 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
 
       <FormField
         label={t(`${scope}.paidByField.label`)}
-        errorKey={form.formState.errors.paidBy?.message}
+        errorKey={errors.paidBy?.message}
       >
         {({ id, describedBy }) => (
           <PayerPicker
@@ -88,7 +89,7 @@ export function ExpenseMetaFields({ form, isIncome, participants }: Props) {
       <FormTextarea
         label={t('notesField.label')}
         rows={2}
-        errorKey={form.formState.errors.notes?.message}
+        errorKey={errors.notes?.message}
         {...form.register('notes')}
       />
     </div>

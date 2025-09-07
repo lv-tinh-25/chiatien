@@ -3,6 +3,7 @@
 import { Button } from '@/components/core/atoms/Button'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { useExpenseCategorySuggestion } from '@/hooks/expenses/useExpenseCategorySuggestion'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { Loader2, Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -20,6 +21,7 @@ export function ExpenseTitleField({
   categoryExtractEnabled,
 }: Props) {
   const t = useTranslations('ExpenseForm')
+  const errors = useFormErrors(form.control)
   const scope = isIncome ? 'Income' : 'Expense'
   const { suggest, isLoading } = useExpenseCategorySuggestion(
     categoryExtractEnabled,
@@ -31,7 +33,7 @@ export function ExpenseTitleField({
       <FormInput
         label={t(`${scope}.TitleField.label`)}
         placeholder={t(`${scope}.TitleField.placeholder`)}
-        errorKey={form.formState.errors.title?.message}
+        errorKey={errors.title?.message}
         fieldClassName="flex-1"
         {...form.register('title')}
       />

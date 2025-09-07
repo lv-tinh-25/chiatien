@@ -3,6 +3,7 @@
 import { Input } from '@/components/core/atoms/Input'
 import { CurrencyChips } from '@/components/core/molecules/CurrencyChips'
 import { FormField } from '@/components/core/molecules/FormField'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
 import { currencyChoicesWith } from '@/lib/currency-choices'
@@ -32,6 +33,7 @@ export function ExpenseAmountField({
   convertible,
 }: Props) {
   const t = useTranslations('ExpenseForm')
+  const errors = useFormErrors(form.control)
   const registration = form.register('amount')
   const currencyCode = useWatch({
     control: form.control,
@@ -43,10 +45,7 @@ export function ExpenseAmountField({
   const options = currencyChoicesWith(locale, selected)
 
   return (
-    <FormField
-      label={t('amountField.label')}
-      errorKey={form.formState.errors.amount?.message}
-    >
+    <FormField label={t('amountField.label')} errorKey={errors.amount?.message}>
       {({ id, describedBy }) => (
         <div className="flex items-stretch gap-2">
           <Input

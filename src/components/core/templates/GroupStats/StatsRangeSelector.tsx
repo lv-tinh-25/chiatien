@@ -1,5 +1,6 @@
 'use client'
 
+import { DateInput } from '@/components/core/atoms/DateInput'
 import { SegmentedControl } from '@/components/core/molecules/SegmentedControl'
 import {
   STATS_PERIODS,
@@ -23,9 +24,6 @@ const ORDER: StatsPeriod[] = [
   'all',
   'custom',
 ]
-
-const DATE_INPUT =
-  'flex min-h-touch-min w-full rounded-control border border-input bg-card px-3 text-body-md font-semibold text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20'
 
 export function StatsRangeSelector({
   period,
@@ -60,9 +58,7 @@ export function StatsRangeSelector({
             <span className="text-label-md text-muted-foreground">
               {t('from')}
             </span>
-            <input
-              type="date"
-              className={DATE_INPUT}
+            <DateInput
               value={customRange.from ?? ''}
               onChange={(event) =>
                 onCustomRangeChange({
@@ -76,9 +72,7 @@ export function StatsRangeSelector({
             <span className="text-label-md text-muted-foreground">
               {t('to')}
             </span>
-            <input
-              type="date"
-              className={DATE_INPUT}
+            <DateInput
               value={customRange.to ?? ''}
               onChange={(event) =>
                 onCustomRangeChange({ ...customRange, to: event.target.value })
