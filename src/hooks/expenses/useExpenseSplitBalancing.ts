@@ -1,19 +1,31 @@
 'use client'
 
+import type { SplitMode } from '@/generated/prisma/browser'
 import type { Currency } from '@/lib/currency'
-import { redistributeShares, seedSharesForMode } from '@/lib/expense-split'
+import {
+  redistributeShares,
+  rememberShares,
+  restoreShares,
+  type SharesByParticipant,
+} from '@/lib/expense-split'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 
 /**
- * Keeps `BY_AMOUNT` shares adding up to the expense total.
+ * Owns what each split tab holds.
  *
- * A participant is only auto-filled until the user types into their field;
- * after that their value is theirs and the remainder is spread over whoever is
- * left. Changing the amount or the split mode clears that memory, because the
- * previously typed numbers no longer relate to the new total.
+ * Every tab reads `shares` on its own scale, so switching cannot simply carry
+ * the numbers over. Each tab keeps its own values instead: leaving one records
+ * what is in it, arriving at one puts back what was there, and a tab opened for
+ * the first time is seeded.
+ *
+ * `BY_AMOUNT` additionally keeps adding up to the expense total. A participant
+ * is auto-filled only until the user types into their field; after that their
+ * value is theirs and the remainder is spread over whoever is left. A new
+ * amount clears that memory, because the previously typed numbers no longer
+ * relate to the new total.
  */
 export function useExpenseSplitBalancing(
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>,
@@ -23,6 +35,7 @@ export function useExpenseSplitBalancing(
   const splitMode = useWatch({ control: form.control, name: 'splitMode' })
   const amount = useWatch({ control: form.control, name: 'amount' })
   const previous = useRef({ splitMode, amount })
+  const remembered = useRef<Partial<Record<SplitMode, SharesByParticipant>>>({})
 
   const markEdited = useCallback((participant: string) => {
     setManuallyEdited((edited) =>
@@ -31,19 +44,33 @@ export function useExpenseSplitBalancing(
   }, [])
 
   useEffect(() => {
-    const modeChanged = previous.current.splitMode !== splitMode
+    const previousMode = previous.current.splitMode
+    const modeChanged = previousMode !== splitMode
     if (!modeChanged && previous.current.amount === amount) return
     previous.current = { splitMode, amount }
-    setManuallyEdited(new Set())
 
-    // Only a mode the user switched to is re-seeded. The first run matches the
-    // mode the form opened on, so an expense being edited keeps its stored
-    // shares.
-    if (!modeChanged || splitMode === undefined) return
+    if (!modeChanged || splitMode === undefined) {
+      setManuallyEdited(new Set())
+      return
+    }
+
     const paidFor = form.getValues('paidFor')
-    const seeded = seedSharesForMode(splitMode, paidFor)
-    if (seeded !== paidFor) {
-      form.setValue('paidFor', seeded, { shouldValidate: true })
+    if (previousMode !== undefined) {
+      remembered.current[previousMode] = rememberShares(paidFor)
+    }
+
+    const { rows, restored } = restoreShares(
+      splitMode,
+      paidFor,
+      remembered.current[splitMode],
+    )
+    // Restored values are the user's own, so `redistributeShares` must treat
+    // them as typed rather than spread the total over them again.
+    setManuallyEdited(
+      restored ? new Set(rows.map((row) => row.participant)) : new Set(),
+    )
+    if (rows !== paidFor) {
+      form.setValue('paidFor', rows, { shouldValidate: true })
     }
   }, [splitMode, amount, form])
 
