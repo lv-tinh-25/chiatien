@@ -208,7 +208,9 @@ export function PaidForList({
               splitMode === 'BY_SHARES' ? totalShares(paidFor) : paidFor.length,
           })}
         </span>
-        <span className="text-numeric-table-md text-credit tabular">
+        {/* The same horizontal padding as a row's own amount, so the two
+            right edges agree. */}
+        <span className="px-2.5 py-1 text-numeric-table-md text-credit tabular">
           {formatCurrency(currency, Math.abs(total), locale)}
         </span>
       </div>
