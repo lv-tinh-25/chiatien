@@ -48,10 +48,12 @@ export function Select({
           className,
         )}
       >
-        <SelectPrimitive.Value
-          placeholder={placeholder}
-          className="min-w-0 truncate text-left"
-        />
+        {/* Radix renders `Value` and `ItemText` as their own elements and drops
+            the class handed to them, so the truncation has to live on a span we
+            own. */}
+        <span className="min-w-0 flex-1 truncate text-left">
+          <SelectPrimitive.Value placeholder={placeholder} />
+        </span>
         <SelectPrimitive.Icon className="shrink-0">
           <ChevronDown className="size-4 opacity-60" aria-hidden />
         </SelectPrimitive.Icon>
@@ -61,18 +63,20 @@ export function Select({
         <SelectPrimitive.Content
           position="popper"
           sideOffset={4}
-          className="glass-modal z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-control"
+          className="glass-modal z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] max-w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-control"
         >
           <SelectPrimitive.Viewport className="p-1">
             {options.map((option) => (
               <SelectPrimitive.Item
                 key={option.value}
                 value={option.value}
-                className="flex min-h-touch-min cursor-default items-center justify-between gap-3 whitespace-nowrap rounded-control px-3 text-body-lg text-foreground outline-none data-[highlighted]:bg-foreground/6"
+                className="flex min-h-touch-min cursor-default items-center justify-between gap-3 rounded-control px-3 text-body-lg text-foreground outline-none data-[highlighted]:bg-foreground/6"
               >
-                <SelectPrimitive.ItemText>
-                  {option.label}
-                </SelectPrimitive.ItemText>
+                <span className="min-w-0 flex-1 truncate">
+                  <SelectPrimitive.ItemText>
+                    {option.label}
+                  </SelectPrimitive.ItemText>
+                </span>
                 <SelectPrimitive.ItemIndicator>
                   <Check className="size-4 text-primary" aria-hidden />
                 </SelectPrimitive.ItemIndicator>
