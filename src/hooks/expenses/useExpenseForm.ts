@@ -181,7 +181,9 @@ export function useExpenseForm(expense?: Expense) {
   })
 
   const remove = async () => {
-    if (!expense) return
+    // The dialog disables its own button, but a stray second call would still
+    // ask the server to delete a row that is already gone.
+    if (!expense || deleteExpense.isPending) return
     await deleteExpense.mutateAsync({
       groupId,
       expenseId: expense.id,

@@ -89,3 +89,41 @@ test('deletes an expense and clears the balances', async ({ page }) => {
   await expectBalance(page, 'Carol', 0)
   await expect(page.getByText(/doesn.t need any reimbursement/)).toBeVisible()
 })
+
+test('asks before deleting and cannot be confirmed twice', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Delete Twice ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await addExpense(page, groupId, {
+    title: 'Taxi',
+    amount: '30',
+    paidBy: 'Alice',
+  })
+
+  await openExpense(page, 'Taxi')
+
+  // Held long enough that a second click is possible while the first is in
+  // flight, which is exactly what produced a 500 in the reported bug.
+  let deletes = 0
+  await page.route('**/api/trpc/**', async (route) => {
+    if (!route.request().url().includes('expenses.delete'))
+      return route.continue()
+    deletes += 1
+    await new Promise((resolve) => setTimeout(resolve, 1_500))
+    await route.continue()
+  })
+
+  await page.getByRole('button', { name: 'Delete', exact: true }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toBeVisible()
+
+  const confirm = dialog.getByRole('button', { name: 'Yes', exact: true })
+  await confirm.click()
+  await expect(confirm).toBeDisabled()
+
+  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+  await expect(page.getByTestId('expense-card')).toHaveCount(0)
+  expect(deletes).toBe(1)
+})

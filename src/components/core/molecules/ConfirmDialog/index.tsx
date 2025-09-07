@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/core/atoms/Button'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 
 type ConfirmDialogProps = {
   trigger: ReactNode
@@ -11,9 +11,15 @@ type ConfirmDialogProps = {
   confirmLabel: string
   cancelLabel: string
   destructive?: boolean
-  onConfirm: () => void
+  onConfirm: () => void | Promise<void>
 }
 
+/**
+ * The dialog, not the caller, is what stops a second confirmation: closing on
+ * click would put the trigger back under the user's finger while the request is
+ * still in flight, and a second delete answers 500. So it stays open and
+ * disabled until the promise settles.
+ */
 export function ConfirmDialog({
   trigger,
   title,
@@ -23,12 +29,30 @@ export function ConfirmDialog({
   destructive = false,
   onConfirm,
 }: ConfirmDialogProps) {
+  const [open, setOpen] = useState(false)
+  const [pending, setPending] = useState(false)
+
+  const confirm = async () => {
+    setPending(true)
+    try {
+      await onConfirm()
+      setOpen(false)
+    } finally {
+      setPending(false)
+    }
+  }
+
   return (
-    <DialogPrimitive.Root>
+    <DialogPrimitive.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (!pending) setOpen(next)
+      }}
+    >
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="glass-scrim fixed inset-0 z-50" />
-        <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-50 w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 glass-modal rounded-card p-5">
+        <DialogPrimitive.Content className="glass-modal fixed top-1/2 left-1/2 z-50 w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-card p-5">
           <DialogPrimitive.Title className="text-headline-md text-foreground">
             {title}
           </DialogPrimitive.Title>
@@ -38,17 +62,20 @@ export function ConfirmDialog({
             </DialogPrimitive.Description>
           )}
           <div className="mt-5 flex justify-end gap-2">
-            <DialogPrimitive.Close asChild>
-              <Button variant="ghost">{cancelLabel}</Button>
-            </DialogPrimitive.Close>
-            <DialogPrimitive.Close asChild>
-              <Button
-                variant={destructive ? 'destructive' : 'primary'}
-                onClick={onConfirm}
-              >
-                {confirmLabel}
-              </Button>
-            </DialogPrimitive.Close>
+            <Button
+              variant="ghost"
+              disabled={pending}
+              onClick={() => setOpen(false)}
+            >
+              {cancelLabel}
+            </Button>
+            <Button
+              variant={destructive ? 'destructive' : 'primary'}
+              disabled={pending}
+              onClick={() => void confirm()}
+            >
+              {confirmLabel}
+            </Button>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>

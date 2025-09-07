@@ -122,10 +122,13 @@ function ExpenseFormFields({
             onShareEdited={markEdited}
           />
 
+          {/* `remove` is handed over unwrapped: the confirmation dialog awaits
+              it to know when to close, and `() => void remove()` would resolve
+              a tick after the click instead. */}
           <ExpenseFormFooter
             isCreate={isCreate}
             isSubmitting={isSubmitting}
-            onDelete={() => void remove()}
+            onDelete={remove}
           />
         </div>
       </div>
