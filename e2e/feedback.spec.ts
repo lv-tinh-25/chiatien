@@ -62,16 +62,18 @@ test('shows a skeleton while a screen is still loading', async ({ page }) => {
     participants: ['Alice', 'Bob'],
   })
 
-  // Held open so the pending render is observable rather than a single frame.
+  // The group query, not the expense one: reading expenses also materialises
+  // recurring ones, and holding that request open races the backfill that
+  // e2e/recurrence.spec.ts depends on.
   await page.route('**/api/trpc/**', async (route) => {
-    if (!route.request().url().includes('balances')) return route.continue()
+    if (!route.request().url().includes('groups.get')) return route.continue()
     await new Promise((resolve) => setTimeout(resolve, 2_000))
     await route.continue()
   })
 
-  await page.goto(`/groups/${groupId}/balances`)
+  await page.goto(`/groups/${groupId}/information`)
   await expect(page.getByRole('status').getByText('Loading…')).toBeVisible()
-  await expect(page.getByTestId('balance-row').first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Information' })).toBeVisible()
 })
 
 test('back never returns to a form that was already submitted', async ({
