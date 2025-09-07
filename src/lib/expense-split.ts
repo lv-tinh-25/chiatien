@@ -108,3 +108,7 @@ export function restoreShares<T extends PaidForRow>(
     restored: true,
   }
 }
+
+export function totalShares(paidFor: PaidForRow[]): number {
+  return paidFor.reduce((sum, row) => sum + (Number(row.shares) || 0), 0)
+}

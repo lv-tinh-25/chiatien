@@ -4,6 +4,7 @@ import {
   rememberShares,
   restoreShares,
   seedSharesForMode,
+  totalShares,
 } from '@/lib/expense-split'
 
 const USD: Currency = {
@@ -177,5 +178,20 @@ describe('restoreShares', () => {
     })
     expect(result.rows.map((row) => row.shares)).toEqual(['34', '33', '33'])
     expect(result.restored).toBe(false)
+  })
+})
+
+describe('totalShares', () => {
+  it('adds the shares up', () => {
+    expect(
+      totalShares([
+        { participant: 'a', shares: '2' },
+        { participant: 'b', shares: '1' },
+      ]),
+    ).toBe(3)
+  })
+
+  it('reads a half-typed field as nothing rather than NaN', () => {
+    expect(totalShares([{ participant: 'a', shares: '' }])).toBe(0)
   })
 })

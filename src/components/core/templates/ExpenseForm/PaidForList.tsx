@@ -8,6 +8,7 @@ import type { SplitMode } from '@/generated/prisma/browser'
 import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
+import { totalShares } from '@/lib/expense-split'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { distributeAmount } from '@/lib/shares'
 import { amountAsMinorUnits, formatCurrency } from '@/lib/utils'
@@ -201,7 +202,11 @@ export function PaidForList({
 
       <div className="flex items-center justify-between gap-3 text-body-sm font-semibold text-muted-foreground">
         <span>
-          {t(`splitHint.${HINT_KEYS[splitMode]}`, { count: paidFor.length })}
+          {t(`splitHint.${HINT_KEYS[splitMode]}`, {
+            // "Tổng {count} phần" counts shares; every other hint counts people.
+            count:
+              splitMode === 'BY_SHARES' ? totalShares(paidFor) : paidFor.length,
+          })}
         </span>
         <span className="text-numeric-table-md text-credit tabular">
           {formatCurrency(currency, Math.abs(total), locale)}
