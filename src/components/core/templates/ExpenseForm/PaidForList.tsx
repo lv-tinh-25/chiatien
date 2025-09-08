@@ -191,6 +191,7 @@ export function PaidForList({
               checked={row !== undefined}
               splitMode={splitMode}
               currency={currency}
+              locale={locale}
               shares={String(row?.shares ?? '')}
               shareDisplay={shareDisplay(participant.id)}
               onToggle={(checked) => toggle(participant.id, checked)}

@@ -1,16 +1,17 @@
 'use client'
 
 import { Button } from '@/components/core/atoms/Button'
+import { AmountInput } from '@/components/core/molecules/AmountInput'
+import { FormField } from '@/components/core/molecules/FormField'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { ConversionRateNotice } from '@/lib/conversion-rate-notice'
 import type { Currency } from '@/lib/currency'
-import { enforceCurrencyPattern } from '@/lib/currency-input'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { RefreshCw } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { useWatch, type UseFormReturn } from 'react-hook-form'
+import { useLocale, useTranslations } from 'next-intl'
+import { Controller, useWatch, type UseFormReturn } from 'react-hook-form'
 
 type Props = {
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>
@@ -36,17 +37,17 @@ export function ExpenseCurrencyBlock({
   const t = useTranslations('ExpenseForm')
   const tRate = useTranslations('ExpenseForm.conversionRateState')
   const errors = useFormErrors(form.control)
+  const locale = useLocale()
   const isReimbursement = useWatch({
     control: form.control,
     name: 'isReimbursement',
   })
-  const originalAmount = form.register('originalAmount')
 
   if (!conversionRequired) return null
 
   return (
     <div className="flex flex-col gap-4">
-      <FormInput
+      <FormField
         label={
           isReimbursement
             ? t('originalAmountField.repaymentLabel')
@@ -57,18 +58,32 @@ export function ExpenseCurrencyBlock({
             ? t('originalAmountField.repaymentDescription')
             : undefined
         }
-        inputMode="decimal"
-        placeholder={originalCurrency.symbol_native}
-        // On a repayment this field is derived from the balance being settled,
-        // so typing into it would be overwritten on the next render.
-        readOnly={Boolean(isReimbursement)}
         errorKey={errors.originalAmount?.message}
-        {...originalAmount}
-        onChange={(event) => {
-          event.target.value = enforceCurrencyPattern(event.target.value)
-          void originalAmount.onChange(event)
-        }}
-      />
+      >
+        {({ id, describedBy }) => (
+          <Controller
+            control={form.control}
+            name="originalAmount"
+            render={({ field }) => (
+              <AmountInput
+                id={id}
+                aria-describedby={describedBy}
+                placeholder={originalCurrency.symbol_native}
+                // On a repayment this field is derived from the balance being
+                // settled, so typing into it would be overwritten on the next
+                // render.
+                readOnly={Boolean(isReimbursement)}
+                locale={locale}
+                name={field.name}
+                ref={field.ref}
+                value={field.value}
+                onBlur={field.onBlur}
+                onValueChange={field.onChange}
+              />
+            )}
+          />
+        )}
+      </FormField>
 
       <p className="flex flex-wrap items-center gap-x-2 text-body-sm text-muted-foreground">
         <span>
