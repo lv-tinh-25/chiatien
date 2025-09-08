@@ -127,3 +127,27 @@ test('asks before deleting and cannot be confirmed twice', async ({ page }) => {
   await expect(page.getByTestId('expense-card')).toHaveCount(0)
   expect(deletes).toBe(1)
 })
+
+test('says so when the expense behind a link is gone', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Gone ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  const problems: string[] = []
+  page.on('console', (message) => {
+    if (message.type() === 'error') problems.push(message.text())
+  })
+  page.on('pageerror', (error) => problems.push(String(error.message)))
+
+  // The shape of a bookmark, a shared link, or the back button outliving the
+  // expense it points at.
+  await page.goto(`/groups/${groupId}/expenses/deadid00000000000000/edit`)
+
+  await expect(page.getByText('This expense is no longer here')).toBeVisible()
+  await page.getByRole('link', { name: 'Back to expenses' }).click()
+  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+
+  // A missing record used to be reported twice, because the query retried it.
+  expect(problems).toEqual([])
+})

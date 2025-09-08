@@ -158,7 +158,10 @@
       "byShares": "Tổng {count} phần",
       "byPercentage": "Tổng phải đủ 100%",
       "byAmount": "Tổng phải khớp số tiền"
-    }
+    },
+    "notFoundTitle": "Khoản chi này không còn nữa",
+    "notFoundDescription": "Nó đã bị xoá, hoặc đường link trỏ tới một khoản chi chưa từng có.",
+    "notFoundAction": "Về danh sách chi tiêu"
   },
   "ExpenseDocumentsInput": {
     "add": "Đính kèm chứng từ",
