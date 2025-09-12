@@ -45,12 +45,10 @@ export const useToastStore = create<ToastState>()((set) => ({
   toasts: [],
   show: (toast) =>
     set((state) => ({
-      // Newest first. The viewport hangs from the top edge, so a new toast
-      // arrives where the eye already is and pushes the older ones down.
-      toasts: [{ ...toast, id: nanoid() }, ...state.toasts].slice(
-        0,
-        MAX_VISIBLE,
-      ),
+      // Oldest first, so reading order and focus order both run top to bottom.
+      // The viewport is anchored to the bottom edge, which puts the newest
+      // toast nearest it and lifts the older ones out of the way.
+      toasts: [...state.toasts, { ...toast, id: nanoid() }].slice(-MAX_VISIBLE),
     })),
   dismiss: (id) =>
     set((state) => ({

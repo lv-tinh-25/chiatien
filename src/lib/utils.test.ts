@@ -97,4 +97,8 @@ describe('cn', () => {
       'size-7 min-h-0',
     )
   })
+
+  it('lets a later offset replace a fab-safe one', () => {
+    expect(cn('bottom-fab-safe', 'bottom-4')).toBe('bottom-4')
+  })
 })

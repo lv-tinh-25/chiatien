@@ -13,16 +13,15 @@ export function ToastViewport() {
       {toasts.map(({ id, ...toast }) => (
         <ToastCard key={id} {...toast} onDismiss={() => dismiss(id)} />
       ))}
-      {/* Hangs below whichever top bar is on screen — 56px on a phone, 60px on
-          a desktop — so a report never covers the title of what it reports on.
+      {/* Above the FAB, which already sits above the bottom nav — on a phone
+          the card spans the width, so the lowest floating thing on screen sets
+          the floor for all of it, not just its right end.
 
-          Above z-50, which every scrim in the app shares: creating a group
+          z-60 outranks the z-50 every scrim in the app shares: creating a group
           opens ActiveUserPrompt over the toast that confirms it, and on the
-          same layer the later portal wins and swallows both the message and
-          its close button.
-
-          The second half of that problem is solved on the card itself. */}
-      <ToastPrimitive.Viewport className="fixed inset-x-4 top-16 z-60 flex flex-col gap-2.5 lg:top-17 lg:right-4 lg:left-auto lg:w-96" />
+          same layer the later portal wins and swallows the message whole. The
+          other half of that problem is solved on the card itself. */}
+      <ToastPrimitive.Viewport className="fixed inset-x-4 bottom-fab-safe z-60 flex flex-col gap-2.5 lg:right-4 lg:bottom-4 lg:left-auto lg:w-96" />
     </ToastPrimitive.Provider>
   )
 }
