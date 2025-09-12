@@ -48,6 +48,7 @@ export function useReceiptExtract() {
           maxSize: formatFileSize(MAX_FILE_SIZE, locale),
           size: formatFileSize(file.size, locale),
         }),
+        variant: 'warning',
       })
       return
     }
@@ -69,6 +70,7 @@ export function useReceiptExtract() {
           altLabel: t('ErrorToast.retry'),
           onAction: () => void pick(file),
         },
+        variant: 'error',
       })
     } finally {
       setIsScanning(false)

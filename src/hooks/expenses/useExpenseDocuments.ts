@@ -35,6 +35,7 @@ export function useExpenseDocuments(
           maxSize: formatFileSize(MAX_FILE_SIZE, locale),
           size: formatFileSize(file.size, locale),
         }),
+        variant: 'warning',
       })
       return
     }
@@ -60,6 +61,7 @@ export function useExpenseDocuments(
           altLabel: t('ErrorToast.retry'),
           onAction: () => void attach(file),
         },
+        variant: 'error',
       })
     } finally {
       setIsUploading(false)

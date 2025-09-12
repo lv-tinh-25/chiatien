@@ -7,6 +7,7 @@ import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
 import { useToastStore } from '@/stores/useToastStore'
 import { trpc } from '@/trpc/client'
+import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 
@@ -130,6 +131,7 @@ export function useGroupList() {
           altLabel: t('undoAlt'),
           onAction: () => visit(group),
         },
+        icon: Trash2,
       })
     },
     visit,
