@@ -61,7 +61,7 @@ export function ToastViewport() {
               if (!open) dismiss(toast.id)
             }}
             className={cn(
-              'glass-float rise-in relative flex items-start gap-3 overflow-hidden rounded-card py-3 pr-2 pl-4',
+              'glass-float rise-in relative flex items-start gap-2 overflow-hidden rounded-card p-3.5 pl-4',
               'transition-[opacity,transform] duration-200 ease-out-soft',
               'data-[state=closed]:opacity-0',
               'data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none',
@@ -73,39 +73,41 @@ export function ToastViewport() {
               className={cn('absolute inset-y-0 left-0 w-1', rail)}
             />
 
-            <span
-              aria-hidden
-              className={cn(
-                'flex size-7 shrink-0 items-center justify-center rounded-full',
-                mark,
-              )}
-            >
-              <Icon className="size-4" strokeWidth={2.75} />
-            </span>
+            {/* The mark shares a row with the title so the two read as one
+                line, and the close button matches their height rather than a
+                phone's 48px target: on the web a control needs 24px, and a
+                taller one here would sit below the line it belongs to.
+                Everything else stacks beneath at full width, where a
+                description has room for more than three words to a line. */}
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <div className="flex items-center gap-2.5">
+                <span
+                  aria-hidden
+                  className={cn(
+                    'flex size-7 shrink-0 items-center justify-center rounded-full',
+                    mark,
+                  )}
+                >
+                  <Icon className="size-4" strokeWidth={2.75} />
+                </span>
+                <ToastPrimitive.Title className="min-w-0 flex-1 text-body-lg font-bold text-foreground">
+                  {toast.title}
+                </ToastPrimitive.Title>
+              </div>
 
-            {/* The action sits under the sentence rather than beside it: on a
-                phone-width card the two together leave the description three
-                words to a line. */}
-            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <ToastPrimitive.Title className="text-body-lg font-bold text-foreground">
-                {toast.title}
-              </ToastPrimitive.Title>
               {toast.description !== undefined && (
                 <ToastPrimitive.Description className="text-body-sm text-muted-foreground">
                   {toast.description}
                 </ToastPrimitive.Description>
               )}
+
               {toast.action !== undefined && (
                 <ToastPrimitive.Action
                   altText={toast.action.altLabel}
                   onClick={toast.action.onAction}
                   asChild
                 >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-1.5 self-start"
-                  >
+                  <Button variant="outline" size="sm" className="self-start">
                     {toast.action.label}
                   </Button>
                 </ToastPrimitive.Action>
@@ -117,7 +119,7 @@ export function ToastViewport() {
                 variant="ghost"
                 size="icon"
                 aria-label={t('dismiss')}
-                className="shrink-0 text-muted-foreground hover:text-foreground"
+                className="size-7 min-h-0 shrink-0 rounded-full px-0 text-muted-foreground hover:text-foreground"
               >
                 <X aria-hidden className="size-4" />
               </Button>

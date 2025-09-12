@@ -12,6 +12,14 @@ import { Currency, getCurrency } from './currency'
  */
 const twMerge = extendTailwindMerge({
   extend: {
+    // The same blind spot on the spacing side: `w-touch-min` is not a width
+    // tailwind-merge knows, so a later `size-7` did not replace it and the
+    // browser fell back to source order — a toast's close button stayed 48px
+    // however it was overridden. Naming the scale makes an override an
+    // override again.
+    theme: {
+      spacing: ['touch-min', 'thumb-safe'],
+    },
     classGroups: {
       'font-size': [
         {
