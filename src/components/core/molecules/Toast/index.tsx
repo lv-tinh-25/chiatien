@@ -13,15 +13,17 @@ export function ToastViewport() {
       {toasts.map(({ id, ...toast }) => (
         <ToastCard key={id} {...toast} onDismiss={() => dismiss(id)} />
       ))}
-      {/* Above the FAB, which already sits above the bottom nav — on a phone
-          the card spans the width, so the lowest floating thing on screen sets
-          the floor for all of it, not just its right end.
+      {/* Two corners, because the two screens have different empty space. A
+          phone's bottom edge belongs to the nav and the FAB, so a full-width
+          card there would have to sit above both and end up mid-screen; the
+          top, under the bar, is the one place nothing else floats. A desktop
+          has the whole bottom-right corner free.
 
           z-60 outranks the z-50 every scrim in the app shares: creating a group
           opens ActiveUserPrompt over the toast that confirms it, and on the
           same layer the later portal wins and swallows the message whole. The
           other half of that problem is solved on the card itself. */}
-      <ToastPrimitive.Viewport className="fixed inset-x-4 bottom-fab-safe z-60 flex flex-col gap-2.5 lg:right-4 lg:bottom-4 lg:left-auto lg:w-96" />
+      <ToastPrimitive.Viewport className="fixed inset-x-4 top-16 z-60 flex flex-col gap-2.5 lg:top-auto lg:right-4 lg:bottom-4 lg:left-auto lg:w-96" />
     </ToastPrimitive.Provider>
   )
 }

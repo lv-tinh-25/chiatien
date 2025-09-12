@@ -128,7 +128,8 @@ export function ToastCard({
         if (!open) onDismiss?.()
       }}
       className={cn(
-        'glass-toast rise-in relative flex w-full gap-3 overflow-hidden rounded-card p-3 pr-2',
+        // Each corner's card arrives from the edge it will rest against.
+        'glass-toast drop-in lg:rise-in relative flex w-full gap-3 overflow-hidden rounded-card p-3 pr-2',
         // Radix ranks every dismissable layer and writes `pointer-events: none`
         // inline on the ones a modal covers — which is the toast, always. For
         // anything else that is right; for the layer whose whole job is to

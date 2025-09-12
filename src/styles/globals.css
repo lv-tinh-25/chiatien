@@ -190,10 +190,6 @@
   --radius-sheet: 1.5rem;
 
   --spacing-thumb-safe: 6.5rem;
-  /* Clear of the FAB, which is the lowest-hanging thing on a phone: it sits at
-     5.75rem and stands 3.625rem tall, so anything below 9.375rem lands under
-     it — including a toast's close button. */
-  --spacing-fab-safe: 10rem;
   --spacing-touch-min: 3rem;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -418,6 +414,11 @@
   animation: rise-in 260ms var(--ease-out-soft) both;
 }
 
+/* Its mirror, for a surface that enters from above. */
+@utility drop-in {
+  animation: drop-in 300ms var(--ease-out-soft) both;
+}
+
 /* The delays are written out per child rather than driven by an inline custom
    property, so no component has to reach for a style prop to animate a list. */
 @utility stagger-children {
@@ -454,6 +455,17 @@
   from {
     opacity: 0;
     transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0) scale(0.96);
   }
   to {
     opacity: 1;

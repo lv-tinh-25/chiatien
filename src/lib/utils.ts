@@ -18,7 +18,7 @@ const twMerge = extendTailwindMerge({
     // however it was overridden. Naming the scale makes an override an
     // override again.
     theme: {
-      spacing: ['touch-min', 'thumb-safe', 'fab-safe'],
+      spacing: ['touch-min', 'thumb-safe'],
     },
     classGroups: {
       'font-size': [
