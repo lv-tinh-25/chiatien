@@ -51,11 +51,14 @@ export function MobileTopBar({
 
         <div className="flex-1" />
 
-        <nav aria-label={t('mainSections')} className="flex shrink-0">
+        <nav
+          aria-label={t('mainSections')}
+          className="flex shrink-0 items-center"
+        >
           {chrome.groupId !== null && shellTitle.showGroupMenu && (
             <GroupOverflowMenu groupId={chrome.groupId} variant="sheet" />
           )}
-          <LanguageSwitch className="ml-1" />
+          <LanguageSwitch variant="single" className="ml-1" />
         </nav>
       </div>
     </div>

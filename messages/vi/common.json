@@ -54,6 +54,7 @@
     "groupSettingsTitle": "Cài đặt nhóm",
     "back": "Quay lại",
     "breadcrumb": "Đường dẫn",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "switchLanguage": "Chuyển sang {language}"
   }
 }

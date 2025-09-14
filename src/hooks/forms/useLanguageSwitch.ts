@@ -17,6 +17,9 @@ type LanguageSwitch = {
   options: LanguageOption[]
   /** Where the marker belongs, so the caller does not re-derive it. */
   selectedIndex: number
+  /** What is being read now, and what one press would give instead. */
+  shown: Locale
+  target: LanguageOption
   pending: boolean
   select: (locale: Locale) => void
 }
@@ -41,13 +44,19 @@ export function useLanguageSwitch(): LanguageSwitch {
   const [pending, startSwitching] = useTransition()
   const [shown, showImmediately] = useOptimistic(current)
 
+  const options = locales.map((locale) => ({
+    locale,
+    label: localeLabels[locale],
+    selected: locale === shown,
+  }))
+
   return {
-    options: locales.map((locale) => ({
-      locale,
-      label: localeLabels[locale],
-      selected: locale === shown,
-    })),
+    options,
     selectedIndex: locales.indexOf(shown),
+    shown,
+    // With two locales the next one is simply the other; a third would make
+    // this a wrap-around, which is the moment to go back to a list.
+    target: options.find((option) => !option.selected) ?? options[0],
     pending,
     select: (locale) => {
       // Deliberately not blocked while one is in flight: a press that lands

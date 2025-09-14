@@ -54,6 +54,7 @@
     "groupSettingsTitle": "Group settings",
     "back": "Back",
     "breadcrumb": "Breadcrumb",
-    "language": "Language"
+    "language": "Language",
+    "switchLanguage": "Switch to {language}"
   }
 }

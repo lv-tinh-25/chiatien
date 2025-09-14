@@ -70,6 +70,9 @@ test('the language switcher is reachable from inside a group on a phone', async 
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/groups/seeded/expenses')
-  // Alongside the group menu, not buried inside it.
-  await expect(page.getByRole('radiogroup', { name: 'Language' })).toBeVisible()
+  // Alongside the group menu, not buried inside it. A phone header has no room
+  // to lay both languages out, so there it is one flag and a press.
+  await expect(
+    page.getByRole('button', { name: 'Switch to Tiếng Việt' }),
+  ).toBeVisible()
 })

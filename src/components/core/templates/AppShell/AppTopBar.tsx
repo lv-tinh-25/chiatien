@@ -46,7 +46,7 @@ export function AppTopBar({ chrome }: { chrome: GroupChrome }) {
         {chrome.groupId !== null && (
           <GroupOverflowMenu groupId={chrome.groupId} variant="menu" />
         )}
-        <LanguageSwitch />
+        <LanguageSwitch variant="pair" />
       </nav>
     </header>
   )
