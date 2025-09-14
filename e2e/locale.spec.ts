@@ -42,15 +42,13 @@ test('honours an English browser', async ({ browser }) => {
 
 test('remembers the language picked in the header', async ({ page }) => {
   await page.goto('/groups')
-  await page.getByRole('button', { name: 'Switch to Tiếng Việt' }).click()
+  await page.getByRole('radio', { name: 'Tiếng Việt' }).click()
 
   // The page it is on answers in the new language, and so does the next one.
   await expect(
     page.getByRole('heading', { name: 'Nhóm của bạn' }),
   ).toBeVisible()
-  await expect(
-    page.getByRole('button', { name: 'Chuyển sang English' }),
-  ).toBeVisible()
+  await expect(page.getByRole('radio', { name: 'Tiếng Việt' })).toBeChecked()
 
   await page.goto('/groups/seeded/expenses')
   await expect(page.getByRole('link', { name: 'Số dư' })).toBeVisible()

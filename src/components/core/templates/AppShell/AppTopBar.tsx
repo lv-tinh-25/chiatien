@@ -2,7 +2,7 @@
 
 import { BrandMark } from '@/components/core/templates/AppShell/BrandMark'
 import { GroupOverflowMenu } from '@/components/core/templates/AppShell/GroupOverflowMenu'
-import { LanguageToggle } from '@/components/core/templates/AppShell/LanguageToggle'
+import { LanguageSwitch } from '@/components/core/templates/AppShell/LanguageSwitch'
 import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -46,7 +46,7 @@ export function AppTopBar({ chrome }: { chrome: GroupChrome }) {
         {chrome.groupId !== null && (
           <GroupOverflowMenu groupId={chrome.groupId} variant="menu" />
         )}
-        <LanguageToggle className="min-h-9.5 w-9.5" />
+        <LanguageSwitch />
       </nav>
     </header>
   )

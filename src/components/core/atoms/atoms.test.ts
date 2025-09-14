@@ -14,7 +14,20 @@ describe('atom styling', () => {
     expect(files.length).toBeGreaterThan(0)
   })
 
-  it.each(files)('%s uses no hardcoded colour', (file) => {
+  /**
+   * The rule exists so a theme change reaches every surface. A national flag is
+   * not a surface this theme owns — its colours are set by the country's own
+   * law, and a flag that followed the palette would be the wrong flag. So the
+   * one atom that draws flags is exempt from the colour check, and from that
+   * check only.
+   */
+  const themed = files.filter((file) => !file.includes('/Flag/'))
+
+  it('exempts exactly one atom from the colour rule', () => {
+    expect(files.length - themed.length).toBe(1)
+  })
+
+  it.each(themed)('%s uses no hardcoded colour', (file) => {
     const source = readFileSync(file, 'utf8')
     expect(source).not.toMatch(/#[0-9a-fA-F]{3,8}\b/)
     expect(source).not.toMatch(/\brgba?\(/)
