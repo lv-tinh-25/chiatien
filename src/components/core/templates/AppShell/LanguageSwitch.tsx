@@ -6,14 +6,17 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 /**
- * Selection is carried by a ring and a lifted surface as well as by colour: the
- * unselected flag is drained rather than merely dimmed, so the difference
- * survives both a greyscale screenshot and a viewer who cannot separate the
- * two palettes.
+ * One marker that slides rather than two backgrounds that swap: the movement is
+ * what tells the eye the choice was received, and a transform re-aims itself
+ * mid-flight, so pressing back and forth quickly leaves the marker wherever the
+ * last press put it without any of it depending on the transition finishing.
+ *
+ * Nothing dims while the switch is in flight. The wait is too short for a
+ * loading state to be anything but a flash, and the marker has already moved.
  */
 export function LanguageSwitch({ className }: { className?: string }) {
   const t = useTranslations('Nav')
-  const { options, pending, select } = useLanguageSwitch()
+  const { options, selectedIndex, pending, select } = useLanguageSwitch()
 
   return (
     <div
@@ -21,11 +24,20 @@ export function LanguageSwitch({ className }: { className?: string }) {
       aria-label={t('language')}
       aria-busy={pending || undefined}
       className={cn(
-        'flex items-center gap-0.5 rounded-full bg-muted/70 p-0.5',
-        pending && 'pointer-events-none opacity-60',
+        'relative flex items-center gap-0.5 rounded-full bg-muted/70 p-0.5',
+        'aria-busy:settling',
         className,
       )}
     >
+      <span
+        aria-hidden
+        className={cn(
+          'absolute top-0.5 left-0.5 size-9 rounded-full bg-card shadow-segment lg:size-8',
+          'transition-transform duration-200 ease-out-soft',
+          selectedIndex === 1 && 'translate-x-[calc(100%+0.125rem)]',
+        )}
+      />
+
       {options.map(({ locale, label, selected }) => (
         <button
           key={locale}
@@ -35,18 +47,16 @@ export function LanguageSwitch({ className }: { className?: string }) {
           aria-label={label}
           onClick={() => select(locale)}
           className={cn(
-            'flex size-9 cursor-pointer items-center justify-center rounded-full lg:size-8',
-            'transition-[background-color,box-shadow,transform] duration-150 ease-out-soft',
+            'relative flex size-9 cursor-pointer items-center justify-center rounded-full lg:size-8',
             'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-            selected
-              ? 'bg-card shadow-segment'
-              : 'hover:bg-card/60 active:scale-95',
+            'active:scale-95 active:duration-75',
+            'transition-transform duration-150 ease-out-soft',
           )}
         >
           <Flag
             locale={locale}
             className={cn(
-              'size-5 transition-[filter,opacity] duration-150 ease-out-soft lg:size-4.5',
+              'size-5 transition-[filter,opacity] duration-200 ease-out-soft lg:size-4.5',
               selected ? 'ring-1 ring-border/60' : 'opacity-55 grayscale',
             )}
           />

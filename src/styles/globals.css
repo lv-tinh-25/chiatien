@@ -419,6 +419,15 @@
   animation: drop-in 300ms var(--ease-out-soft) both;
 }
 
+/* A wait that only shows itself once it has become a wait. The delay is the
+   whole point: switching language answers in about a fifth of a second on a
+   local connection and near five seconds on a bad one, and an indicator that
+   fires on both is a flash in the first case and the only explanation in the
+   second. */
+@utility settling {
+  animation: settling 1.3s var(--ease-out-soft) 450ms infinite;
+}
+
 /* The delays are written out per child rather than driven by an inline custom
    property, so no component has to reach for a style prop to animate a list. */
 @utility stagger-children {
@@ -459,6 +468,16 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes settling {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--ring) / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.18);
   }
 }
 

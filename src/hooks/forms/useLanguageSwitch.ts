@@ -4,7 +4,7 @@ import { asLocale, localeLabels, locales, type Locale } from '@/i18n/locales'
 import { setUserLocale } from '@/lib/locale'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { useOptimistic, useTransition } from 'react'
 
 type LanguageOption = {
   locale: Locale
@@ -15,6 +15,8 @@ type LanguageOption = {
 
 type LanguageSwitch = {
   options: LanguageOption[]
+  /** Where the marker belongs, so the caller does not re-derive it. */
+  selectedIndex: number
   pending: boolean
   select: (locale: Locale) => void
 }
@@ -25,31 +27,38 @@ type LanguageSwitch = {
  * you would get, and with the choice laid out the selected state answers that
  * without a word.
  *
- * The locale lives in a cookie the server reads, so nothing changes on screen
- * until the route re-renders — hence the pending flag, and hence no toast: the
- * whole interface answering in another language is the confirmation.
+ * Selection moves on the press, not on the response. Writing the cookie and
+ * re-rendering the server components takes a couple of hundred milliseconds,
+ * and a control that sits still for that long reads as broken — so the choice
+ * is shown optimistically and React reconciles it when the route catches up.
+ *
+ * No toast either way: the whole interface answering in another language is
+ * the confirmation.
  */
 export function useLanguageSwitch(): LanguageSwitch {
   const current = asLocale(useLocale())
   const router = useRouter()
-  const [isRefreshing, startRefresh] = useTransition()
-  const [isSaving, setIsSaving] = useState(false)
-
-  const pending = isSaving || isRefreshing
+  const [pending, startSwitching] = useTransition()
+  const [shown, showImmediately] = useOptimistic(current)
 
   return {
     options: locales.map((locale) => ({
       locale,
       label: localeLabels[locale],
-      selected: locale === current,
+      selected: locale === shown,
     })),
+    selectedIndex: locales.indexOf(shown),
     pending,
     select: (locale) => {
-      if (pending || locale === current) return
-      setIsSaving(true)
-      void setUserLocale(locale)
-        .then(() => startRefresh(() => router.refresh()))
-        .finally(() => setIsSaving(false))
+      // Deliberately not blocked while one is in flight: a press that lands
+      // during the wait re-aims the marker and wins, rather than being dropped
+      // by the control the user is pressing precisely because it looks slow.
+      if (locale === shown) return
+      startSwitching(async () => {
+        showImmediately(locale)
+        await setUserLocale(locale)
+        router.refresh()
+      })
     },
   }
 }
