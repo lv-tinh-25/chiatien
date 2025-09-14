@@ -14,7 +14,6 @@ import {
   Info,
   Link2,
   MoreHorizontal,
-  Settings,
   Settings2,
   Star,
   Trash2,
@@ -83,13 +82,6 @@ function Items({
         <FileJson aria-hidden />
         {tExpenses('exportJson')}
       </a>
-      {/* Inside a group the shell shows no settings button of its own, so this
-          is the only way to the language switcher on a phone. */}
-      <Link href="/settings" className={ROW} onClick={onNavigate}>
-        <Settings aria-hidden />
-        {t('settings')}
-      </Link>
-
       {membership.remembered && (
         <>
           <hr className="my-1.5 border-border/60" />

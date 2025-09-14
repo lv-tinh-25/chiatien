@@ -1,10 +1,9 @@
 'use client'
 
-import { Button } from '@/components/core/atoms/Button'
 import { BrandMark } from '@/components/core/templates/AppShell/BrandMark'
 import { GroupOverflowMenu } from '@/components/core/templates/AppShell/GroupOverflowMenu'
+import { LanguageToggle } from '@/components/core/templates/AppShell/LanguageToggle'
 import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
-import { Settings } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
@@ -47,16 +46,7 @@ export function AppTopBar({ chrome }: { chrome: GroupChrome }) {
         {chrome.groupId !== null && (
           <GroupOverflowMenu groupId={chrome.groupId} variant="menu" />
         )}
-        <Button
-          variant="outline"
-          size="icon"
-          className="min-h-9.5 w-9.5"
-          asChild
-        >
-          <Link href="/settings" aria-label={t('settings')}>
-            <Settings aria-hidden />
-          </Link>
-        </Button>
+        <LanguageToggle className="min-h-9.5 w-9.5" />
       </nav>
     </header>
   )

@@ -4,11 +4,6 @@
     "description": "Split expenses with friends and family. No ads, no account needed.",
     "loading": "Loading…"
   },
-  "Settings": {
-    "title": "Settings",
-    "about": "ChiaTien · a self-hosted web app, no account needed. Calculations are based on Spliit (MIT licence).",
-    "language": "Language"
-  },
   "Toast": {
     "dismiss": "Dismiss",
     "expenseCreated": "Expense created",
@@ -44,7 +39,6 @@
     "stats": "Stats",
     "activity": "Activity",
     "groups": "Groups",
-    "settings": "Settings",
     "more": "More",
     "groupSettings": "Group settings",
     "information": "Information",
@@ -59,6 +53,7 @@
     "memberCount": "{count} members",
     "groupSettingsTitle": "Group settings",
     "back": "Back",
-    "breadcrumb": "Breadcrumb"
+    "breadcrumb": "Breadcrumb",
+    "switchLanguage": "Switch to {language}"
   }
 }
