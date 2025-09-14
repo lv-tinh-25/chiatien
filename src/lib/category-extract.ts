@@ -6,10 +6,23 @@ import { formatCategoryForAIPrompt } from '@/lib/utils'
 import OpenAI from 'openai'
 import { z } from 'zod'
 
-const openai = new OpenAI({
-  apiKey: env.OPENAI_API_KEY,
-  baseURL: env.OPENAI_BASE_URL,
-})
+/**
+ * Built on first use, not on import. Next bundles every server action a route
+ * can reach into one chunk, so this module is evaluated whenever any action on
+ * a page that offers receipt scanning runs — including one that has nothing to
+ * do with it. The SDK throws from its constructor when no key is set, which
+ * turned an unrelated action into a 500 on a deployment that had simply left
+ * the feature off.
+ */
+let client: OpenAI | undefined
+
+function openai() {
+  client ??= new OpenAI({
+    apiKey: env.OPENAI_API_KEY,
+    baseURL: env.OPENAI_BASE_URL,
+  })
+  return client
+}
 
 /** Limit of characters to be evaluated. May help avoiding abuse when using AI. */
 const limit = 40 // ~10 tokens
@@ -34,7 +47,7 @@ export async function extractCategoryFromTitle(description: string) {
 
   const categories = await getCategories()
 
-  const completion = await openai.chat.completions.create({
+  const completion = await openai().chat.completions.create({
     model: env.OPENAI_MODEL_CATEGORY_EXTRACT,
     response_format: {
       type: 'json_schema',
