@@ -151,7 +151,7 @@ export function ToastCard({
           mark,
         )}
       >
-        <Glyph className="size-4.5" strokeWidth={2.5} />
+        <Glyph className="size-4.5" />
       </span>
 
       <div className="min-w-0 flex-1">
