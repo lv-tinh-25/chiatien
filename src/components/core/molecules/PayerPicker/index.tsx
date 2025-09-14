@@ -201,7 +201,7 @@ export function PayerPicker({
               <PopoverPrimitive.Content
                 align="start"
                 sideOffset={8}
-                className="glass-modal z-50 flex w-75 flex-col gap-2.5 rounded-card p-3"
+                className="solid-overlay z-50 flex w-75 flex-col gap-2.5 rounded-card p-3"
               >
                 <div className="flex items-center justify-between px-0.5">
                   <span className="text-body-md font-extrabold text-foreground">

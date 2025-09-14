@@ -52,7 +52,7 @@ export function ConfirmDialog({
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="glass-scrim fixed inset-0 z-50" />
-        <DialogPrimitive.Content className="glass-modal fixed top-1/2 left-1/2 z-50 w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-card p-5">
+        <DialogPrimitive.Content className="solid-overlay fixed top-1/2 left-1/2 z-50 w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-card p-5">
           <DialogPrimitive.Title className="text-headline-md text-foreground">
             {title}
           </DialogPrimitive.Title>

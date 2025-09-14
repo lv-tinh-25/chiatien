@@ -159,7 +159,7 @@ export function GroupOverflowMenu({
             <PopoverPrimitive.Content
               align="end"
               sideOffset={8}
-              className="glass-modal z-50 flex w-60 flex-col rounded-card p-1.5"
+              className="solid-overlay z-50 flex w-60 flex-col rounded-card p-1.5"
             >
               <Items
                 groupId={groupId}

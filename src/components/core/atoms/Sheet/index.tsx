@@ -20,7 +20,7 @@ export function SheetContent({
       <Drawer.Overlay className="glass-scrim fixed inset-0 z-50" />
       <Drawer.Content
         className={cn(
-          'glass-modal fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-sheet border-b-0 pb-[env(safe-area-inset-bottom)] outline-none',
+          'solid-overlay fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-sheet border-b-0 pb-[env(safe-area-inset-bottom)] outline-none',
           className,
         )}
         {...props}

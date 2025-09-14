@@ -63,7 +63,7 @@ export function Select({
         <SelectPrimitive.Content
           position="popper"
           sideOffset={4}
-          className="glass-modal z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] max-w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-control"
+          className="solid-overlay z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] max-w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-control"
         >
           <SelectPrimitive.Viewport className="p-1">
             {options.map((option) => (
