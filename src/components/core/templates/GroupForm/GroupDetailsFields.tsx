@@ -5,6 +5,7 @@ import { CurrencyChips } from '@/components/core/molecules/CurrencyChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { FormInput } from '@/components/core/molecules/FormInput'
 import { FormTextarea } from '@/components/core/molecules/FormTextarea'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import { asLocale } from '@/i18n/locales'
 import { currencyChoicesWith } from '@/lib/currency-choices'
 import type { GroupFormValues } from '@/lib/schemas'
@@ -23,7 +24,7 @@ export function GroupDetailsFields({
 }: GroupDetailsFieldsProps) {
   const t = useTranslations('GroupForm')
   const locale = asLocale(useLocale())
-  const { errors } = form.formState
+  const errors = useFormErrors(form.control)
   const currencyCode = useWatch({ control: form.control, name: 'currencyCode' })
 
   return (

@@ -37,17 +37,19 @@ export function ShareInput({
     .exhaustive()
 
   return (
-    <span className="flex items-center gap-1">
+    <span className="flex shrink-0 items-center gap-1.5">
       <Input
         aria-label={`${participantName} ${adornment}`.trim()}
         inputMode="decimal"
-        className="w-24 text-right"
+        className="w-20 text-right lg:w-24"
         value={value}
         onChange={(event) =>
           onChange(enforceCurrencyPattern(event.target.value))
         }
       />
-      <span className="w-10 shrink-0 text-body-sm text-muted-foreground">
+      {/* Sized by its own text, not a fixed box: a reserved width would either
+          clip "share(s)" or leave the field floating away from the row edge. */}
+      <span className="shrink-0 text-body-sm text-muted-foreground">
         {adornment}
       </span>
     </span>

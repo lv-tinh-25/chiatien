@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/core/atoms/Checkbox'
 import { SegmentedControl } from '@/components/core/molecules/SegmentedControl'
 import { PaidForRow } from '@/components/core/templates/ExpenseForm/PaidForRow'
 import type { SplitMode } from '@/generated/prisma/browser'
+import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
@@ -82,7 +83,7 @@ export function PaidForList({
     name: 'saveDefaultSplittingOptions',
   })
   const amount = useWatch({ control: form.control, name: 'amount' })
-  const errorKey = form.formState.errors.paidFor?.message
+  const errorKey = useFormErrors(form.control).paidFor?.message
 
   const rowFor = (participantId: string) =>
     paidFor.find((row) => row.participant === participantId)

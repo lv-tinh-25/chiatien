@@ -1,5 +1,5 @@
 import type { Currency } from '@/lib/currency'
-import { redistributeShares } from '@/lib/expense-split'
+import { redistributeShares, seedSharesForMode } from '@/lib/expense-split'
 
 const USD: Currency = {
   name: 'US dollar',
@@ -104,5 +104,29 @@ describe('redistributeShares', () => {
       USD,
     )
     expect(result.map((row) => row.shares)).toEqual(['0.00', '0.00'])
+  })
+})
+
+describe('seedSharesForMode', () => {
+  it('gives everyone one share', () => {
+    const result = seedSharesForMode('BY_SHARES', rows('a', 'b', 'c'))
+    expect(result.map((row) => row.shares)).toEqual(['1', '1', '1'])
+  })
+
+  it('spreads percentages so they add up to exactly 100', () => {
+    const result = seedSharesForMode('BY_PERCENTAGE', rows('a', 'b', 'c'))
+    expect(result.map((row) => row.shares)).toEqual(['34', '33', '33'])
+    expect(result.reduce((sum, row) => sum + Number(row.shares), 0)).toBe(100)
+  })
+
+  it('leaves the modes that derive their own shares alone', () => {
+    const paidFor = rows('a', 'b')
+    expect(seedSharesForMode('EVENLY', paidFor)).toBe(paidFor)
+    expect(seedSharesForMode('BY_AMOUNT', paidFor)).toBe(paidFor)
+  })
+
+  it('has nothing to seed when nobody is paid for', () => {
+    const paidFor = rows()
+    expect(seedSharesForMode('BY_SHARES', paidFor)).toBe(paidFor)
   })
 })

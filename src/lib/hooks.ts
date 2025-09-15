@@ -34,20 +34,23 @@ export function useBaseUrl(): string | null {
 
 // Parsed rather than asserted: the exchange-rate messages downstream turn on
 // `date` and on which codes `rates` holds, so a response that does not match
-// has to fail here rather than silently produce a wrong conversion.
-const frankfurterResponse = z.object({
+// has to fail here rather than silently produce a wrong conversion. The API
+// answers a rejected request with `success: false` and HTTP 400, so the literal
+// is what turns an error body into a thrown error.
+const fxRatesResponse = z.object({
+  success: z.literal(true),
   base: z.string(),
   date: z.string(),
   rates: z.record(z.string(), z.number()),
 })
 
-type FrankfurterAPIResponse = z.infer<typeof frankfurterResponse>
+type FxRatesAPIResponse = z.infer<typeof fxRatesResponse>
 
-const fetcher: Fetcher<FrankfurterAPIResponse> = (url: string) =>
+const fetcher: Fetcher<FxRatesAPIResponse> = (url: string) =>
   fetch(url).then(async (res) => {
     if (!res.ok)
       throw new TypeError('Unsuccessful response from API', { cause: res })
-    return frankfurterResponse.parse(await res.json())
+    return fxRatesResponse.parse(await res.json())
   })
 
 export function useCurrencyRate(
@@ -57,13 +60,21 @@ export function useCurrencyRate(
 ) {
   const dateString = dayjs(date).format('YYYY-MM-DD')
 
+  // `historical` refuses a date it does not have yet, and an expense dated
+  // tomorrow is ordinary. The latest rate is the closest answer there is, and
+  // the date it comes back with is what marks it as being for another day.
+  const path =
+    dateString > dayjs().format('YYYY-MM-DD')
+      ? 'latest?'
+      : `historical?date=${dateString}&`
+
   const url =
     !isNaN(date.getTime()) &&
     !!baseCurrency.length &&
     !!targetCurrency.length &&
     baseCurrency !== targetCurrency &&
-    `https://api.frankfurter.dev/v1/${dateString}?base=${baseCurrency}`
-  const { data, error, isLoading, mutate } = useSWR<FrankfurterAPIResponse>(
+    `https://api.fxratesapi.com/${path}base=${baseCurrency}&currencies=${targetCurrency}`
+  const { data, error, isLoading, mutate } = useSWR<FxRatesAPIResponse>(
     url,
     fetcher,
     { shouldRetryOnError: false, revalidateOnFocus: false },
@@ -72,12 +83,16 @@ export function useCurrencyRate(
   if (data) {
     let exchangeRate = undefined
     let sentError = error
-    if (!error && data.date !== dateString) {
-      // this happens if for example, the requested date is in the future.
-      sentError = new RangeError(data.date)
+    // The API dates its answer as a full timestamp; only the day is comparable.
+    const answeredFor = data.date.slice(0, 10)
+    if (!error && answeredFor !== dateString) {
+      sentError = new RangeError(answeredFor)
     }
     if (data.rates[targetCurrency]) {
-      exchangeRate = data.rates[targetCurrency]
+      // A dong rate arrives with twelve decimals of noise. Eight significant
+      // digits keeps a rate near 26,000 and one near 0.86 equally usable, both
+      // in the notice and in the field a custom rate is typed into.
+      exchangeRate = Number(data.rates[targetCurrency].toPrecision(8))
     }
     return {
       data: exchangeRate,

@@ -48,8 +48,11 @@ export function Select({
           className,
         )}
       >
-        <SelectPrimitive.Value placeholder={placeholder} />
-        <SelectPrimitive.Icon>
+        <SelectPrimitive.Value
+          placeholder={placeholder}
+          className="min-w-0 truncate text-left"
+        />
+        <SelectPrimitive.Icon className="shrink-0">
           <ChevronDown className="size-4 opacity-60" aria-hidden />
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
@@ -58,14 +61,14 @@ export function Select({
         <SelectPrimitive.Content
           position="popper"
           sideOffset={4}
-          className="glass-modal z-50 max-h-72 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-control"
+          className="glass-modal z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-control"
         >
           <SelectPrimitive.Viewport className="p-1">
             {options.map((option) => (
               <SelectPrimitive.Item
                 key={option.value}
                 value={option.value}
-                className="flex min-h-touch-min cursor-default items-center justify-between rounded-control px-3 text-body-lg text-foreground outline-none data-[highlighted]:bg-foreground/6"
+                className="flex min-h-touch-min cursor-default items-center justify-between gap-3 whitespace-nowrap rounded-control px-3 text-body-lg text-foreground outline-none data-[highlighted]:bg-foreground/6"
               >
                 <SelectPrimitive.ItemText>
                   {option.label}

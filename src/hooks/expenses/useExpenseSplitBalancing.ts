@@ -1,7 +1,7 @@
 'use client'
 
 import type { Currency } from '@/lib/currency'
-import { redistributeShares } from '@/lib/expense-split'
+import { redistributeShares, seedSharesForMode } from '@/lib/expense-split'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
@@ -31,14 +31,21 @@ export function useExpenseSplitBalancing(
   }, [])
 
   useEffect(() => {
-    if (
-      previous.current.splitMode !== splitMode ||
-      previous.current.amount !== amount
-    ) {
-      previous.current = { splitMode, amount }
-      setManuallyEdited(new Set())
+    const modeChanged = previous.current.splitMode !== splitMode
+    if (!modeChanged && previous.current.amount === amount) return
+    previous.current = { splitMode, amount }
+    setManuallyEdited(new Set())
+
+    // Only a mode the user switched to is re-seeded. The first run matches the
+    // mode the form opened on, so an expense being edited keeps its stored
+    // shares.
+    if (!modeChanged || splitMode === undefined) return
+    const paidFor = form.getValues('paidFor')
+    const seeded = seedSharesForMode(splitMode, paidFor)
+    if (seeded !== paidFor) {
+      form.setValue('paidFor', seeded, { shouldValidate: true })
     }
-  }, [splitMode, amount])
+  }, [splitMode, amount, form])
 
   useEffect(() => {
     if (splitMode !== 'BY_AMOUNT') return

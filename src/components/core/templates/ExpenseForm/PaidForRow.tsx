@@ -46,7 +46,7 @@ export function PaidForRow({
       data-id={participant.id}
       className="flex items-center justify-between gap-3 py-1.5"
     >
-      <label className="flex min-h-touch-min flex-1 items-center gap-3">
+      <label className="flex min-h-touch-min min-w-0 flex-1 items-center gap-3">
         <span
           className={cn(
             'min-w-0 flex-1 truncate text-body-lg font-semibold',
