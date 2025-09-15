@@ -5,6 +5,7 @@ import { EmptyState } from '@/components/core/molecules/EmptyState'
 import { SearchBar } from '@/components/core/molecules/SearchBar'
 import { CreateFromReceipt } from '@/components/core/templates/ExpenseList/CreateFromReceipt'
 import { ExpenseCard } from '@/components/core/templates/ExpenseList/ExpenseCard'
+import { ExpenseListSkeleton } from '@/components/core/templates/ExpenseList/Skeleton'
 import { useExpenseList } from '@/hooks/expenses/useExpenseList'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -60,9 +61,7 @@ export function ExpenseList({
           header shows it too; the empty-state spec looks for it here. */}
       <h2 className="sr-only">{group?.name ?? ''}</h2>
 
-      {isPending && (
-        <p className="text-body-md text-muted-foreground">{t('title')}…</p>
-      )}
+      {isPending && <ExpenseListSkeleton />}
 
       {isEmpty && (
         <EmptyState

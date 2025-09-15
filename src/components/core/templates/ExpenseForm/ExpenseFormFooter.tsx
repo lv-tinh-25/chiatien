@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 type Props = {
   isCreate: boolean
   isSubmitting: boolean
-  onDelete: () => void
+  onDelete: () => Promise<void>
 }
 
 export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
@@ -30,6 +30,7 @@ export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
               <Button
                 type="button"
                 variant="outline"
+                pending={isSubmitting}
                 className="w-full text-destructive"
               >
                 {t('DeletePopup.label')}
@@ -50,7 +51,7 @@ export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
       <Button
         type="submit"
         size="lg"
-        disabled={isSubmitting}
+        pending={isSubmitting}
         className="flex-2 shadow-action"
       >
         {label}

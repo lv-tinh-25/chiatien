@@ -89,3 +89,65 @@ test('deletes an expense and clears the balances', async ({ page }) => {
   await expectBalance(page, 'Carol', 0)
   await expect(page.getByText(/doesn.t need any reimbursement/)).toBeVisible()
 })
+
+test('asks before deleting and cannot be confirmed twice', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Delete Twice ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await addExpense(page, groupId, {
+    title: 'Taxi',
+    amount: '30',
+    paidBy: 'Alice',
+  })
+
+  await openExpense(page, 'Taxi')
+
+  // Held long enough that a second click is possible while the first is in
+  // flight, which is exactly what produced a 500 in the reported bug.
+  let deletes = 0
+  await page.route('**/api/trpc/**', async (route) => {
+    if (!route.request().url().includes('expenses.delete'))
+      return route.continue()
+    deletes += 1
+    await new Promise((resolve) => setTimeout(resolve, 1_500))
+    await route.continue()
+  })
+
+  await page.getByRole('button', { name: 'Delete', exact: true }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toBeVisible()
+
+  const confirm = dialog.getByRole('button', { name: 'Yes', exact: true })
+  await confirm.click()
+  await expect(confirm).toBeDisabled()
+
+  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+  await expect(page.getByTestId('expense-card')).toHaveCount(0)
+  expect(deletes).toBe(1)
+})
+
+test('says so when the expense behind a link is gone', async ({ page }) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Gone ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  const problems: string[] = []
+  page.on('console', (message) => {
+    if (message.type() === 'error') problems.push(message.text())
+  })
+  page.on('pageerror', (error) => problems.push(String(error.message)))
+
+  // The shape of a bookmark, a shared link, or the back button outliving the
+  // expense it points at.
+  await page.goto(`/groups/${groupId}/expenses/deadid00000000000000/edit`)
+
+  await expect(page.getByText('This expense is no longer here')).toBeVisible()
+  await page.getByRole('link', { name: 'Back to expenses' }).click()
+  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+
+  // A missing record used to be reported twice, because the query retried it.
+  expect(problems).toEqual([])
+})

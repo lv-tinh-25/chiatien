@@ -3,11 +3,11 @@
 import { Button } from '@/components/core/atoms/Button'
 import { BrandMark } from '@/components/core/templates/AppShell/BrandMark'
 import { GroupOverflowMenu } from '@/components/core/templates/AppShell/GroupOverflowMenu'
+import { LanguageSwitch } from '@/components/core/templates/AppShell/LanguageSwitch'
 import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
 import type { ShellTitle } from '@/hooks/groups/useShellTitle'
-import { ChevronLeft, Settings } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 export function MobileTopBar({
@@ -51,17 +51,14 @@ export function MobileTopBar({
 
         <div className="flex-1" />
 
-        <nav aria-label={t('mainSections')} className="flex shrink-0">
+        <nav
+          aria-label={t('mainSections')}
+          className="flex shrink-0 items-center"
+        >
           {chrome.groupId !== null && shellTitle.showGroupMenu && (
             <GroupOverflowMenu groupId={chrome.groupId} variant="sheet" />
           )}
-          {chrome.groupId === null && shellTitle.showSettings && (
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/settings" aria-label={t('settings')}>
-                <Settings aria-hidden />
-              </Link>
-            </Button>
-          )}
+          <LanguageSwitch variant="single" className="ml-1" />
         </nav>
       </div>
     </div>

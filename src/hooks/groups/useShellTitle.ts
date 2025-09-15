@@ -9,8 +9,6 @@ export type ShellTitle = {
   title: string | null
   subtitle: string | null
   showBack: boolean
-  /** False on the settings screen itself. */
-  showSettings: boolean
   /**
    * The design hangs the group menu off the section screens only: a form is a
    * task, and its header carries nothing but a way back out.
@@ -33,7 +31,6 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
     title: null,
     subtitle: null,
     showBack: false,
-    showSettings: true,
     showGroupMenu: false,
   }
 
@@ -44,14 +41,6 @@ export function useShellTitle(chrome: GroupChrome): ShellTitle {
       ...none,
       title: tGroupForm('createTitle'),
       showBack: true,
-      showSettings: false,
-    }
-  if (pathname === '/settings')
-    return {
-      ...none,
-      title: t('settings'),
-      showBack: true,
-      showSettings: false,
     }
 
   const section = pathname.match(/^\/groups\/[^/]+\/([^/]+)/)?.[1] ?? null

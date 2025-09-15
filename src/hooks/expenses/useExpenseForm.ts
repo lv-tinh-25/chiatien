@@ -2,6 +2,8 @@
 
 import { useExpenseCurrencyConversion } from '@/hooks/expenses/useExpenseCurrencyConversion'
 import { useExpenseSplitBalancing } from '@/hooks/expenses/useExpenseSplitBalancing'
+import { useLeaveForm } from '@/hooks/forms/useLeaveForm'
+import { useMutationFeedback } from '@/hooks/forms/useMutationFeedback'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import { defaultCategoryFor } from '@/lib/categories'
 import { getCurrency } from '@/lib/currency'
@@ -20,15 +22,17 @@ import { trpc } from '@/trpc/client'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useForm, useWatch } from 'react-hook-form'
 
 type Expense = AppRouterOutput['groups']['expenses']['get']['expense']
 
 export function useExpenseForm(expense?: Expense) {
   const t = useTranslations('ExpenseForm')
+  const tToast = useTranslations('Toast')
+  const { run } = useMutationFeedback()
+  const leaveForm = useLeaveForm()
   const { groupId, group, locale, currency, activeUserId } = useCurrentGroup()
-  const router = useRouter()
   const utils = trpc.useUtils()
   const searchParams = useSearchParams()
   const remember = useSplittingOptionsStore((state) => state.remember)
@@ -161,34 +165,52 @@ export function useExpenseForm(expense?: Expense) {
       conversion.conversionRequired,
     )
 
-    if (expense) {
-      await updateExpense.mutateAsync({
-        groupId,
-        expenseId: expense.id,
-        expenseFormValues: payload,
-        participantId: activeUserId ?? undefined,
-      })
-    } else {
-      await createExpense.mutateAsync({
-        groupId,
-        expenseFormValues: payload,
-        participantId: activeUserId ?? undefined,
-      })
-    }
+    const saved = await run(
+      async () => {
+        if (expense) {
+          await updateExpense.mutateAsync({
+            groupId,
+            expenseId: expense.id,
+            expenseFormValues: payload,
+            participantId: activeUserId ?? undefined,
+          })
+        } else {
+          await createExpense.mutateAsync({
+            groupId,
+            expenseFormValues: payload,
+            participantId: activeUserId ?? undefined,
+          })
+        }
+      },
+      {
+        success: tToast(expense ? 'expenseUpdated' : 'expenseCreated'),
+        failure: tToast('failed'),
+      },
+    )
+    if (!saved.ok) return
 
     await utils.groups.invalidate()
-    router.push(`/groups/${groupId}/expenses`)
+    leaveForm(`/groups/${groupId}/expenses`)
   })
 
   const remove = async () => {
-    if (!expense) return
-    await deleteExpense.mutateAsync({
-      groupId,
-      expenseId: expense.id,
-      participantId: activeUserId ?? undefined,
-    })
+    // The dialog disables its own button, but a stray second call would still
+    // ask the server to delete a row that is already gone.
+    if (!expense || deleteExpense.isPending) return
+    const deleted = await run(
+      async () => {
+        await deleteExpense.mutateAsync({
+          groupId,
+          expenseId: expense.id,
+          participantId: activeUserId ?? undefined,
+        })
+      },
+      { success: tToast('expenseDeleted'), failure: tToast('failed') },
+    )
+    if (!deleted.ok) return
+
     await utils.groups.invalidate()
-    router.push(`/groups/${groupId}/expenses`)
+    leaveForm(`/groups/${groupId}/expenses`)
   }
 
   return {

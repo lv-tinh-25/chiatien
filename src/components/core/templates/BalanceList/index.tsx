@@ -3,6 +3,7 @@
 import { Card } from '@/components/core/atoms/Card'
 import { BalanceRow } from '@/components/core/templates/BalanceList/BalanceRow'
 import { ReimbursementRow } from '@/components/core/templates/BalanceList/ReimbursementRow'
+import { BalanceListSkeleton } from '@/components/core/templates/BalanceList/Skeleton'
 import { useBalanceList } from '@/hooks/balances/useBalanceList'
 import { useTranslations } from 'next-intl'
 
@@ -20,7 +21,8 @@ export function BalanceList() {
     isSettled,
   } = useBalanceList()
 
-  if (isPending || !currency) return null
+  if (isPending) return <BalanceListSkeleton />
+  if (!currency) return null
 
   const scale = Math.max(
     0,

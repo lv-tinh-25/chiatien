@@ -2,6 +2,7 @@
 
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
 import { useToastStore } from '@/stores/useToastStore'
+import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -39,6 +40,7 @@ export function useGroupMembership(groupId: string) {
           altLabel: t('undoAlt'),
           onAction: () => visit(remembered),
         },
+        icon: Trash2,
       })
     },
   }

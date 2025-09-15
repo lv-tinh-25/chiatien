@@ -2,7 +2,6 @@
   "Groups": {
     "myGroups": "Nhóm của bạn",
     "create": "Tạo",
-    "loadingRecent": "Đang tải các nhóm gần đây…",
     "NoRecent": {
       "description": "Bạn chưa xem nhóm nào gần đây.",
       "create": "Tạo nhóm",
@@ -16,7 +15,7 @@
     "removeRecent": "Bỏ khỏi nhóm gần đây",
     "RecentRemovedToast": {
       "title": "Nhóm đã loại bỏ",
-      "description": "Nhóm đã loại bỏ khoải danh sách nhóm gần đây của bạn.",
+      "description": "Nhóm đã loại bỏ khỏi danh sách nhóm gần đây của bạn.",
       "undoAlt": "Hoàn tác việc loại bỏ nhóm",
       "undo": "Hoàn tác"
     },

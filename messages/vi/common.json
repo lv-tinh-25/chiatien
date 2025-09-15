@@ -1,15 +1,17 @@
 {
   "App": {
     "name": "ChiaTiền",
-    "description": "Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản."
-  },
-  "Settings": {
-    "title": "Cài đặt",
-    "about": "ChiaTiền · webapp tự lưu trữ, không cần tài khoản. Lõi tính toán dựa trên Spliit (giấy phép MIT).",
-    "language": "Ngôn ngữ"
+    "description": "Chia tiền với bạn bè và gia đình. Không quảng cáo, không cần tài khoản.",
+    "loading": "Đang tải…"
   },
   "Toast": {
-    "dismiss": "Bỏ qua"
+    "dismiss": "Bỏ qua",
+    "expenseCreated": "Đã thêm khoản chi",
+    "expenseUpdated": "Đã lưu khoản chi",
+    "expenseDeleted": "Đã xoá khoản chi",
+    "groupCreated": "Đã tạo nhóm",
+    "groupUpdated": "Đã lưu nhóm",
+    "failed": "Không lưu được. Vui lòng thử lại."
   },
   "Share": {
     "title": "Chia sẻ",
@@ -37,7 +39,6 @@
     "stats": "Thống kê",
     "activity": "Hoạt động",
     "groups": "Nhóm",
-    "settings": "Cài đặt",
     "more": "Thêm",
     "groupSettings": "Cài đặt nhóm",
     "information": "Thông tin",
@@ -52,6 +53,8 @@
     "memberCount": "{count} thành viên",
     "groupSettingsTitle": "Cài đặt nhóm",
     "back": "Quay lại",
-    "breadcrumb": "Đường dẫn"
+    "breadcrumb": "Đường dẫn",
+    "language": "Ngôn ngữ",
+    "switchLanguage": "Chuyển sang {language}"
   }
 }

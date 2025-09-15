@@ -17,6 +17,12 @@ const OPTIONS = [
   { value: 'amount', label: 'Theo số tiền' },
 ]
 
+const LONG_OPTIONS = [
+  { value: 'none', label: 'Does not repeat' },
+  { value: 'daily', label: 'Every day until the group is settled up' },
+  { value: 'weekly', label: 'Weekly' },
+]
+
 function ControlledSelect() {
   const [value, setValue] = useState('evenly')
   return (
@@ -26,4 +32,16 @@ function ControlledSelect() {
   )
 }
 
+function NarrowSelect() {
+  const [value, setValue] = useState('none')
+  return (
+    <div className="w-40">
+      <Select value={value} onValueChange={setValue} options={LONG_OPTIONS} />
+    </div>
+  )
+}
+
 export const Default: Story = { render: () => <ControlledSelect /> }
+
+/** The width the expense form gives it, where the label used to wrap. */
+export const Narrow: Story = { render: () => <NarrowSelect /> }

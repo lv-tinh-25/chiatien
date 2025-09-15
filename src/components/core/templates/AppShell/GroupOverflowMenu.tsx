@@ -4,6 +4,8 @@ import { Button } from '@/components/core/atoms/Button'
 import { Sheet, SheetContent, SheetTitle } from '@/components/core/atoms/Sheet'
 import { ShareSheet } from '@/components/core/templates/AppShell/ShareSheet'
 import { useGroupMembership } from '@/hooks/groups/useGroupMembership'
+import { useMediaQuery } from '@/lib/hooks'
+import { cn } from '@/lib/utils'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import {
   Archive,
@@ -13,7 +15,6 @@ import {
   FileJson,
   Info,
   Link2,
-  MoreHorizontal,
   Settings,
   Settings2,
   Star,
@@ -23,8 +24,15 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useState } from 'react'
 
-const ROW =
-  'flex min-h-touch-min w-full cursor-pointer items-center gap-3 rounded-control px-3 text-left text-body-lg font-medium text-foreground transition-colors duration-150 ease-out-soft hover:bg-foreground/5'
+const ROW = cn(
+  'flex min-h-touch-min w-full cursor-pointer items-center gap-3 rounded-control px-3',
+  'text-left text-body-lg font-medium text-foreground',
+  'transition-colors duration-150 ease-out-soft hover:bg-foreground/5',
+  '[&_svg]:size-5 [&_svg]:shrink-0',
+  // A pointer needs none of the 48px a thumb does, and the icons were half
+  // again the height of the words they label.
+  'lg:min-h-9 lg:gap-2.5 lg:px-2.5 lg:text-body-md lg:[&_svg]:size-4',
+)
 
 function Items({
   groupId,
@@ -60,7 +68,7 @@ function Items({
         className={ROW}
         onClick={onNavigate}
       >
-        <Settings2 aria-hidden />
+        <Settings aria-hidden />
         {t('groupSettings')}
       </Link>
       <button type="button" className={ROW} onClick={onShare}>
@@ -83,13 +91,6 @@ function Items({
         <FileJson aria-hidden />
         {tExpenses('exportJson')}
       </a>
-      {/* Inside a group the shell shows no settings button of its own, so this
-          is the only way to the language switcher on a phone. */}
-      <Link href="/settings" className={ROW} onClick={onNavigate}>
-        <Settings aria-hidden />
-        {t('settings')}
-      </Link>
-
       {membership.remembered && (
         <>
           <hr className="my-1.5 border-border/60" />
@@ -148,6 +149,26 @@ export function GroupOverflowMenu({
   const [open, setOpen] = useState(false)
   const [sharing, setSharing] = useState(false)
 
+  // Both bars mount this; CSS hides the one that does not belong to the current
+  // width. A sheet's content is portalled to the body, though, so it escapes
+  // that `lg:hidden` and a phone-width sheet left open across a resize reappears
+  // full-width over the desktop layout. Whichever copy the width no longer
+  // addresses closes itself.
+  const wide = useMediaQuery('(min-width: 1024px)')
+  const addressed = variant === 'menu' ? wide : !wide
+
+  // Hiding it is not enough: a copy that stops being addressed keeps `open`
+  // true, and coming back to that width re-opens a menu nobody asked for. The
+  // state is corrected during the render that notices, which is React's own
+  // answer to a prop change and costs no second pass.
+  const [addressedBefore, setAddressedBefore] = useState(addressed)
+  if (addressedBefore !== addressed) {
+    setAddressedBefore(addressed)
+    if (open) setOpen(false)
+  }
+
+  const showing = open && addressed
+
   const share = () => {
     setOpen(false)
     setSharing(true)
@@ -156,7 +177,7 @@ export function GroupOverflowMenu({
   return (
     <>
       {variant === 'menu' ? (
-        <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
+        <PopoverPrimitive.Root open={showing} onOpenChange={setOpen}>
           <PopoverPrimitive.Trigger asChild>
             <Button variant="outline" size="sm" className="min-h-9.5">
               {t('thisGroup')}
@@ -167,7 +188,7 @@ export function GroupOverflowMenu({
             <PopoverPrimitive.Content
               align="end"
               sideOffset={8}
-              className="glass-modal z-50 flex w-60 flex-col rounded-card p-1.5"
+              className="solid-overlay z-50 flex w-60 flex-col rounded-card p-1.5"
             >
               <Items
                 groupId={groupId}
@@ -178,14 +199,14 @@ export function GroupOverflowMenu({
           </PopoverPrimitive.Portal>
         </PopoverPrimitive.Root>
       ) : (
-        <Sheet open={open} onOpenChange={setOpen}>
+        <Sheet open={showing} onOpenChange={setOpen}>
           <Button
             variant="ghost"
             size="icon"
             aria-label={t('more')}
             onClick={() => setOpen(true)}
           >
-            <MoreHorizontal aria-hidden />
+            <Settings2 aria-hidden />
           </Button>
           <SheetContent className="p-3 pb-6">
             <SheetTitle className="sr-only">{t('thisGroup')}</SheetTitle>

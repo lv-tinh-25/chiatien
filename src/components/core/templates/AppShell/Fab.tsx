@@ -26,7 +26,7 @@ export function Fab({
         aboveNav ? 'bottom-23' : 'bottom-6',
       )}
     >
-      <Plus className="size-6.5" strokeWidth={2.4} aria-hidden />
+      <Plus className="size-6.5" aria-hidden />
     </Link>
   )
 }

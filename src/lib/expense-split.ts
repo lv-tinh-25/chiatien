@@ -70,3 +70,45 @@ export function seedSharesForMode<T extends PaidForRow>(
   }
   return paidFor
 }
+
+export type SharesByParticipant = Record<string, string>
+
+export function rememberShares<T extends PaidForRow>(
+  paidFor: T[],
+): SharesByParticipant {
+  return Object.fromEntries(
+    paidFor.map((row) => [row.participant, String(row.shares)]),
+  )
+}
+
+/**
+ * What a split tab shows when the user comes back to it.
+ *
+ * Restoring only works when every current participant was there last time: a
+ * percentage split adds up to 100 for the people it was typed for, so half a
+ * remembered split beside half a fresh seed would add up to nothing in
+ * particular. `restored` tells the caller the values are the user's own, which
+ * is what stops `redistributeShares` overwriting a `BY_AMOUNT` tab.
+ */
+export function restoreShares<T extends PaidForRow>(
+  splitMode: SplitMode,
+  paidFor: T[],
+  remembered: SharesByParticipant | undefined,
+): { rows: T[]; restored: boolean } {
+  const complete =
+    remembered !== undefined &&
+    paidFor.every((row) => remembered[row.participant] !== undefined)
+  if (!complete)
+    return { rows: seedSharesForMode(splitMode, paidFor), restored: false }
+  return {
+    rows: paidFor.map((row) => ({
+      ...row,
+      shares: remembered[row.participant],
+    })),
+    restored: true,
+  }
+}
+
+export function totalShares(paidFor: PaidForRow[]): number {
+  return paidFor.reduce((sum, row) => sum + (Number(row.shares) || 0), 0)
+}

@@ -158,7 +158,10 @@
       "byShares": "{count} shares in total",
       "byPercentage": "Must add up to 100%",
       "byAmount": "Must add up to the amount"
-    }
+    },
+    "notFoundTitle": "This expense is no longer here",
+    "notFoundDescription": "It was deleted, or the link points at something that never existed.",
+    "notFoundAction": "Back to expenses"
   },
   "ExpenseDocumentsInput": {
     "add": "Attach a document",

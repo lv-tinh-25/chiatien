@@ -8,14 +8,22 @@ import { Sidebar } from '@/components/core/templates/AppShell/Sidebar'
 import { useGroupChrome } from '@/hooks/groups/useGroupChrome'
 import { useShellTitle } from '@/hooks/groups/useShellTitle'
 import { cn } from '@/lib/utils'
+import { useNavigationStore } from '@/stores/useNavigationStore'
 import { useTranslations } from 'next-intl'
-import type { ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect, type ReactNode } from 'react'
 
 export function AppShell({ children }: { children: ReactNode }) {
   const chrome = useGroupChrome()
   const shellTitle = useShellTitle(chrome)
   const tGroups = useTranslations('Groups')
   const tExpenses = useTranslations('Expenses')
+
+  // One place records where the app has been; the forms read it to decide how
+  // to leave themselves behind.
+  const pathname = usePathname()
+  const visit = useNavigationStore((state) => state.visit)
+  useEffect(() => visit(pathname), [pathname, visit])
 
   return (
     <div className="min-h-dvh">

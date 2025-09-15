@@ -44,6 +44,21 @@
   --debit-subtle: 0 86% 95%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
+  --destructive-subtle: 0 86% 95%;
+
+  /* Something the reader should look at before it costs them money — a file
+     that will not upload, a split that does not add up. Amber is not in the
+     money palette on purpose: it must not be mistaken for a balance. */
+  --warning: 32 95% 40%;
+  --warning-subtle: 48 96% 92%;
+
+  /* An outcome's edge. These are decoration and measure well under 3:1 against
+     the page — the glyph inside the card is what has to carry the outcome, and
+     it does: 4.56:1 credit, 4.07:1 destructive, 3.47:1 warning, each on its own
+     subtle fill. */
+  --credit-border: 152 60% 86%;
+  --destructive-border: 0 70% 88%;
+  --warning-border: 38 90% 82%;
 
   /* One stable hue per participant, so a person keeps the same swatch on every
      screen. Each is checked to clear 4.5:1 as text on a white glass tint. */
@@ -71,17 +86,14 @@
   --glass-tint-flush: 0.55;
   --glass-tint-raised: 0.64;
   --glass-tint-float: 0.74;
-  --glass-tint-modal: 0.86;
 
   --glass-blur-flush: 8px;
   --glass-blur-raised: 16px;
   --glass-blur-float: 24px;
-  --glass-blur-modal: 32px;
 
   --glass-edge-flush: 0.55;
   --glass-edge-raised: 0.7;
   --glass-edge-float: 0.8;
-  --glass-edge-modal: 0.9;
 
   /* Saturation boost is what separates glass from frosted plastic: it amplifies
      whatever colour sits behind the surface instead of washing it grey. */
@@ -132,6 +144,12 @@
   --color-debit-subtle: hsl(var(--debit-subtle));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-subtle: hsl(var(--destructive-subtle));
+  --color-warning: hsl(var(--warning));
+  --color-warning-subtle: hsl(var(--warning-subtle));
+  --color-credit-border: hsl(var(--credit-border));
+  --color-destructive-border: hsl(var(--destructive-border));
+  --color-warning-border: hsl(var(--warning-border));
 
   --color-participant-1: hsl(var(--participant-1));
   --color-participant-2: hsl(var(--participant-2));
@@ -323,13 +341,28 @@
   box-shadow: var(--glass-highlight), var(--shadow-raised);
 }
 
-@utility glass-modal {
-  background-color: rgb(255 255 255 / var(--glass-tint-modal));
-  backdrop-filter: blur(var(--glass-blur-modal)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur-modal))
-    saturate(var(--glass-saturate));
-  border: 1px solid rgb(255 255 255 / var(--glass-edge-modal));
-  box-shadow: var(--glass-highlight), var(--shadow-sheet);
+/* The one overlay whose edge means something. It sets the border's width and
+   style but never its colour, because `border` as a shorthand — which every
+   other tier writes — resets a `border-*` utility no matter which order the two
+   land in. `--toast-glow` tints the drop shadow to match. */
+@utility solid-toast {
+  background-color: hsl(var(--card));
+  border-width: 1px;
+  border-style: solid;
+  box-shadow:
+    var(--glass-highlight),
+    0 12px 34px hsl(var(--toast-glow, var(--foreground)) / 0.14);
+}
+
+/* Where the glass stops. Everything below this floats over content the reader
+   was in the middle of, and a tint they can read through puts one sentence on
+   top of another — the blur softens the words underneath without removing
+   them. So an overlay is opaque, and carries no backdrop filter at all: behind
+   a surface nothing shows through, blurring is work with no visible result. */
+@utility solid-overlay {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-sheet);
 }
 
 /* A sticky bar spans the viewport, so it takes an edge only where content
@@ -344,10 +377,15 @@
 
 /* Blurring the page behind a modal is what stops the overlay reading as a flat
    scrim: the content stays visible but demonstrably out of focus. */
+/* No hand-written `-webkit-backdrop-filter` here, and none anywhere: the build
+   prefixes this property itself, and writing the prefix as well makes it
+   collapse the pair and keep only the prefixed one — which this browser no
+   longer honours, so the blur silently disappears. The other glass tiers still
+   carry the hand-written prefix and still render flat; see the note in
+   docs/superpowers/specs. */
 @utility glass-scrim {
   background-color: hsl(var(--foreground) / 0.25);
   backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
 }
 
 /* Primary actions are a gradient in this design, not a flat fill. Kept as a
@@ -375,6 +413,20 @@
 
 @utility rise-in {
   animation: rise-in 260ms var(--ease-out-soft) both;
+}
+
+/* Its mirror, for a surface that enters from above. */
+@utility drop-in {
+  animation: drop-in 300ms var(--ease-out-soft) both;
+}
+
+/* A wait that only shows itself once it has become a wait. The delay is the
+   whole point: switching language answers in about a fifth of a second on a
+   local connection and near five seconds on a bad one, and an indicator that
+   fires on both is a flash in the first case and the only explanation in the
+   second. */
+@utility settling {
+  animation: settling 1.3s var(--ease-out-soft) 450ms infinite;
 }
 
 /* The delays are written out per child rather than driven by an inline custom
@@ -417,6 +469,39 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes settling {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--ring) / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.18);
+  }
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* A toast that leaves on its own says so first. The reduced-motion block below
+   collapses this to nothing, which is correct: the bar is a courtesy, and the
+   close button is always there. */
+@keyframes toast-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
   }
 }
 

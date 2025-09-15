@@ -9,6 +9,7 @@ import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/Expen
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
 import { ExpenseTitleField } from '@/components/core/templates/ExpenseForm/ExpenseTitleField'
 import { PaidForList } from '@/components/core/templates/ExpenseForm/PaidForList'
+import { ExpenseFormSkeleton } from '@/components/core/templates/ExpenseForm/Skeleton'
 import { useExpenseForm } from '@/hooks/expenses/useExpenseForm'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
@@ -31,7 +32,7 @@ type ExpenseFormProps = {
  */
 export function ExpenseForm(props: ExpenseFormProps) {
   const { group } = useCurrentGroup()
-  if (!group) return null
+  if (!group) return <ExpenseFormSkeleton />
   return <ExpenseFormFields {...props} />
 }
 
@@ -122,10 +123,13 @@ function ExpenseFormFields({
             onShareEdited={markEdited}
           />
 
+          {/* `remove` is handed over unwrapped: the confirmation dialog awaits
+              it to know when to close, and `() => void remove()` would resolve
+              a tick after the click instead. */}
           <ExpenseFormFooter
             isCreate={isCreate}
             isSubmitting={isSubmitting}
-            onDelete={() => void remove()}
+            onDelete={remove}
           />
         </div>
       </div>

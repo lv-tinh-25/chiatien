@@ -3,8 +3,10 @@ import {
   createGroup,
   expectBalance,
   expenseCard,
+  EXPENSES_URL,
   openExpense,
   openTab,
+  selectPayer,
   uniqueSuffix,
 } from './app'
 import { expect, test } from './fixtures'
@@ -127,4 +129,34 @@ test('searches the payer list in a group too large to show as chips', async ({
     'aria-selected',
     'true',
   )
+})
+
+test('groups a large amount as it is typed and stores it ungrouped', async ({
+  page,
+}) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Grouping ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await page.goto(`/groups/${groupId}/expenses/create`)
+  const submit = page.getByRole('button', { name: 'Add expense', exact: true })
+  await expect(submit).toBeVisible({ timeout: 30_000 })
+
+  const amount = page.locator('input[name="amount"]')
+  await amount.click()
+  await amount.pressSequentially('1209312')
+  await expect(amount).toHaveValue('1,209,312')
+
+  // The split total is computed from the form value, so a grouped one would
+  // read as a thousand times too little here.
+  await expect(page.getByText('Split evenly between 2 people')).toBeVisible()
+  await expect(page.getByText(money(1209312), { exact: false })).toBeVisible()
+
+  await fillStable(page.locator('input[name="title"]'), 'Big one')
+  await selectPayer(page, 'Alice')
+  await submit.click()
+  await page.waitForURL(EXPENSES_URL, { timeout: 30_000 })
+
+  await expect(expenseCard(page, 'Big one')).toContainText(money(1209312))
 })

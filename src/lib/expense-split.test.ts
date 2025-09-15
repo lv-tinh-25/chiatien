@@ -1,5 +1,11 @@
 import type { Currency } from '@/lib/currency'
-import { redistributeShares, seedSharesForMode } from '@/lib/expense-split'
+import {
+  redistributeShares,
+  rememberShares,
+  restoreShares,
+  seedSharesForMode,
+  totalShares,
+} from '@/lib/expense-split'
 
 const USD: Currency = {
   name: 'US dollar',
@@ -128,5 +134,64 @@ describe('seedSharesForMode', () => {
   it('has nothing to seed when nobody is paid for', () => {
     const paidFor = rows()
     expect(seedSharesForMode('BY_SHARES', paidFor)).toBe(paidFor)
+  })
+})
+
+describe('rememberShares', () => {
+  it('keys the typed values by participant', () => {
+    expect(
+      rememberShares([
+        { participant: 'a', shares: '2' },
+        { participant: 'b', shares: '1' },
+      ]),
+    ).toEqual({ a: '2', b: '1' })
+  })
+})
+
+describe('restoreShares', () => {
+  it('seeds a mode that has never been opened', () => {
+    const result = restoreShares('BY_SHARES', rows('a', 'b'), undefined)
+    expect(result).toEqual({
+      rows: [
+        { participant: 'a', shares: '1' },
+        { participant: 'b', shares: '1' },
+      ],
+      restored: false,
+    })
+  })
+
+  it('gives back exactly what the mode held before', () => {
+    const result = restoreShares('BY_SHARES', rows('a', 'b'), {
+      a: '2',
+      b: '1',
+    })
+    expect(result.rows.map((row) => row.shares)).toEqual(['2', '1'])
+    expect(result.restored).toBe(true)
+  })
+
+  // A remembered percentage split adds up to 100 only for the people it was
+  // typed for; keeping half of it beside a fresh seed would not.
+  it('re-seeds when someone joined since the mode was last open', () => {
+    const result = restoreShares('BY_PERCENTAGE', rows('a', 'b', 'c'), {
+      a: '50',
+      b: '50',
+    })
+    expect(result.rows.map((row) => row.shares)).toEqual(['34', '33', '33'])
+    expect(result.restored).toBe(false)
+  })
+})
+
+describe('totalShares', () => {
+  it('adds the shares up', () => {
+    expect(
+      totalShares([
+        { participant: 'a', shares: '2' },
+        { participant: 'b', shares: '1' },
+      ]),
+    ).toBe(3)
+  })
+
+  it('reads a half-typed field as nothing rather than NaN', () => {
+    expect(totalShares([{ participant: 'a', shares: '' }])).toBe(0)
   })
 })

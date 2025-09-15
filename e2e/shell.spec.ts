@@ -54,16 +54,15 @@ test('the bottom bar replaces the sidebar on a phone viewport', async ({
   await expect(navs.first()).toBeVisible()
 })
 
-test('the language switcher is reachable from the group list', async ({
+test('the language switcher offers both languages and marks the current one', async ({
   page,
 }) => {
   await page.goto('/groups')
-  await page
-    .getByRole('navigation', { name: 'Main sections' })
-    .getByRole('link', { name: 'Settings', exact: true })
-    .click()
-  await expect(page).toHaveURL(/\/settings$/)
-  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible()
+  const languages = page.getByRole('radiogroup', { name: 'Language' })
+  await expect(languages.getByRole('radio', { name: 'English' })).toBeChecked()
+  await expect(
+    languages.getByRole('radio', { name: 'Tiếng Việt' }),
+  ).not.toBeChecked()
 })
 
 test('the language switcher is reachable from inside a group on a phone', async ({
@@ -71,7 +70,9 @@ test('the language switcher is reachable from inside a group on a phone', async 
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/groups/seeded/expenses')
-  await page.getByRole('button', { name: 'More' }).click()
-  await page.getByRole('link', { name: 'Settings', exact: true }).click()
-  await expect(page).toHaveURL(/\/settings$/)
+  // Alongside the group menu, not buried inside it. A phone header has no room
+  // to lay both languages out, so there it is one flag and a press.
+  await expect(
+    page.getByRole('button', { name: 'Switch to Tiếng Việt' }),
+  ).toBeVisible()
 })

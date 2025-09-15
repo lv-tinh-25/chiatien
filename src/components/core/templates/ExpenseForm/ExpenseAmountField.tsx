@@ -1,17 +1,16 @@
 'use client'
 
-import { Input } from '@/components/core/atoms/Input'
+import { AmountInput } from '@/components/core/molecules/AmountInput'
 import { CurrencyChips } from '@/components/core/molecules/CurrencyChips'
 import { FormField } from '@/components/core/molecules/FormField'
 import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { Locale } from '@/i18n/locales'
 import type { Currency } from '@/lib/currency'
 import { currencyChoicesWith } from '@/lib/currency-choices'
-import { enforceCurrencyPattern } from '@/lib/currency-input'
 import type { ExpenseFormInput, ExpenseFormValues } from '@/lib/schemas'
 import { useTranslations } from 'next-intl'
 import type { UseFormReturn } from 'react-hook-form'
-import { useWatch } from 'react-hook-form'
+import { Controller, useWatch } from 'react-hook-form'
 
 type Props = {
   form: UseFormReturn<ExpenseFormInput, unknown, ExpenseFormValues>
@@ -34,7 +33,6 @@ export function ExpenseAmountField({
 }: Props) {
   const t = useTranslations('ExpenseForm')
   const errors = useFormErrors(form.control)
-  const registration = form.register('amount')
   const currencyCode = useWatch({
     control: form.control,
     name: 'originalCurrency',
@@ -48,17 +46,23 @@ export function ExpenseAmountField({
     <FormField label={t('amountField.label')} errorKey={errors.amount?.message}>
       {({ id, describedBy }) => (
         <div className="flex items-stretch gap-2">
-          <Input
-            id={id}
-            aria-describedby={describedBy}
-            inputMode="decimal"
-            placeholder={currency.symbol_native}
-            className="h-13 flex-1 text-[1.5rem] font-extrabold tracking-[-0.02em] lg:text-[1.625rem]"
-            {...registration}
-            onChange={(event) => {
-              event.target.value = enforceCurrencyPattern(event.target.value)
-              void registration.onChange(event)
-            }}
+          <Controller
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <AmountInput
+                id={id}
+                aria-describedby={describedBy}
+                placeholder={currency.symbol_native}
+                className="h-13 flex-1 text-[1.5rem] font-extrabold tracking-[-0.02em] lg:text-[1.625rem]"
+                locale={locale}
+                name={field.name}
+                ref={field.ref}
+                value={field.value}
+                onBlur={field.onBlur}
+                onValueChange={field.onChange}
+              />
+            )}
           />
           {convertible && (
             <CurrencyChips

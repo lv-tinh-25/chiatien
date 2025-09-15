@@ -13,6 +13,7 @@ type PaidForRowProps = {
   checked: boolean
   splitMode: SplitMode
   currency: Currency
+  locale: string
   shares: string
   /** What this person carries, shown when the mode has nothing to type into. */
   shareDisplay: string
@@ -36,6 +37,7 @@ export function PaidForRow({
   checked,
   splitMode,
   currency,
+  locale,
   shares,
   shareDisplay,
   onToggle,
@@ -73,6 +75,7 @@ export function PaidForRow({
         <ShareInput
           splitMode={splitMode}
           currency={currency}
+          locale={locale}
           value={shares}
           participantName={participant.name}
           onChange={onSharesChange}

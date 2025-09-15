@@ -12,7 +12,7 @@ export function BottomNav({ items }: { items: NavItem[] }) {
   return (
     <nav
       aria-label={t('groupSections')}
-      className="glass-modal fixed bottom-0 left-1/2 z-30 w-full max-w-[480px] -translate-x-1/2 rounded-none border-x-0 border-b-0 px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
+      className="glass-bar fixed bottom-0 left-1/2 z-30 w-full max-w-[480px] -translate-x-1/2 rounded-none border-x-0 border-b-0 px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
     >
       <ul className="flex">
         {items.map((item) => {

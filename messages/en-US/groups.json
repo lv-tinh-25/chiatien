@@ -3,7 +3,6 @@
     "myGroups": "Your groups",
     "create": "Create",
     "createGroup": "Create group",
-    "loadingRecent": "Loading recent groups…",
     "NoRecent": {
       "description": "You have not visited any group recently.",
       "create": "Create one",

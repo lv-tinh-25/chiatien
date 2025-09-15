@@ -1,15 +1,17 @@
 {
   "App": {
     "name": "ChiaTien",
-    "description": "Split expenses with friends and family. No ads, no account needed."
-  },
-  "Settings": {
-    "title": "Settings",
-    "about": "ChiaTien · a self-hosted web app, no account needed. Calculations are based on Spliit (MIT licence).",
-    "language": "Language"
+    "description": "Split expenses with friends and family. No ads, no account needed.",
+    "loading": "Loading…"
   },
   "Toast": {
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "expenseCreated": "Expense created",
+    "expenseUpdated": "Expense saved",
+    "expenseDeleted": "Expense deleted",
+    "groupCreated": "Group created",
+    "groupUpdated": "Group saved",
+    "failed": "That could not be saved. Try again."
   },
   "Share": {
     "title": "Share",
@@ -37,7 +39,6 @@
     "stats": "Stats",
     "activity": "Activity",
     "groups": "Groups",
-    "settings": "Settings",
     "more": "More",
     "groupSettings": "Group settings",
     "information": "Information",
@@ -52,6 +53,8 @@
     "memberCount": "{count} members",
     "groupSettingsTitle": "Group settings",
     "back": "Back",
-    "breadcrumb": "Breadcrumb"
+    "breadcrumb": "Breadcrumb",
+    "language": "Language",
+    "switchLanguage": "Switch to {language}"
   }
 }

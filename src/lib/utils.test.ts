@@ -1,5 +1,5 @@
 import { Currency } from './currency'
-import { formatCurrency } from './utils'
+import { cn, formatCurrency } from './utils'
 
 describe('formatCurrency', () => {
   const currency: Currency = {
@@ -77,4 +77,24 @@ describe('formatCurrency', () => {
       ).toBe(variation.result)
     })
   }
+})
+
+describe('cn', () => {
+  // Both scales were invisible to tailwind-merge, so a later class did not
+  // replace an earlier one and the browser fell back to source order.
+  it('lets a later font size replace an earlier one', () => {
+    expect(cn('text-headline-sm', 'text-body-md')).toBe('text-body-md')
+  })
+
+  it('keeps a font size beside a colour', () => {
+    expect(cn('text-headline-sm text-foreground')).toBe(
+      'text-headline-sm text-foreground',
+    )
+  })
+
+  it('lets a later size replace a touch-min width', () => {
+    expect(cn('min-h-touch-min w-touch-min', 'size-7 min-h-0')).toBe(
+      'size-7 min-h-0',
+    )
+  })
 })

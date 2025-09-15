@@ -12,8 +12,8 @@ describe('navigationFor', () => {
     expect(navigationFor('/groups/create').scope).toBe('app')
   })
 
-  it('shows no group navigation on settings', () => {
-    expect(navigationFor('/settings').scope).toBe('app')
+  it('shows no group navigation outside /groups', () => {
+    expect(navigationFor('/').scope).toBe('app')
   })
 
   it('shows five destinations inside a group', () => {
