@@ -31,7 +31,6 @@
     "AddByURL": {
       "title": "Add a group by URL",
       "description": "Paste a shared link, or scan a QR code from your phone.",
-      "error": "Oops, we are not able to find the group from the URL you provided…",
       "scanner": {
         "startCamera": "Start Camera",
         "stopScanning": "Stop Scanning",
@@ -40,7 +39,12 @@
         "cameraError": "Failed to start camera. Please try again."
       },
       "placeholder": "Paste a group link to join…",
-      "scanQr": "Scan QR code"
+      "scanQr": "Scan QR code",
+      "join": "Open this group",
+      "joined": "Joined {name}",
+      "alreadyJoined": "You are already in {name}",
+      "malformed": "That does not look like a group link.",
+      "notFound": "Oops, we are not able to find the group from the URL you provided…"
     },
     "NotFound": {
       "text": "This group does not exist.",

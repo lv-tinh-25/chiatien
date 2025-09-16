@@ -40,6 +40,7 @@ export function GroupForm({
     isProtected,
     submit,
     isSubmitting,
+    canSubmit,
     onCurrencyCodeChange,
   } = useGroupForm({ group, protectedParticipantIds, defaultCurrencyCode })
 
@@ -62,7 +63,11 @@ export function GroupForm({
         onAdd={addParticipant}
         onRemove={removeParticipant}
       />
-      <GroupFormFooter isEdit={isEdit} isSubmitting={isSubmitting} />
+      <GroupFormFooter
+        isEdit={isEdit}
+        isSubmitting={isSubmitting}
+        canSubmit={canSubmit}
+      />
     </form>
   )
 }

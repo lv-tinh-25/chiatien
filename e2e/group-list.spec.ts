@@ -102,7 +102,7 @@ test('renaming a group updates the list', async ({ page }) => {
     participants: ['Alice', 'Bob'],
   })
 
-  await page.goto(`/groups/${groupId}/edit`)
+  await page.goto(`/groups/${groupId}/settings/edit`)
   const renamed = `${original} renamed`
   await fillStable(page.locator('input[name="name"]'), renamed)
 
@@ -141,6 +141,56 @@ test('offers to undo forgetting a group', async ({ page }) => {
   await page.getByRole('button', { name: 'Remove from recent groups' }).click()
   await page.goto('/groups')
   await expect(page.getByRole('link', { name })).toBeHidden()
+})
+
+test('a pasted link opens the group and says so', async ({ page, context }) => {
+  const name = `E2E Join ${uniqueSuffix()}`
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
+
+  // A second profile has never seen the group, so the only way in is the link.
+  const fresh = await context.browser()!.newContext()
+  await fresh.addCookies([
+    { name: 'NEXT_LOCALE', value: 'en-US', url: 'http://localhost:3000' },
+  ])
+  const other = await fresh.newPage()
+  await other.goto('/groups')
+
+  const field = other.getByRole('textbox', { name: 'Add a group by URL' })
+  await fillStable(field, `http://localhost:3000/groups/${groupId}/expenses`)
+  await other.getByRole('button', { name: 'Open this group' }).click()
+
+  // Landing on the list would leave a newcomer hunting for the card that just
+  // appeared, so the link opens the group itself.
+  await other.waitForURL(new RegExp(`/groups/${groupId}/expenses`), {
+    timeout: 30_000,
+  })
+  await expect(other.getByText(`Joined ${name}`)).toBeVisible()
+
+  // Pasting the same link again is not an error, and must not read as one.
+  await other.goto('/groups')
+  await fillStable(
+    other.getByRole('textbox', { name: 'Add a group by URL' }),
+    `/groups/${groupId}`,
+  )
+  await other.getByRole('button', { name: 'Open this group' }).click()
+  await expect(other.getByText(`You are already in ${name}`)).toBeVisible()
+
+  await fresh.close()
+})
+
+test('says when a pasted link is not a group link', async ({ page }) => {
+  await page.goto('/groups')
+  await fillStable(
+    page.getByRole('textbox', { name: 'Add a group by URL' }),
+    'https://example.com/',
+  )
+  await page.getByRole('button', { name: 'Open this group' }).click()
+  await expect(
+    page.getByText('That does not look like a group link.'),
+  ).toBeVisible()
 })
 
 test('offers a QR scanner as a second way to add a group', async ({ page }) => {

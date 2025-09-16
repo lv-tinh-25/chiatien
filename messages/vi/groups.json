@@ -22,7 +22,6 @@
     "AddByURL": {
       "title": "Thêm nhóm bằng URL",
       "description": "Dán link được chia sẻ, hoặc quét mã QR từ điện thoại.",
-      "error": "Rất tiếc, chúng tôi không thể tìm thấy nhóm từ URL bạn cung cấp…",
       "scanner": {
         "startCamera": "Bật camera",
         "stopScanning": "Dừng quét",
@@ -31,7 +30,12 @@
         "cameraError": "Không bật được camera. Vui lòng thử lại."
       },
       "placeholder": "Dán link nhóm để tham gia…",
-      "scanQr": "Quét mã QR"
+      "scanQr": "Quét mã QR",
+      "join": "Mở nhóm này",
+      "joined": "Đã tham gia {name}",
+      "alreadyJoined": "Bạn đã ở trong nhóm {name} rồi",
+      "malformed": "Đây không giống một link nhóm.",
+      "notFound": "Rất tiếc, chúng tôi không tìm thấy nhóm từ link bạn đã nhập…"
     },
     "NotFound": {
       "text": "Nhóm này không tồn tại.",

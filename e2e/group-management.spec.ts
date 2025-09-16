@@ -192,3 +192,40 @@ test('shares a group as a link and as a QR code', async ({ page }) => {
   await sheet.getByRole('button', { name: 'Download QR Code' }).click()
   expect((await download).suggestedFilename()).toBe(`chiatien-${groupId}.png`)
 })
+
+test('a save button waits for something to save', async ({ page }) => {
+  await createGroup(page, {
+    name: `E2E Dirty ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await openTab(page, 'EditSettings')
+  const save = page.getByRole('button', { name: 'Save group', exact: true })
+  await expect(save).toBeDisabled()
+
+  await fillStable(page.locator('input[name="name"]'), 'E2E Dirty renamed')
+  await expect(save).toBeEnabled()
+})
+
+test('a create button stays pressable on a form that arrives filled in', async ({
+  page,
+}) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Prefilled ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+  await addExpense(page, groupId, {
+    title: 'Dinner',
+    amount: '50',
+    paidBy: 'Alice',
+  })
+
+  // A settlement arrives complete from the balances screen: nothing is left to
+  // type, so gating on "has anything changed" would strand it.
+  await page.goto(
+    `/groups/${groupId}/expenses/create?reimbursement=yes&amount=2500`,
+  )
+  await expect(
+    page.getByRole('button', { name: 'Add expense', exact: true }),
+  ).toBeEnabled()
+})

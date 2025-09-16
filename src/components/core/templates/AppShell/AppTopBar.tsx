@@ -11,7 +11,7 @@ export function AppTopBar({ chrome }: { chrome: GroupChrome }) {
   const t = useTranslations('Nav')
 
   return (
-    <header className="glass-bar fixed inset-x-0 top-0 z-30 hidden h-15 items-center gap-4 px-6 lg:flex">
+    <header className="solid-bar fixed inset-x-0 top-0 z-30 hidden h-15 items-center gap-4 border-b px-6 lg:flex">
       <BrandMark />
 
       {chrome.groupId !== null && (
