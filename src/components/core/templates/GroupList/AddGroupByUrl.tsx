@@ -4,7 +4,6 @@ import { Button } from '@/components/core/atoms/Button'
 import { Input } from '@/components/core/atoms/Input'
 import { QrScanner } from '@/components/core/templates/GroupList/QrScanner'
 import { useJoinGroupByUrl } from '@/hooks/groups/useJoinGroupByUrl'
-import { cn } from '@/lib/utils'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { ArrowRight, QrCode } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -45,15 +44,19 @@ export function AddGroupByUrl() {
         </label>
 
         <DialogPrimitive.Root open={scanning} onOpenChange={setScanning}>
-          <DialogPrimitive.Trigger
-            aria-label={t('scanQr')}
-            className={cn(
-              'flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-control border border-input bg-card/85 text-primary-ink',
-              'transition-colors duration-150 ease-out-soft hover:bg-card',
-              'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-            )}
-          >
-            <QrCode aria-hidden className="size-5" />
+          {/* Through the Button atom, not a hand-written box: the row holds
+              three controls and the odd one out was 44px beside two 48px
+              neighbours. */}
+          <DialogPrimitive.Trigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label={t('scanQr')}
+              className="shrink-0 text-primary-ink [&_svg]:size-5"
+            >
+              <QrCode aria-hidden />
+            </Button>
           </DialogPrimitive.Trigger>
           <DialogPrimitive.Portal>
             <DialogPrimitive.Overlay className="glass-scrim fixed inset-0 z-50" />
@@ -81,7 +84,7 @@ export function AddGroupByUrl() {
           aria-label={t('join')}
           pending={joining}
           disabled={value.trim() === ''}
-          className="shrink-0"
+          className="shrink-0 [&_svg]:size-5"
         >
           {!joining && <ArrowRight aria-hidden />}
         </Button>
