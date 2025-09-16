@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test'
+import { createGroup, uniqueSuffix } from './app'
 import { test } from './fixtures'
 
 test('the group list carries no in-group navigation', async ({ page }) => {
@@ -17,7 +18,7 @@ test('a group shows its destinations in the sidebar', async ({ page }) => {
     'Balances',
     'Stats',
     'Activity',
-    'Information',
+    'Settings',
   ]) {
     await expect(
       nav.getByRole('link', { name: label, exact: true }),
@@ -33,6 +34,45 @@ test('the current destination is marked for assistive technology', async ({
   await expect(
     nav.getByRole('link', { name: 'Balances', exact: true }),
   ).toHaveAttribute('aria-current', 'page')
+})
+
+test('back goes to the parent screen, not the one visited last', async ({
+  page,
+}) => {
+  // The five destinations are siblings, so history walks sideways between
+  // them: arriving at settings by way of stats must not make stats the way
+  // back out. The phone header derives this from the path alone, so a group
+  // that was never loaded still answers correctly.
+  await page.setViewportSize({ width: 390, height: 844 })
+  const back = page.getByRole('link', { name: 'Back' })
+
+  await page.goto('/groups/seeded/stats')
+  await page.goto('/groups/seeded/settings')
+  await expect(back).toHaveAttribute('href', '/groups')
+
+  await page.goto('/groups/seeded/settings/edit')
+  await expect(back).toHaveAttribute('href', '/groups/seeded/settings')
+
+  await page.goto('/groups/seeded/expenses/create')
+  await expect(back).toHaveAttribute('href', '/groups/seeded/expenses')
+
+  await page.goto('/groups')
+  await expect(back).toHaveCount(0)
+})
+
+test('a desktop form carries the same way up beside its title', async ({
+  page,
+}) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Back ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await page.goto(`/groups/${groupId}/settings/edit`)
+  await expect(page.getByRole('link', { name: 'Back' })).toHaveAttribute(
+    'href',
+    `/groups/${groupId}/settings`,
+  )
 })
 
 test('the group root redirects to expenses', async ({ page }) => {

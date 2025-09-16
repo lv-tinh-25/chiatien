@@ -13,15 +13,12 @@ import {
   ChevronDown,
   Download,
   FileJson,
-  Info,
   Link2,
-  Settings,
   Settings2,
   Star,
   Trash2,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
 import { useState } from 'react'
 
 const ROW = cn(
@@ -55,22 +52,6 @@ function Items({
 
   return (
     <>
-      <Link
-        href={`/groups/${groupId}/information`}
-        className={ROW}
-        onClick={onNavigate}
-      >
-        <Info aria-hidden />
-        {t('information')}
-      </Link>
-      <Link
-        href={`/groups/${groupId}/edit`}
-        className={ROW}
-        onClick={onNavigate}
-      >
-        <Settings aria-hidden />
-        {t('groupSettings')}
-      </Link>
       <button type="button" className={ROW} onClick={onShare}>
         <Link2 aria-hidden />
         {t('shareLink')}
@@ -134,9 +115,11 @@ function Items({
 }
 
 /**
- * Every group-level action in the two shapes the design asks for: a labelled
+ * Every group-level *action* in the two shapes the design asks for: a labelled
  * dropdown beside the desktop breadcrumb, and a bottom sheet behind the mobile
- * header's overflow button.
+ * header's overflow button. Nothing here navigates to a screen — the five
+ * destinations are reached from the nav, so a reader never has to open a menu
+ * to find out where they can go.
  */
 export function GroupOverflowMenu({
   groupId,

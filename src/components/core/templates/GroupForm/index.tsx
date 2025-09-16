@@ -3,8 +3,8 @@
 import { BackButton } from '@/components/core/atoms/BackButton'
 import { GroupDetailsFields } from '@/components/core/templates/GroupForm/GroupDetailsFields'
 import { GroupFormFooter } from '@/components/core/templates/GroupForm/GroupFormFooter'
-import { GroupSettingsFields } from '@/components/core/templates/GroupForm/GroupSettingsFields'
 import { ParticipantList } from '@/components/core/templates/GroupForm/ParticipantList'
+import { useParentPath } from '@/hooks/forms/useParentPath'
 import { useGroupForm } from '@/hooks/groups/useGroupForm'
 import { useTranslations } from 'next-intl'
 
@@ -30,6 +30,7 @@ export function GroupForm({
 }: GroupFormProps) {
   const tNav = useTranslations('Nav')
   const tGroupForm = useTranslations('GroupForm')
+  const back = useParentPath()
   const {
     form,
     isEdit,
@@ -39,19 +40,15 @@ export function GroupForm({
     isProtected,
     submit,
     isSubmitting,
-    activeUser,
-    setActiveUser,
     onCurrencyCodeChange,
   } = useGroupForm({ group, protectedParticipantIds, defaultCurrencyCode })
 
   return (
     <form onSubmit={submit} className="flex w-full max-w-180 flex-col gap-4">
       <div className="hidden items-center gap-3 lg:flex">
-        <BackButton
-          href={group ? `/groups/${group.id}/information` : '/groups'}
-        />
+        {back !== null && <BackButton href={back} />}
         <h1 className="text-headline-lg text-foreground">
-          {isEdit ? tNav('groupSettingsTitle') : tGroupForm('createTitle')}
+          {isEdit ? tNav('editSettingsTitle') : tGroupForm('createTitle')}
         </h1>
       </div>
       <GroupDetailsFields
@@ -65,13 +62,6 @@ export function GroupForm({
         onAdd={addParticipant}
         onRemove={removeParticipant}
       />
-      {isEdit && group && (
-        <GroupSettingsFields
-          participants={group.participants}
-          activeUser={activeUser}
-          onActiveUserChange={setActiveUser}
-        />
-      )}
       <GroupFormFooter isEdit={isEdit} isSubmitting={isSubmitting} />
     </form>
   )

@@ -40,8 +40,6 @@
     "activity": "Activity",
     "groups": "Groups",
     "more": "More",
-    "groupSettings": "Group settings",
-    "information": "Information",
     "thisGroup": "This group",
     "shareLink": "Share group link",
     "activeUser": "You are viewing as",
@@ -51,10 +49,11 @@
     "statsSubtitle": "Group statistics",
     "activitySubtitle": "Activity log",
     "memberCount": "{count} members",
-    "groupSettingsTitle": "Group settings",
     "back": "Back",
     "breadcrumb": "Breadcrumb",
     "language": "Language",
-    "switchLanguage": "Switch to {language}"
+    "switchLanguage": "Switch to {language}",
+    "settings": "Settings",
+    "editSettingsTitle": "Edit group settings"
   }
 }

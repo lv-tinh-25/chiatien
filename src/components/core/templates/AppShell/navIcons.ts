@@ -2,9 +2,9 @@ import type { NavKey } from '@/components/core/templates/AppShell/navigation'
 import {
   BarChart3,
   History,
-  Info,
   Receipt,
   Scale,
+  Settings,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -13,5 +13,5 @@ export const NAV_ICONS: Record<NavKey, LucideIcon> = {
   balances: Scale,
   stats: BarChart3,
   activity: History,
-  information: Info,
+  settings: Settings,
 }

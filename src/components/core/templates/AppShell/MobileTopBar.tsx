@@ -1,14 +1,12 @@
 'use client'
 
-import { Button } from '@/components/core/atoms/Button'
+import { BackButton } from '@/components/core/atoms/BackButton'
 import { BrandMark } from '@/components/core/templates/AppShell/BrandMark'
 import { GroupOverflowMenu } from '@/components/core/templates/AppShell/GroupOverflowMenu'
 import { LanguageSwitch } from '@/components/core/templates/AppShell/LanguageSwitch'
 import type { GroupChrome } from '@/hooks/groups/useGroupChrome'
 import type { ShellTitle } from '@/hooks/groups/useShellTitle'
-import { ChevronLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 
 export function MobileTopBar({
   chrome,
@@ -18,20 +16,12 @@ export function MobileTopBar({
   shellTitle: ShellTitle
 }) {
   const t = useTranslations('Nav')
-  const router = useRouter()
 
   return (
     <div className="glass-bar fixed top-0 left-1/2 z-30 w-full max-w-[480px] -translate-x-1/2 lg:hidden">
       <div className="flex h-14 items-center gap-2 px-3">
-        {shellTitle.showBack && (
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t('back')}
-            onClick={() => router.back()}
-          >
-            <ChevronLeft aria-hidden />
-          </Button>
+        {shellTitle.back !== null && (
+          <BackButton href={shellTitle.back} tone="bar" />
         )}
 
         {shellTitle.title === null ? (

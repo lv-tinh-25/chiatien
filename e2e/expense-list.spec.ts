@@ -36,22 +36,32 @@ test('the export routes answer for a group with no expenses', async ({
   expect(json.status()).toBe(200)
 })
 
-test('the group header links to settings and information', async ({ page }) => {
+test('the group menu offers actions, and settings is a destination', async ({
+  page,
+}) => {
   const groupId = await createGroup(page, {
     name: `E2E Header ${uniqueSuffix()}`,
     participants: ['Alice', 'Bob'],
   })
 
   await page.goto(`/groups/${groupId}/expenses`)
+
+  // Settings is reached from the navigation like every other destination, so
+  // nobody has to open a menu to find out where they can go.
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Group sections' })
+      .getByRole('link', { name: 'Settings', exact: true }),
+  ).toHaveAttribute('href', `/groups/${groupId}/settings`)
+
   // On a desktop viewport the overflow is a labelled dropdown in the top bar;
   // a phone shows the same items behind an icon button.
   await page.getByRole('button', { name: 'This group' }).click()
-  // The sidebar carries an Information link too, so scope to the menu.
   const menu = page.locator('[data-radix-popper-content-wrapper]')
   await expect(
-    menu.getByRole('link', { name: 'Information', exact: true }),
+    menu.getByRole('button', { name: 'Share group link' }),
   ).toBeVisible()
   await expect(
-    menu.getByRole('link', { name: 'Group settings', exact: true }),
-  ).toBeVisible()
+    menu.getByRole('link', { name: /Settings|Information/ }),
+  ).toHaveCount(0)
 })

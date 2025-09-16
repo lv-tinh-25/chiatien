@@ -40,8 +40,6 @@
     "activity": "Hoạt động",
     "groups": "Nhóm",
     "more": "Thêm",
-    "groupSettings": "Cài đặt nhóm",
-    "information": "Thông tin",
     "thisGroup": "Nhóm này",
     "shareLink": "Chia sẻ link nhóm",
     "activeUser": "Bạn đang xem là",
@@ -51,10 +49,11 @@
     "statsSubtitle": "Thống kê nhóm",
     "activitySubtitle": "Nhật ký hoạt động",
     "memberCount": "{count} thành viên",
-    "groupSettingsTitle": "Cài đặt nhóm",
     "back": "Quay lại",
     "breadcrumb": "Đường dẫn",
     "language": "Ngôn ngữ",
-    "switchLanguage": "Chuyển sang {language}"
+    "switchLanguage": "Chuyển sang {language}",
+    "settings": "Cài đặt",
+    "editSettingsTitle": "Sửa cài đặt nhóm"
   }
 }

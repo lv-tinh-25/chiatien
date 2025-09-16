@@ -14,15 +14,15 @@ export type SplitMode = 'EVENLY' | 'BY_SHARES' | 'BY_PERCENTAGE' | 'BY_AMOUNT'
 export type Recurrence = 'Does not repeat' | 'Daily' | 'Weekly' | 'Monthly'
 
 export type GroupTab =
-  'Expenses' | 'Balances' | 'Information' | 'Stats' | 'Activity' | 'Settings'
+  'Expenses' | 'Balances' | 'Stats' | 'Activity' | 'Settings' | 'EditSettings'
 
 const TAB_PATHS: Record<GroupTab, string> = {
   Expenses: 'expenses',
   Balances: 'balances',
-  Information: 'information',
   Stats: 'stats',
   Activity: 'activity',
-  Settings: 'edit',
+  Settings: 'settings',
+  EditSettings: 'settings/edit',
 }
 
 // Regexes, not literals: the labels are "Unevenly – By shares" with an en dash.
