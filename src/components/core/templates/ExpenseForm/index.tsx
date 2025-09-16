@@ -56,6 +56,7 @@ function ExpenseFormFields({
     remove,
     markEdited,
     isSubmitting,
+    canSubmit,
     conversionRequired,
     exchangeRate,
     usingCustomRate,
@@ -131,6 +132,7 @@ function ExpenseFormFields({
           <ExpenseFormFooter
             isCreate={isCreate}
             isSubmitting={isSubmitting}
+            canSubmit={canSubmit}
             onDelete={remove}
           />
         </div>

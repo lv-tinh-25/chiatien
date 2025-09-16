@@ -365,14 +365,16 @@
   box-shadow: var(--shadow-sheet);
 }
 
-/* A sticky bar spans the viewport, so it takes an edge only where content
-   passes under it rather than the full outline the tiered utilities draw. */
-@utility glass-bar {
-  background-color: rgb(255 255 255 / var(--glass-tint-float));
-  backdrop-filter: blur(var(--glass-blur-float)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur-float))
-    saturate(var(--glass-saturate));
-  border-bottom: 1px solid hsl(var(--border) / 0.7);
+/* A fixed bar is the same case as an overlay: the page scrolls underneath it,
+   and a tint that can be read through puts a row of expenses through the title
+   above them. So it is opaque, and it takes an edge only on the side content
+   passes rather than the full outline the tiered utilities draw — which side
+   that is depends on which end of the screen the bar is pinned to. */
+@utility solid-bar {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border) / 0.7);
+  border-style: solid;
+  border-width: 0;
 }
 
 /* Blurring the page behind a modal is what stops the overlay reading as a flat

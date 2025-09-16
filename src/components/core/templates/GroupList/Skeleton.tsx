@@ -1,14 +1,15 @@
 'use client'
 
 import { Skeleton } from '@/components/core/atoms/Skeleton'
+import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 /** Two group cards, the width the sections settle into on both layouts. */
-export function GroupListSkeleton() {
+export function GroupListSkeleton({ className }: { className?: string }) {
   const t = useTranslations('App')
 
   return (
-    <div className="flex flex-col gap-2 lg:col-span-2">
+    <div className={cn('flex flex-col gap-2 lg:col-span-2', className)}>
       <p role="status" className="sr-only">
         {t('loading')}
       </p>

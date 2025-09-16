@@ -91,7 +91,13 @@ export function useExpenseCurrencyConversion({
 
     const converted = convertToGroupCurrency(original, rate, groupCurrency)
     if (converted === null) return
-    form.setValue('amount', Number(enforceCurrencyPattern(converted)))
+    // `shouldDirty`: this runs on an edit form the moment a rate arrives, and
+    // a value that no longer matches the stored expense must leave the save
+    // button reachable. RHF compares against the defaults, so a rate that
+    // converts to the same amount still counts as untouched.
+    form.setValue('amount', Number(enforceCurrencyPattern(converted)), {
+      shouldDirty: true,
+    })
   }, [
     originalAmount,
     conversionRate,

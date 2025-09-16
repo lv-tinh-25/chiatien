@@ -9,22 +9,13 @@ import { GroupCard } from '@/components/core/templates/GroupList/GroupCard'
 import { GroupSection } from '@/components/core/templates/GroupList/GroupSection'
 import { GroupListSkeleton } from '@/components/core/templates/GroupList/Skeleton'
 import { useGroupList } from '@/hooks/groups/useGroupList'
-import { trpc } from '@/trpc/client'
 import { Plus, Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 export function GroupList() {
   const t = useTranslations('Groups')
-  const { status, starred, recent, archived, balances, visit } = useGroupList()
-  const utils = trpc.useUtils()
-
-  const addByUrl = async (groupId: string) => {
-    const details = await utils.groups.get.fetch({ groupId }).catch(() => null)
-    if (!details?.group) return false
-    visit({ id: details.group.id, name: details.group.name })
-    return true
-  }
+  const { status, starred, recent, archived, balances } = useGroupList()
 
   return (
     <div className="flex flex-col gap-5 *:min-w-0 lg:grid lg:grid-cols-[repeat(2,minmax(0,1fr))] lg:items-start lg:gap-4">
@@ -45,16 +36,18 @@ export function GroupList() {
 
       <GlobalBalanceCard balances={balances} />
 
-      {/* The design puts this between the last group section and the archived
-          list on a phone, and beside the balance card on a desktop. */}
-      <div className="order-3 lg:order-none">
-        <AddGroupByUrl onAdd={addByUrl} />
+      {/* Directly under the balance card on a phone: someone who was sent a
+          link opens the app for this field alone, and at the foot of the list
+          they had to scroll past every group they already have. On a desktop
+          the grid puts it beside the balance card instead. */}
+      <div className="order-1 lg:order-none">
+        <AddGroupByUrl />
       </div>
 
-      {status === 'pending' && <GroupListSkeleton />}
+      {status === 'pending' && <GroupListSkeleton className="order-2" />}
 
       {status === 'empty' && (
-        <div className="lg:col-span-2">
+        <div className="order-2 lg:col-span-2">
           <EmptyState
             title={t('NoRecent.description')}
             description={t('NoRecent.orAsk')}
@@ -78,7 +71,7 @@ export function GroupList() {
                   aria-hidden
                 />
               }
-              className="order-1 lg:col-span-2"
+              className="order-3 lg:col-span-2"
             >
               {starred.map((group) => (
                 <GroupCard key={group.id} group={group} />
@@ -87,7 +80,7 @@ export function GroupList() {
           )}
 
           {recent.length > 0 && (
-            <GroupSection title={t('recent')} className="order-2 lg:col-span-2">
+            <GroupSection title={t('recent')} className="order-4 lg:col-span-2">
               {recent.map((group) => (
                 <GroupCard key={group.id} group={group} />
               ))}
@@ -98,7 +91,7 @@ export function GroupList() {
             <GroupSection
               title={t('archived')}
               layout="rows"
-              className="order-4 lg:col-span-2"
+              className="order-5 lg:col-span-2"
             >
               {archived.map((group) => (
                 <ArchivedGroupRow key={group.id} group={group} />

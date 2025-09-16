@@ -11,7 +11,7 @@ import { trpc } from '@/trpc/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocale, useTranslations } from 'next-intl'
 import { useMemo } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useFieldArray, useForm, useFormState } from 'react-hook-form'
 
 type ExistingGroup = {
   id: string
@@ -85,6 +85,11 @@ export function useGroupForm({
     name: 'participants',
   })
 
+  // Through `useFormState`, never `form.formState`: the React Compiler caches
+  // the proxy read that does the subscribing, which would leave the button one
+  // keystroke behind — the same trap `useFormErrors` documents.
+  const { isDirty } = useFormState({ control: form.control })
+
   const protectedIds = useMemo(
     () => new Set(protectedParticipantIds),
     [protectedParticipantIds],
@@ -139,6 +144,10 @@ export function useGroupForm({
     isProtected,
     submit,
     isSubmitting: createGroup.isPending || updateGroup.isPending,
+    // Saving a group nobody edited writes the same row back and reports
+    // success for nothing. Creating one is different: a form opened from a
+    // link can be complete before it is touched.
+    canSubmit: !isEdit || isDirty,
     onCurrencyCodeChange: (code: string) => {
       form.setValue('currencyCode', code)
       form.setValue('currency', symbolFor(code))

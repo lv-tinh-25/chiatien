@@ -7,10 +7,16 @@ import { useTranslations } from 'next-intl'
 type Props = {
   isCreate: boolean
   isSubmitting: boolean
+  canSubmit: boolean
   onDelete: () => Promise<void>
 }
 
-export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
+export function ExpenseFormFooter({
+  isCreate,
+  isSubmitting,
+  canSubmit,
+  onDelete,
+}: Props) {
   const t = useTranslations('ExpenseForm')
 
   const label = isCreate
@@ -47,11 +53,15 @@ export function ExpenseFormFooter({ isCreate, isSubmitting, onDelete }: Props) {
       )}
 
       {/* No cancel: the header's back button is the design's way out, and a
-          second full-width control below the primary one reads as a peer. */}
+          second full-width control below the primary one reads as a peer.
+          Disabled only for "nothing has changed", which needs no explanation;
+          an invalid field leaves it enabled so pressing it can say what is
+          wrong. */}
       <Button
         type="submit"
         size="lg"
         pending={isSubmitting}
+        disabled={!canSubmit}
         className="flex-2 shadow-action"
       >
         {label}

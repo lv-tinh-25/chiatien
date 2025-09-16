@@ -23,7 +23,7 @@ import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm, useFormState, useWatch } from 'react-hook-form'
 
 type Expense = AppRouterOutput['groups']['expenses']['get']['expense']
 
@@ -132,6 +132,11 @@ export function useExpenseForm(expense?: Expense) {
     defaultValues: defaults,
   })
 
+  // Through `useFormState`, never `form.formState`: the React Compiler caches
+  // the proxy read that does the subscribing, which would leave the button one
+  // keystroke behind — the same trap `useFormErrors` documents.
+  const { isDirty } = useFormState({ control: form.control })
+
   // useWatch rather than form.watch: the latter cannot be memoized, and the
   // React Compiler bails out of the whole hook when it sees one.
   const originalCode = useWatch({
@@ -229,6 +234,10 @@ export function useExpenseForm(expense?: Expense) {
       createExpense.isPending ||
       updateExpense.isPending ||
       deleteExpense.isPending,
+    // Saving an expense nobody edited writes the same row back and reports
+    // success for nothing. Creating one is different: a settlement or a
+    // scanned receipt arrives prefilled and is meant to be submitted as it is.
+    canSubmit: isCreate || isDirty,
     ...conversion,
   }
 }

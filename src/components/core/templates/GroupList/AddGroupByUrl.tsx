@@ -1,46 +1,20 @@
 'use client'
 
+import { Button } from '@/components/core/atoms/Button'
 import { Input } from '@/components/core/atoms/Input'
 import { QrScanner } from '@/components/core/templates/GroupList/QrScanner'
+import { useJoinGroupByUrl } from '@/hooks/groups/useJoinGroupByUrl'
 import { cn } from '@/lib/utils'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { QrCode } from 'lucide-react'
+import { ArrowRight, QrCode } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
-/**
- * Accepts anything that contains a group id — a full share URL, a path, or the
- * bare id — because people paste all three.
- */
-function groupIdFromUrl(value: string): string | null {
-  const trimmed = value.trim()
-  if (trimmed === '') return null
-  const fromPath = /\/groups\/([^/?#]+)/.exec(trimmed)
-  if (fromPath) return fromPath[1]
-  return /^[A-Za-z0-9_-]+$/.test(trimmed) ? trimmed : null
-}
-
-export function AddGroupByUrl({
-  onAdd,
-}: {
-  onAdd: (groupId: string) => Promise<boolean>
-}) {
+export function AddGroupByUrl() {
   const t = useTranslations('Groups.AddByURL')
   const tGroups = useTranslations('Groups')
-  const [value, setValue] = useState('')
-  const [failed, setFailed] = useState(false)
+  const { value, error, joining, change, submit, scanned } = useJoinGroupByUrl()
   const [scanning, setScanning] = useState(false)
-
-  const add = async (candidate: string) => {
-    const groupId = groupIdFromUrl(candidate)
-    if (groupId === null) {
-      setFailed(true)
-      return
-    }
-    const added = await onAdd(groupId)
-    setFailed(!added)
-    if (added) setValue('')
-  }
 
   return (
     <div className="flex flex-col justify-center gap-2.5 rounded-hero border border-dashed border-border bg-card/45 p-3.5 backdrop-blur-md lg:gap-3 lg:p-5">
@@ -57,24 +31,18 @@ export function AddGroupByUrl({
         className="flex items-center gap-2"
         onSubmit={(event) => {
           event.preventDefault()
-          void add(value)
+          submit()
         }}
       >
-        <label className="flex-1">
+        <label className="min-w-0 flex-1">
           <span className="sr-only">{t('title')}</span>
           <Input
             name="groupUrl"
             placeholder={t('placeholder')}
             value={value}
-            onChange={(event) => {
-              setValue(event.target.value)
-              setFailed(false)
-            }}
+            onChange={(event) => change(event.target.value)}
           />
         </label>
-        <button type="submit" className="sr-only">
-          {tGroups('joinTitle')}
-        </button>
 
         <DialogPrimitive.Root open={scanning} onOpenChange={setScanning}>
           <DialogPrimitive.Trigger
@@ -97,18 +65,31 @@ export function AddGroupByUrl({
                 <QrScanner
                   onScan={(text) => {
                     setScanning(false)
-                    void add(text)
+                    scanned(text)
                   }}
                 />
               </div>
             </DialogPrimitive.Content>
           </DialogPrimitive.Portal>
         </DialogPrimitive.Root>
+
+        {/* Enter is not an affordance: a phone keyboard may show no submit key
+            at all, and nothing on screen said the field could be sent. */}
+        <Button
+          type="submit"
+          size="icon"
+          aria-label={t('join')}
+          pending={joining}
+          disabled={value.trim() === ''}
+          className="shrink-0"
+        >
+          {!joining && <ArrowRight aria-hidden />}
+        </Button>
       </form>
 
-      {failed && (
+      {error !== null && (
         <p role="alert" className="text-body-sm text-destructive">
-          {t('error')}
+          {t(error)}
         </p>
       )}
     </div>
