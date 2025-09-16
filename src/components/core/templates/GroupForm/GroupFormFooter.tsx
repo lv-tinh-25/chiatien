@@ -12,7 +12,7 @@ export function GroupFormFooter({
   isEdit,
   isSubmitting,
 }: GroupFormFooterProps) {
-  const t = useTranslations('GroupForm.Settings')
+  const t = useTranslations('GroupForm.Actions')
 
   const label = isEdit
     ? isSubmitting

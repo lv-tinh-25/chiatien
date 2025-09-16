@@ -1,29 +1,18 @@
 'use client'
 
 import type { NavItem } from '@/components/core/templates/AppShell/navigation'
-import {
-  BOTTOM_DESTINATIONS,
-  navigationFor,
-} from '@/components/core/templates/AppShell/navigation'
-import type { Currency } from '@/lib/currency'
+import { navigationFor } from '@/components/core/templates/AppShell/navigation'
+import { currencyLabel } from '@/lib/currency-label'
 import { groupEmoji } from '@/lib/group-emoji'
 import { getCurrencyFromGroup } from '@/lib/utils'
 import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { trpc } from '@/trpc/client'
 import { usePathname } from 'next/navigation'
 
-/** `₫ VND` — the symbol the design leads with, then the code that disambiguates it. */
-function currencyLabel(currency: Currency): string {
-  return currency.code === ''
-    ? currency.symbol_native
-    : `${currency.symbol_native} ${currency.code}`
-}
-
 export type GroupChrome = {
   inGroup: boolean
   groupId: string | null
   items: NavItem[]
-  bottomItems: NavItem[]
   name: string
   emoji: string
   participantCount: number
@@ -70,15 +59,12 @@ export function useGroupChrome(): GroupChrome {
 
   const onForm =
     /\/expenses\/(create|[^/]+\/edit)$/.test(pathname) ||
-    /^\/groups\/[^/]+\/edit$/.test(pathname)
+    /^\/groups\/[^/]+\/settings\/edit$/.test(pathname)
 
   return {
     inGroup: groupId !== null,
     groupId,
     items: navigation.items,
-    bottomItems: navigation.items.filter((item) =>
-      BOTTOM_DESTINATIONS.includes(item.key),
-    ),
     name: group?.name ?? '',
     emoji: groupId === null ? '' : groupEmoji(groupId),
     participantCount: group?.participants.length ?? 0,

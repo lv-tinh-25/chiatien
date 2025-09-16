@@ -1,5 +1,4 @@
-export type NavKey =
-  'expenses' | 'balances' | 'stats' | 'activity' | 'information'
+export type NavKey = 'expenses' | 'balances' | 'stats' | 'activity' | 'settings'
 
 export type NavItem = {
   key: NavKey
@@ -18,24 +17,15 @@ export const GROUP_DESTINATIONS: NavKey[] = [
   'balances',
   'stats',
   'activity',
-  'information',
-]
-
-/** The bottom bar holds four; information lives in the overflow menu there. */
-export const BOTTOM_DESTINATIONS: NavKey[] = [
-  'expenses',
-  'balances',
-  'stats',
-  'activity',
+  'settings',
 ]
 
 const RESERVED = new Set(['create'])
 
 /**
  * Derives the navigation chrome from the path alone, so no screen has to
- * declare where it sits. A section with no entry of its own — edit — is still
- * group scope but leaves every item inactive rather than lighting up an
- * unrelated one.
+ * declare where it sits. A nested route keeps its section active: editing the
+ * settings is still being in the settings.
  */
 export function navigationFor(pathname: string): Navigation {
   const match = pathname.match(/^\/groups\/([^/]+)(?:\/([^/]+))?/)
@@ -55,4 +45,32 @@ export function navigationFor(pathname: string): Navigation {
       active: section === key,
     })),
   }
+}
+
+/**
+ * The screen one level up, which is not the same as the screen visited last.
+ * The five group destinations are siblings, so stepping back through history
+ * walks sideways between them instead of leaving the group.
+ *
+ * Null means the screen is a root and shows no back affordance.
+ */
+export function parentOf(pathname: string): string | null {
+  const path = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname
+
+  if (path === '/groups') return null
+  if (path === '/groups/create') return '/groups'
+
+  const match = path.match(/^\/groups\/([^/]+)(?:\/(.*))?$/)
+  if (!match) return null
+
+  const groupId = match[1]
+  if (RESERVED.has(groupId)) return null
+
+  const rest = match[2] ?? ''
+  if (rest === '' || rest === 'expenses') return '/groups'
+
+  // Anything under a section belongs to that section; a section itself belongs
+  // to the group list, because the five are siblings rather than a chain.
+  const [section, ...deeper] = rest.split('/')
+  return deeper.length === 0 ? '/groups' : `/groups/${groupId}/${section}`
 }

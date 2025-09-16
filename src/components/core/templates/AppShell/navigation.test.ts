@@ -1,4 +1,7 @@
-import { navigationFor } from '@/components/core/templates/AppShell/navigation'
+import {
+  navigationFor,
+  parentOf,
+} from '@/components/core/templates/AppShell/navigation'
 
 describe('navigationFor', () => {
   it('shows no group navigation on the group list', () => {
@@ -25,7 +28,7 @@ describe('navigationFor', () => {
       'balances',
       'stats',
       'activity',
-      'information',
+      'settings',
     ])
   })
 
@@ -44,15 +47,14 @@ describe('navigationFor', () => {
     expect(nav.items.find((item) => item.active)?.key).toBe('expenses')
   })
 
-  it('marks information active on the information screen', () => {
-    const nav = navigationFor('/groups/abc123/information')
-    expect(nav.items.find((item) => item.active)?.key).toBe('information')
+  it('marks settings active on the settings screen', () => {
+    const nav = navigationFor('/groups/abc123/settings')
+    expect(nav.items.find((item) => item.active)?.key).toBe('settings')
   })
 
-  it('marks nothing active on a group section with no destination', () => {
-    const nav = navigationFor('/groups/abc123/edit')
-    expect(nav.scope).toBe('group')
-    expect(nav.items.some((item) => item.active)).toBe(false)
+  it('keeps settings active while they are being edited', () => {
+    const nav = navigationFor('/groups/abc123/settings/edit')
+    expect(nav.items.find((item) => item.active)?.key).toBe('settings')
   })
 
   it('builds hrefs under the current group', () => {
@@ -64,5 +66,53 @@ describe('navigationFor', () => {
 
   it('ignores a trailing slash', () => {
     expect(navigationFor('/groups/abc123/').items).toHaveLength(5)
+  })
+})
+
+describe('parentOf', () => {
+  it('gives the group list no parent', () => {
+    expect(parentOf('/groups')).toBeNull()
+  })
+
+  it('returns the group list from the create form', () => {
+    expect(parentOf('/groups/create')).toBe('/groups')
+  })
+
+  it.each([
+    '/groups/abc123',
+    '/groups/abc123/expenses',
+    '/groups/abc123/balances',
+    '/groups/abc123/stats',
+    '/groups/abc123/activity',
+    '/groups/abc123/settings',
+  ])('leaves the group from %s', (path) => {
+    expect(parentOf(path)).toBe('/groups')
+  })
+
+  it('returns the expense list from the expense create form', () => {
+    expect(parentOf('/groups/abc123/expenses/create')).toBe(
+      '/groups/abc123/expenses',
+    )
+  })
+
+  it('returns the expense list from an expense edit form', () => {
+    expect(parentOf('/groups/abc123/expenses/xyz789/edit')).toBe(
+      '/groups/abc123/expenses',
+    )
+  })
+
+  it('returns the settings screen from the settings form', () => {
+    expect(parentOf('/groups/abc123/settings/edit')).toBe(
+      '/groups/abc123/settings',
+    )
+  })
+
+  it('ignores a trailing slash', () => {
+    expect(parentOf('/groups/abc123/settings/')).toBe('/groups')
+  })
+
+  it('has no parent for a path outside the app', () => {
+    expect(parentOf('/')).toBeNull()
+    expect(parentOf('/offline')).toBeNull()
   })
 })

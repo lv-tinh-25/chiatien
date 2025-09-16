@@ -11,6 +11,7 @@ import { ExpenseTitleField } from '@/components/core/templates/ExpenseForm/Expen
 import { PaidForList } from '@/components/core/templates/ExpenseForm/PaidForList'
 import { ExpenseFormSkeleton } from '@/components/core/templates/ExpenseForm/Skeleton'
 import { useExpenseForm } from '@/hooks/expenses/useExpenseForm'
+import { useParentPath } from '@/hooks/forms/useParentPath'
 import { useCurrentGroup } from '@/hooks/groups/useCurrentGroup'
 import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { useTranslations } from 'next-intl'
@@ -42,6 +43,7 @@ function ExpenseFormFields({
   documentsEnabled,
 }: ExpenseFormProps) {
   const t = useTranslations('ExpenseForm')
+  const back = useParentPath()
   const {
     form,
     groupId,
@@ -71,7 +73,7 @@ function ExpenseFormFields({
       {/* The phone gets its back button from the shell header; the desktop
           header has no back affordance of its own, so the title carries one. */}
       <div className="hidden items-center gap-3 lg:flex">
-        <BackButton href={`/groups/${groupId}/expenses`} />
+        {back !== null && <BackButton href={back} />}
         <h1 className="text-headline-lg text-foreground">
           {isCreate ? t(`${scope}.create`) : t(`${scope}.edit`)}
         </h1>

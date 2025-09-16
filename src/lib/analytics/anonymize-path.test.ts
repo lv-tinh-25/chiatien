@@ -16,7 +16,8 @@ describe('anonymizePath', () => {
     [`/groups/${GROUP_A}`, '/groups/[groupId]'],
     [`/groups/${GROUP_A}/expenses`, '/groups/[groupId]/expenses'],
     [`/groups/${GROUP_B}/balances`, '/groups/[groupId]/balances'],
-    [`/groups/${GROUP_C}/edit`, '/groups/[groupId]/edit'],
+    [`/groups/${GROUP_C}/settings`, '/groups/[groupId]/settings'],
+    [`/groups/${GROUP_C}/settings/edit`, '/groups/[groupId]/settings/edit'],
     [`/groups/${GROUP_D}/stats`, '/groups/[groupId]/stats'],
 
     // Expense IDs

@@ -52,7 +52,24 @@
     "joinTitle": "Join an existing group",
     "settledShort": "settled up",
     "star": "Star",
-    "unstar": "Unstar"
+    "unstar": "Unstar",
+    "Settings": {
+      "edit": "Edit",
+      "group": "This group",
+      "name": "Group name",
+      "currency": "Main currency",
+      "members": "{count, plural, one {# member} other {# members}}",
+      "note": "Group information",
+      "empty": "No group information yet.",
+      "created": "Created",
+      "ActiveUser": {
+        "title": "On this device",
+        "label": "You are viewing as",
+        "description": "Used as the default payer, and whose balance the app reports. Stored on this device only.",
+        "placeholder": "Select a participant",
+        "none": "None"
+      }
+    }
   },
   "GroupForm": {
     "NameField": {
@@ -79,27 +96,13 @@
       "Jane": "Jane",
       "Jack": "Jack"
     },
-    "Settings": {
-      "title": "Local settings",
-      "description": "These settings are set per-device, and are used to customize your experience.",
-      "ActiveUserField": {
-        "label": "Active user",
-        "placeholder": "Select a participant",
-        "none": "None",
-        "description": "User used as default for paying expenses."
-      },
+    "createTitle": "New group",
+    "Actions": {
       "save": "Save group",
       "saving": "Saving…",
       "create": "Create group",
       "creating": "Creating…"
-    },
-    "createTitle": "New group"
-  },
-  "Information": {
-    "title": "Group information",
-    "empty": "No group information yet.",
-    "edit": "Edit",
-    "meta": "Created {created}"
+    }
   },
   "Activity": {
     "title": "Activity",

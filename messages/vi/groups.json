@@ -52,7 +52,24 @@
     "joinTitle": "Tham gia nhóm có sẵn",
     "settledShort": "đã tất toán",
     "star": "Gắn sao",
-    "unstar": "Bỏ gắn sao"
+    "unstar": "Bỏ gắn sao",
+    "Settings": {
+      "edit": "Sửa",
+      "group": "Nhóm này",
+      "name": "Tên nhóm",
+      "currency": "Đơn vị tiền tệ chính",
+      "members": "{count, plural, other {# thành viên}}",
+      "note": "Thông tin nhóm",
+      "empty": "Nhóm chưa có thông tin nào.",
+      "created": "Ngày tạo",
+      "ActiveUser": {
+        "title": "Trên thiết bị này",
+        "label": "Bạn đang xem với tư cách",
+        "description": "Được dùng làm người trả mặc định, và là số dư mà ứng dụng báo cho bạn. Chỉ lưu trên thiết bị này.",
+        "placeholder": "Chọn thành viên",
+        "none": "Không có"
+      }
+    }
   },
   "GroupForm": {
     "NameField": {
@@ -79,27 +96,13 @@
       "Jane": "Bình",
       "Jack": "Cường"
     },
-    "Settings": {
-      "title": "Cài đặt cục bộ",
-      "description": "Các thiết lập này được áp dụng cho từng thiết bị và được sử dụng để tùy chỉnh trải nghiệm của bạn.",
-      "ActiveUserField": {
-        "label": "Người dùng hiện tại",
-        "placeholder": "Chọn thành viên",
-        "none": "Không có",
-        "description": "Người dùng này được sử dụng làm mặc định để thanh toán chi phí."
-      },
+    "createTitle": "Tạo nhóm mới",
+    "Actions": {
       "save": "Lưu nhóm",
       "saving": "Đang lưu…",
       "create": "Tạo nhóm",
       "creating": "Đang tạo…"
-    },
-    "createTitle": "Tạo nhóm mới"
-  },
-  "Information": {
-    "title": "Thông tin nhóm",
-    "empty": "Nhóm chưa có thông tin nào.",
-    "edit": "Sửa",
-    "meta": "Tạo ngày {created}"
+    }
   },
   "Activity": {
     "title": "Hoạt động",

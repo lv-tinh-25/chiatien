@@ -22,7 +22,7 @@ test('renames a group and adds a participant afterwards', async ({ page }) => {
     paidBy: 'Alice',
   })
 
-  await openTab(page, 'Settings')
+  await openTab(page, 'EditSettings')
 
   const renamed = `${original} renamed`
   await fillStable(page.locator('input[name="name"]'), renamed)

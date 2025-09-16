@@ -71,9 +71,9 @@ test('shows a skeleton while a screen is still loading', async ({ page }) => {
     await route.continue()
   })
 
-  await page.goto(`/groups/${groupId}/information`)
+  await page.goto(`/groups/${groupId}/settings`)
   await expect(page.getByRole('status').getByText('Loading…')).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Information' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible()
 })
 
 test('back never returns to a form that was already submitted', async ({

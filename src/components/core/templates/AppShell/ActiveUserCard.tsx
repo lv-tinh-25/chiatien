@@ -24,7 +24,7 @@ export function ActiveUserCard({ chrome }: { chrome: GroupChrome }) {
           {chrome.activeUserName}
         </span>
         <Link
-          href={`/groups/${chrome.groupId}/edit`}
+          href={`/groups/${chrome.groupId}/settings`}
           className="text-body-sm font-bold text-primary-ink hover:underline"
         >
           {t('changeActiveUser')}

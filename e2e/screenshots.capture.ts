@@ -20,8 +20,7 @@ const SCREENS: Screen[] = [
   { name: 'balances', path: (id) => `/groups/${id}/balances` },
   { name: 'stats', path: (id) => `/groups/${id}/stats` },
   { name: 'activity', path: (id) => `/groups/${id}/activity` },
-  { name: 'information', path: (id) => `/groups/${id}/information` },
-  { name: 'settings', path: () => '/settings' },
+  { name: 'settings', path: (id) => `/groups/${id}/settings` },
 ]
 
 async function seed(page: Page): Promise<string> {

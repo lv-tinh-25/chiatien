@@ -40,7 +40,6 @@ export function useGroupForm({
   const locale = asLocale(useLocale())
   const utils = trpc.useUtils()
   const visit = useRecentGroupsStore((state) => state.visit)
-  const setActiveUser = useActiveUserStore((state) => state.setActiveUser)
   const activeUser = useActiveUserStore((state) => {
     const stored = group ? state.activeUsers[group.id] : undefined
     return stored === undefined || stored === NO_ACTIVE_USER ? null : stored
@@ -140,10 +139,6 @@ export function useGroupForm({
     isProtected,
     submit,
     isSubmitting: createGroup.isPending || updateGroup.isPending,
-    activeUser,
-    setActiveUser: (participantId: string | null) => {
-      if (group) setActiveUser(group.id, participantId)
-    },
     onCurrencyCodeChange: (code: string) => {
       form.setValue('currencyCode', code)
       form.setValue('currency', symbolFor(code))

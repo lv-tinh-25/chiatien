@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </main>
 
-      {chrome.showBottomNav && <BottomNav items={chrome.bottomItems} />}
+      {chrome.showBottomNav && <BottomNav items={chrome.items} />}
 
       {chrome.fab !== null && (
         <Fab

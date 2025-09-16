@@ -97,8 +97,8 @@ test('titles every page with the app name', async ({ page }) => {
   await page.goto('/groups')
   await expect(page).toHaveTitle('Your groups · ChiaTien')
 
-  await page.goto('/settings')
-  await expect(page).toHaveTitle('Settings · ChiaTien')
+  await page.goto('/groups/create')
+  await expect(page).toHaveTitle('New group · ChiaTien')
 })
 
 test('describes the app in the web manifest', async ({ page }) => {
