@@ -1,14 +1,11 @@
 'use client'
 
 import type { Currency } from '@/lib/currency'
-import { partitionGroups, type RecentGroup } from '@/lib/recent-groups'
+import { partitionGroups } from '@/lib/recent-groups'
 import { getCurrencyFromGroup } from '@/lib/utils'
 import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
-import { useToastStore } from '@/stores/useToastStore'
 import { trpc } from '@/trpc/client'
-import { Trash2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 
 export type GroupListEntry = {
@@ -21,17 +18,11 @@ export type GroupListEntry = {
 }
 
 export function useGroupList() {
-  const t = useTranslations('Groups.RecentRemovedToast')
   const hydrated = useRecentGroupsStore((state) => state.hydrated)
   const groups = useRecentGroupsStore((state) => state.groups)
   const starredIds = useRecentGroupsStore((state) => state.starredIds)
   const archivedIds = useRecentGroupsStore((state) => state.archivedIds)
-  const toggleStar = useRecentGroupsStore((state) => state.toggleStar)
-  const toggleArchive = useRecentGroupsStore((state) => state.toggleArchive)
-  const forget = useRecentGroupsStore((state) => state.forget)
-  const visit = useRecentGroupsStore((state) => state.visit)
   const activeUsers = useActiveUserStore((state) => state.activeUsers)
-  const showToast = useToastStore((state) => state.show)
 
   const groupIds = useMemo(() => groups.map((group) => group.id), [groups])
 
@@ -115,27 +106,12 @@ export function useGroupList() {
         ? 'pending'
         : 'ready'
 
+  // Star, archive and forget are not here: the design reaches them from inside
+  // the group, and a second path to the same flags is how the rule that
+  // archiving clears the star would get bypassed.
   return {
     status,
     ...partitioned,
     balances: balances.data?.balances ?? [],
-    toggleStar,
-    toggleArchive,
-    forget: (group: RecentGroup) => {
-      forget(group.id)
-      showToast({
-        title: t('title'),
-        description: t('description'),
-        action: {
-          label: t('undo'),
-          altLabel: t('undoAlt'),
-          onAction: () => visit(group),
-        },
-        icon: Trash2,
-      })
-    },
-    visit,
-    isStarred: (groupId: string) => starredIds.includes(groupId),
-    isArchived: (groupId: string) => archivedIds.includes(groupId),
   }
 }

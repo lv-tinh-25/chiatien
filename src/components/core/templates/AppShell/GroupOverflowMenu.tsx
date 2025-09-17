@@ -75,19 +75,23 @@ function Items({
       {membership.remembered && (
         <>
           <hr className="my-1.5 border-border/60" />
-          <button
-            type="button"
-            className={ROW}
-            aria-pressed={membership.starred}
-            onClick={act(membership.toggleStar)}
-          >
-            <Star
-              aria-hidden
-              className={membership.starred ? 'text-accent' : undefined}
-              fill={membership.starred ? 'currentColor' : 'none'}
-            />
-            {tGroups(membership.starred ? 'unstar' : 'star')}
-          </button>
+          {/* Archiving puts a group away, so pinning it is not on offer while
+              it is there: unarchive first. */}
+          {!membership.archived && (
+            <button
+              type="button"
+              className={ROW}
+              aria-pressed={membership.starred}
+              onClick={act(membership.toggleStar)}
+            >
+              <Star
+                aria-hidden
+                className={membership.starred ? 'text-accent' : undefined}
+                fill={membership.starred ? 'currentColor' : 'none'}
+              />
+              {tGroups(membership.starred ? 'unstar' : 'star')}
+            </button>
+          )}
           <button
             type="button"
             className={ROW}
