@@ -8,7 +8,7 @@ export function ActivityLogSkeleton() {
   const t = useTranslations('App')
 
   return (
-    <div className="flex w-full max-w-190 flex-col gap-4">
+    <div className="flex w-full flex-col gap-4 lg:max-w-190">
       <p role="status" className="sr-only">
         {t('loading')}
       </p>

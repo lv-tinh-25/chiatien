@@ -43,7 +43,7 @@ export function ActivityLog() {
   if (isPending) return <ActivityLogSkeleton />
 
   return (
-    <div className="flex w-full max-w-190 flex-col gap-4">
+    <div className="flex w-full flex-col gap-4 lg:max-w-190">
       <h1 className="hidden text-headline-lg text-foreground lg:block">
         {t('title')}
       </h1>

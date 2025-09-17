@@ -48,7 +48,7 @@ export function GroupSettings() {
   if (isPending) return <GroupSettingsSkeleton />
 
   return (
-    <div className="flex max-w-190 flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:max-w-190">
       <div className="hidden items-center justify-between gap-3 lg:flex">
         <h1 className="text-headline-lg text-foreground">{tNav('settings')}</h1>
         <Button variant="outline" size="sm" asChild>

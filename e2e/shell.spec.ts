@@ -131,6 +131,27 @@ test('a tablet runs the phone layout at full width, not a centred phone', async 
   const box = await bar.boundingBox()
   expect(box?.x).toBe(0)
   expect(box?.width).toBe(768)
+
+  // Settings and activity carry a reading width of their own, which used to
+  // apply below the desktop breakpoint too and leave the rest of the row bare.
+  await page.setViewportSize({ width: 1000, height: 1024 })
+  for (const section of ['settings', 'activity']) {
+    await page.goto(`/groups/${groupId}/${section}`)
+    await expect
+      .poll(async () =>
+        page.evaluate(() => {
+          const width = (selector: string) => {
+            const el = document.querySelector(selector)
+            return el === null
+              ? 0
+              : Math.round(el.getBoundingClientRect().width)
+          }
+          const block = width('main > div > :first-child')
+          return block === 0 ? null : block - width('main > div')
+        }),
+      )
+      .toBe(0)
+  }
 })
 
 test('the language switcher offers both languages and marks the current one', async ({
