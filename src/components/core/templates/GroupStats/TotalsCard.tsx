@@ -106,9 +106,10 @@ export function TotalsCard({
               locale={locale}
             />
             {/* What the viewer would get back or still owe if the group
-                settled at this instant. Desktop only: on a phone the design
-                keeps the row to one line, and the balances screen says it. */}
-            <span className="hidden lg:contents">
+                settled at this instant. Dropped on a narrow screen, where the
+                design keeps the row to one line and the balances screen says
+                it anyway. */}
+            <span className="hidden md:contents">
               <Metric
                 label={t('difference')}
                 amount={totalParticipantSpendings - totalParticipantShare}

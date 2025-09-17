@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           chrome.groupId !== null && 'lg:pl-70',
         )}
       >
-        <div className="mx-auto w-full max-w-[480px] lg:max-w-[1440px]">
+        <div className="mx-auto w-full lg:max-w-[1440px]">
           {children}
         </div>
       </main>

@@ -18,7 +18,7 @@ export function ArchivedGroupRow({ group }: { group: GroupListEntry }) {
       href={`/groups/${group.id}/expenses`}
       data-testid="group-card"
       className={cn(
-        'flex w-full items-center gap-2.5 rounded-control border border-white/70 bg-card/40 px-3.5 py-3 backdrop-blur-md lg:w-fit',
+        'flex w-full items-center gap-2.5 rounded-control border border-white/70 bg-card/40 px-3.5 py-3 backdrop-blur-md md:w-fit',
         'text-muted-foreground transition-colors duration-150 ease-out-soft hover:bg-card/70',
         'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
       )}

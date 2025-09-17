@@ -38,7 +38,7 @@ export function ExpenseList({
         <h1 className="hidden shrink-0 text-headline-lg text-foreground lg:block">
           {t('title')}
         </h1>
-        <div className="min-w-0 flex-1 lg:max-w-105">
+        <div className="min-w-0 flex-1 md:max-w-105">
           <SearchBar
             label={t('searchPlaceholder')}
             placeholder={t('searchPlaceholder')}
@@ -102,8 +102,8 @@ export function ExpenseList({
       <div ref={sentinelRef} aria-hidden className="h-px" />
       {isFetchingNextPage && (
         <p className="text-center text-body-sm text-muted-foreground">
-          <span className="lg:hidden">{t('loadMore')}</span>
-          <span className="hidden lg:inline">{t('loadMoreWide')}</span>
+          <span className="md:hidden">{t('loadMore')}</span>
+          <span className="hidden md:inline">{t('loadMoreWide')}</span>
         </p>
       )}
     </div>

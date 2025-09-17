@@ -26,7 +26,7 @@ export function MemberBars({ participants, currency, locale }: Props) {
   const widest = Math.max(0, ...participants.map((row) => Math.abs(row.paid)))
 
   return (
-    <ul className="grid gap-x-7 lg:grid-cols-2">
+    <ul className="grid gap-x-7 md:grid-cols-2">
       {participants.map((participant) => {
         const tone = participantTone(participant.name)
         return (
@@ -55,7 +55,7 @@ export function MemberBars({ participants, currency, locale }: Props) {
                   }}
                 />
               </span>
-              <span className="mt-0.5 hidden truncate text-body-sm text-muted-foreground lg:block">
+              <span className="mt-0.5 hidden truncate text-body-sm text-muted-foreground md:block">
                 {t('meta', {
                   count: participant.paidCount,
                   share: formatCurrency(currency, participant.share, locale),

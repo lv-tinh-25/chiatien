@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test'
 import { createGroup, uniqueSuffix } from './app'
-import { expect, test } from './fixtures'
+import { BASE_URL, expect, test } from './fixtures'
 import { fillStable, selectRadixOption } from './ui'
 
 /**
@@ -48,7 +48,7 @@ test('opening a shared link adds the group to this browser list', async ({
   // visiting the link.
   const fresh = await context.browser()!.newContext()
   await fresh.addCookies([
-    { name: 'NEXT_LOCALE', value: 'en-US', url: 'http://localhost:3000' },
+    { name: 'NEXT_LOCALE', value: 'en-US', url: BASE_URL },
   ])
   const other = await fresh.newPage()
   await other.goto('/groups')
@@ -228,13 +228,13 @@ test('a pasted link opens the group and says so', async ({ page, context }) => {
   // A second profile has never seen the group, so the only way in is the link.
   const fresh = await context.browser()!.newContext()
   await fresh.addCookies([
-    { name: 'NEXT_LOCALE', value: 'en-US', url: 'http://localhost:3000' },
+    { name: 'NEXT_LOCALE', value: 'en-US', url: BASE_URL },
   ])
   const other = await fresh.newPage()
   await other.goto('/groups')
 
   const field = other.getByRole('textbox', { name: 'Add a group by URL' })
-  await fillStable(field, `http://localhost:3000/groups/${groupId}/expenses`)
+  await fillStable(field, `${BASE_URL}/groups/${groupId}/expenses`)
   await other.getByRole('button', { name: 'Open this group' }).click()
 
   // Landing on the list would leave a newcomer hunting for the card that just
@@ -242,7 +242,8 @@ test('a pasted link opens the group and says so', async ({ page, context }) => {
   await other.waitForURL(new RegExp(`/groups/${groupId}/expenses`), {
     timeout: 30_000,
   })
-  await expect(other.getByText(`Joined ${name}`)).toBeVisible()
+  // Exact: the toast's own aria-live announcement repeats the same words.
+  await expect(other.getByText(`Joined ${name}`, { exact: true })).toBeVisible()
 
   // Pasting the same link again is not an error, and must not read as one.
   await other.goto('/groups')
@@ -251,7 +252,9 @@ test('a pasted link opens the group and says so', async ({ page, context }) => {
     `/groups/${groupId}`,
   )
   await other.getByRole('button', { name: 'Open this group' }).click()
-  await expect(other.getByText(`You are already in ${name}`)).toBeVisible()
+  await expect(
+    other.getByText(`You are already in ${name}`, { exact: true }),
+  ).toBeVisible()
 
   await fresh.close()
 })
@@ -264,7 +267,7 @@ test('says when a pasted link is not a group link', async ({ page }) => {
   )
   await page.getByRole('button', { name: 'Open this group' }).click()
   await expect(
-    page.getByText('That does not look like a group link.'),
+    page.getByText('That does not look like a group link.', { exact: true }),
   ).toBeVisible()
 })
 

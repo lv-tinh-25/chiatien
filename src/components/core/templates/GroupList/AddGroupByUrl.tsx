@@ -17,12 +17,12 @@ export function AddGroupByUrl() {
 
   return (
     <div className="flex flex-col justify-center gap-2.5 rounded-hero border border-dashed border-border bg-card/45 p-3.5 backdrop-blur-md lg:gap-3 lg:p-5">
-      {/* The title and the explanation are desktop furniture: on a phone the
-          placeholder already says what the field takes. */}
-      <p className="hidden text-body-lg font-extrabold text-foreground lg:block">
+      {/* The title and the explanation need room to earn their place; on a
+          narrow screen the placeholder already says what the field takes. */}
+      <p className="hidden text-body-lg font-extrabold text-foreground md:block">
         {tGroups('joinTitle')}
       </p>
-      <p className="hidden text-body-sm text-muted-foreground lg:block">
+      <p className="hidden text-body-sm text-muted-foreground md:block">
         {t('description')}
       </p>
 

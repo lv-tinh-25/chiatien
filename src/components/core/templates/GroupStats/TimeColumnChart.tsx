@@ -36,7 +36,7 @@ export function TimeColumnChart({
       {columns.map((column) => (
         <li
           key={column.key}
-          className="flex h-full min-w-8 max-w-16 flex-1 lg:min-w-10 lg:max-w-20"
+          className="flex h-full min-w-8 max-w-16 flex-1 md:min-w-10 md:max-w-20"
         >
           {renderTrigger(
             column,
@@ -45,7 +45,7 @@ export function TimeColumnChart({
               aria-label={column.selectLabel}
               className="flex h-full w-full cursor-pointer flex-col items-center gap-1.5"
             >
-              <span className="hidden max-w-full truncate text-label-sm text-muted-foreground lg:block">
+              <span className="hidden max-w-full truncate text-label-sm text-muted-foreground md:block">
                 {column.value}
               </span>
               {/* The bar is positioned against this track rather than sized as

@@ -93,7 +93,7 @@ export function ServiceWorkerRegistration() {
   return (
     <div
       role="status"
-      className="fixed inset-x-4 bottom-[calc(var(--spacing-thumb-safe)+0.75rem)] z-50 flex items-center gap-3 rounded-card border border-border bg-card p-3 shadow-sheet lg:inset-x-auto lg:right-4 lg:bottom-4 lg:max-w-sm"
+      className="fixed inset-x-4 bottom-[calc(var(--spacing-thumb-safe)+0.75rem)] z-50 flex items-center gap-3 rounded-card border border-border bg-card p-3 shadow-sheet md:mx-auto md:max-w-sm lg:inset-x-auto lg:right-4 lg:bottom-4 lg:max-w-sm"
     >
       <span className="flex-1">
         <span className="block text-headline-sm text-foreground">

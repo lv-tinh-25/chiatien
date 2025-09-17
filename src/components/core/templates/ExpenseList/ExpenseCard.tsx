@@ -85,7 +85,7 @@ export function ExpenseCard({
       <CategoryEmoji
         categoryId={expense.category?.id ?? 0}
         size="md"
-        className="lg:size-11"
+        className="md:size-11"
       />
 
       <span className="min-w-0 flex-1">
@@ -100,8 +100,8 @@ export function ExpenseCard({
         {/* One line that truncates, never two: the design keeps every row the
             same height so the column of amounts stays a column. */}
         <span className="mt-0.5 flex items-center gap-x-1.5 truncate text-body-sm whitespace-nowrap text-muted-foreground">
-          <span className="truncate lg:hidden">{summary}</span>
-          <span className="hidden truncate lg:inline">{summaryWide}</span>
+          <span className="truncate md:hidden">{summary}</span>
+          <span className="hidden truncate md:inline">{summaryWide}</span>
           <span aria-hidden>·</span>
           <span>{formatExpenseDate(expense.expenseDate, locale)}</span>
           {expense._count.documents > 0 && (

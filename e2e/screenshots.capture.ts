@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import * as z from 'zod'
+import { BASE_URL } from './fixtures'
 
 const OUT = join(process.cwd(), 'docs', 'screenshots')
 
@@ -159,9 +160,7 @@ test('captures the screenshots in docs/screenshots', async ({ page }) => {
     await page.context().clearCookies()
     await page
       .context()
-      .addCookies([
-        { name: 'NEXT_LOCALE', value: locale, url: 'http://localhost:3000' },
-      ])
+      .addCookies([{ name: 'NEXT_LOCALE', value: locale, url: BASE_URL }])
 
     // Vietnamese is the product's own language, so it is reviewed at every
     // width; English only needs one to prove the fallback renders.

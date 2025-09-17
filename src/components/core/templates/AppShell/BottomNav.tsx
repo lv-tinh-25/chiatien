@@ -12,9 +12,9 @@ export function BottomNav({ items }: { items: NavItem[] }) {
   return (
     <nav
       aria-label={t('groupSections')}
-      className="solid-bar fixed bottom-0 left-1/2 z-30 w-full max-w-[480px] -translate-x-1/2 border-t px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
+      className="solid-bar fixed inset-x-0 bottom-0 z-30 border-t px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
     >
-      <ul className="flex">
+      <ul className="mx-auto flex max-w-[480px]">
         {items.map((item) => {
           const Icon = NAV_ICONS[item.key]
           return (

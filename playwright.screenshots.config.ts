@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const port = process.env.E2E_PORT ?? '3000'
+
 /**
  * Captures the screenshots in docs/screenshots. Separate from the test config
  * because these are documentation, not assertions: they are regenerated on
@@ -25,14 +27,15 @@ export default defineConfig({
       ENABLE_RECEIPT_EXTRACT: 'true',
       OPENAI_API_KEY: 'docs-key',
       OPENAI_BASE_URL: 'http://127.0.0.1:9/v1',
+      PORT: port,
     },
-    url: 'http://localhost:3000/api/health/liveness',
+    url: `http://localhost:${port}/api/health/liveness`,
     reuseExistingServer: false,
     timeout: 120_000,
   },
   use: {
     ...devices['Desktop Chrome'],
-    baseURL: 'http://localhost:3000',
+    baseURL: `http://localhost:${port}`,
     navigationTimeout: 30_000,
     video: 'off',
     timezoneId: 'UTC',

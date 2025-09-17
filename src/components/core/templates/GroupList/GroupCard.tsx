@@ -43,15 +43,15 @@ export function GroupCard({ group }: { group: GroupListEntry }) {
         <span
           aria-hidden
           className={cn(
-            'flex size-9.5 items-center justify-center rounded-control border border-white/80 text-lg lg:size-10 lg:text-xl',
+            'flex size-9.5 items-center justify-center rounded-control border border-white/80 text-lg md:size-10 md:text-xl',
             tone.surface,
           )}
         >
           {groupEmoji(group.id)}
         </span>
-        {/* Desktop pairs the chip with the emoji; a phone has no room, so it
-            drops below the name instead. */}
-        <span className="hidden lg:block">{chip}</span>
+        {/* A wide card pairs the chip with the emoji; a narrow one has no
+            room, so it drops below the name instead. */}
+        <span className="hidden md:block">{chip}</span>
       </span>
 
       <span className="block min-w-0">
@@ -64,7 +64,7 @@ export function GroupCard({ group }: { group: GroupListEntry }) {
         </span>
       </span>
 
-      <span className="block lg:hidden">{chip}</span>
+      <span className="block md:hidden">{chip}</span>
     </Link>
   )
 }

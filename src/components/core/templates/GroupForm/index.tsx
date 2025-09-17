@@ -45,7 +45,7 @@ export function GroupForm({
   } = useGroupForm({ group, protectedParticipantIds, defaultCurrencyCode })
 
   return (
-    <form onSubmit={submit} className="flex w-full max-w-180 flex-col gap-4">
+    <form onSubmit={submit} className="flex w-full flex-col gap-4 lg:max-w-180">
       <div className="hidden items-center gap-3 lg:flex">
         {back !== null && <BackButton href={back} />}
         <h1 className="text-headline-lg text-foreground">

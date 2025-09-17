@@ -46,7 +46,7 @@ export function ShareInput({
       {splitMode === 'BY_AMOUNT' ? (
         <AmountInput
           aria-label={`${participantName} ${adornment}`.trim()}
-          className="w-24 text-right lg:w-28"
+          className="w-24 text-right md:w-28"
           locale={locale}
           value={value}
           onValueChange={onChange}
@@ -55,7 +55,7 @@ export function ShareInput({
         <Input
           aria-label={`${participantName} ${adornment}`.trim()}
           inputMode="decimal"
-          className="w-20 text-right lg:w-24"
+          className="w-20 text-right md:w-24"
           value={value}
           onChange={(event) =>
             onChange(enforceCurrencyPattern(event.target.value))
