@@ -17,7 +17,7 @@ export function ExpenseFormSkeleton() {
   const t = useTranslations('App')
 
   return (
-    <div className="grid items-start gap-3.5 *:min-w-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div className="grid items-start gap-3.5 *:min-w-0 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <p role="status" className="sr-only">
         {t('loading')}
       </p>

@@ -21,7 +21,7 @@ export function BalanceListSkeleton() {
   const t = useTranslations('App')
 
   return (
-    <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
+    <div className="grid items-start gap-4 *:min-w-0 md:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
       <p role="status" className="sr-only">
         {t('loading')}
       </p>

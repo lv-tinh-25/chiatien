@@ -94,6 +94,45 @@ test('the bottom bar replaces the sidebar on a phone viewport', async ({
   await expect(navs.first()).toBeVisible()
 })
 
+test('a tablet runs the phone layout at full width, not a centred phone', async ({
+  page,
+}) => {
+  const name = `E2E Tablet ${uniqueSuffix()}`
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await page.setViewportSize({ width: 768, height: 1024 })
+  await page.goto('/groups')
+  await expect(page.getByRole('link', { name: new RegExp(name) })).toBeVisible()
+
+  const layout = await page.evaluate(() => {
+    const grid = document.querySelector('section > div')
+    const column = document.querySelector('main > div')
+    return {
+      viewport: window.innerWidth,
+      column:
+        column === null ? 0 : Math.round(column.getBoundingClientRect().width),
+      cardColumns:
+        grid === null
+          ? 0
+          : getComputedStyle(grid).gridTemplateColumns.split(' ').length,
+    }
+  })
+
+  // 32px is the shell's own side padding; anything narrower means the 480px
+  // phone column came back and stranded the app in the middle of the screen.
+  expect(layout.column).toBe(layout.viewport - 32)
+  expect(layout.cardColumns).toBeGreaterThan(2)
+
+  await page.goto(`/groups/${groupId}/expenses`)
+  const bar = page.getByRole('navigation', { name: 'Group sections' }).last()
+  const box = await bar.boundingBox()
+  expect(box?.x).toBe(0)
+  expect(box?.width).toBe(768)
+})
+
 test('the language switcher offers both languages and marks the current one', async ({
   page,
 }) => {

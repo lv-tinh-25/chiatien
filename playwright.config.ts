@@ -1,5 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
+// Another project on this machine may already hold 3000; E2E_PORT moves the
+// server under test rather than making the suite unrunnable.
+const port = process.env.E2E_PORT ?? '3000'
+
 export default defineConfig({
   testDir: './e2e',
   outputDir: './test-results',
@@ -11,7 +15,10 @@ export default defineConfig({
   retries: 0,
   timeout: 60_000,
   expect: { timeout: 10_000 },
-  reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+  ],
   webServer: {
     command: 'npm run start',
     // The ported specs assert amounts formatted as US dollars, so the server
@@ -32,15 +39,16 @@ export default defineConfig({
       ENABLE_RECEIPT_EXTRACT: 'true',
       OPENAI_API_KEY: 'e2e-key',
       OPENAI_BASE_URL: 'http://127.0.0.1:9/v1',
+      PORT: port,
     },
-    url: 'http://localhost:3000/api/health/liveness',
+    url: `http://localhost:${port}/api/health/liveness`,
     // Never reuse: a dev server left running from an earlier build silently
     // serves stale code and every assertion fails for the wrong reason.
     reuseExistingServer: false,
     timeout: 120_000,
   },
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: `http://localhost:${port}`,
     navigationTimeout: 30_000,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -51,7 +59,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        // Must stay at or above 768px: useMediaQuery swaps Radix Dialog for
+        // Must stay at or above 1024px: useMediaQuery swaps Radix Dialog for
         // Vaul Drawer below it, which renders a different component tree.
         viewport: { width: 1280, height: 900 },
         locale: 'en-US',

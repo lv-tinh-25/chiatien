@@ -23,12 +23,12 @@ export function GroupSection({
       </h2>
       <div
         className={cn(
-          'stagger-children gap-3 lg:gap-3.5',
+          'stagger-children gap-3 md:gap-3.5',
           layout === 'cards'
-            ? 'grid grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(14.375rem,1fr))]'
-            : // One line each, but a desktop row has space for several: stacking
+            ? 'grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(14.375rem,1fr))]'
+            : // One line each, but a wide row has space for several: stacking
               // them left a column of short pills in a wide empty band.
-              'flex flex-col gap-2 lg:flex-row lg:flex-wrap',
+              'flex flex-col gap-2 md:flex-row md:flex-wrap',
         )}
       >
         {children}

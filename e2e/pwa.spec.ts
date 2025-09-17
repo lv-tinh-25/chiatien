@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
 import { addExpense, createGroup, uniqueSuffix } from './app'
-import { expect, test } from './fixtures'
+import { BASE_URL, expect, test } from './fixtures'
 
 /**
  * The worker registers only in a production build (see
@@ -115,7 +115,7 @@ test('describes the app in the web manifest', async ({ page }) => {
 test('serves the offline page in the browser language', async ({ browser }) => {
   const context = await browser.newContext({
     locale: 'vi-VN',
-    baseURL: 'http://localhost:3000',
+    baseURL: BASE_URL,
   })
   const page = await context.newPage()
   try {

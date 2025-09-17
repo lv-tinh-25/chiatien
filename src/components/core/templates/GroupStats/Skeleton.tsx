@@ -12,7 +12,7 @@ export function GroupStatsSkeleton() {
       <p role="status" className="sr-only">
         {t('loading')}
       </p>
-      <Skeleton className="h-11 w-full rounded-card lg:w-160" />
+      <Skeleton className="h-11 w-full rounded-card md:w-160" />
       <Card className="flex flex-col gap-3 p-5">
         <Skeleton className="h-3.5 w-40" />
         <Skeleton className="h-9 w-56" />
@@ -21,7 +21,7 @@ export function GroupStatsSkeleton() {
         <Skeleton className="h-3.5 w-40" />
         <Skeleton className="h-19.5 lg:h-30" />
       </Card>
-      <div className="grid items-start gap-4 *:min-w-0 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
+      <div className="grid items-start gap-4 *:min-w-0 md:grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
         {[0, 1].map((card) => (
           <Card key={card} className="flex flex-col gap-3 p-5">
             <Skeleton className="h-3.5 w-40" />

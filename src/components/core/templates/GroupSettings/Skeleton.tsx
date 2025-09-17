@@ -32,10 +32,10 @@ export function GroupSettingsSkeleton() {
           {['name', 'currency', 'members', 'note'].map((row) => (
             <div
               key={row}
-              className="flex flex-col gap-1.5 lg:flex-row lg:gap-4"
+              className="flex flex-col gap-1.5 md:flex-row md:gap-4"
             >
-              <Skeleton className="h-3.5 w-24 lg:w-40 lg:shrink-0" />
-              <Skeleton className="h-4 w-2/3 lg:flex-1" />
+              <Skeleton className="h-3.5 w-24 md:w-40 md:shrink-0" />
+              <Skeleton className="h-4 w-2/3 md:flex-1" />
             </div>
           ))}
         </CardContent>

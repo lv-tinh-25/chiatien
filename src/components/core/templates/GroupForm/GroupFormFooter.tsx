@@ -34,7 +34,7 @@ export function GroupFormFooter({
         size="lg"
         pending={isSubmitting}
         disabled={!canSubmit}
-        className="flex-1 shadow-action lg:flex-none"
+        className="flex-1 shadow-action md:flex-none"
       >
         {label}
       </Button>

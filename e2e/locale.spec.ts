@@ -1,10 +1,9 @@
-import { expect, test } from './fixtures'
+import { BASE_URL, expect, test } from './fixtures'
 
 /**
  * The shared fixture pins NEXT_LOCALE to en-US for every other spec, so these
  * two build their own contexts to exercise language negotiation itself.
  */
-const BASE_URL = 'http://localhost:3000'
 
 test('shows Vietnamese to a browser whose languages it cannot honour', async ({
   browser,

@@ -47,7 +47,7 @@ export function StatsRangeSelector({
           label: t(candidate),
           shortLabel: t(`${candidate}Short`),
         }))}
-        className="w-full justify-between overflow-x-auto lg:w-auto"
+        className="w-full justify-between overflow-x-auto md:w-auto"
       />
 
       {period === 'custom' && (

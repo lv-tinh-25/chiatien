@@ -62,8 +62,8 @@ export function GlobalBalanceCard({ balances }: { balances: Balance[] }) {
           its heading. */}
       <CardHeader className="p-0">
         <CardTitle className="text-label-md tracking-wide text-muted-foreground uppercase">
-          <span className="lg:hidden">{t('title')}</span>
-          <span className="hidden lg:inline">{t('titleWide')}</span>
+          <span className="md:hidden">{t('title')}</span>
+          <span className="hidden md:inline">{t('titleWide')}</span>
         </CardTitle>
       </CardHeader>
 

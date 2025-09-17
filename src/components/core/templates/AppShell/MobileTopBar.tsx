@@ -18,7 +18,7 @@ export function MobileTopBar({
   const t = useTranslations('Nav')
 
   return (
-    <div className="solid-bar fixed top-0 left-1/2 z-30 w-full max-w-[480px] -translate-x-1/2 border-b lg:hidden">
+    <div className="solid-bar fixed inset-x-0 top-0 z-30 border-b lg:hidden">
       <div className="flex h-14 items-center gap-2 px-3">
         {shellTitle.back !== null && (
           <BackButton href={shellTitle.back} tone="bar" />

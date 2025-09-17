@@ -107,7 +107,10 @@ test('back never returns to a form that was already submitted', async ({
     await submit.click()
     await page.waitForURL(EXPENSES_URL)
 
+    // Edited before saving: the form disables Save until something actually
+    // changes, so an untouched visit would never reach the submit at all.
     await openExpense(page, title)
+    await fillStable(page.locator('input[name="amount"]'), '25')
     await page
       .getByRole('button', { name: 'Save changes', exact: true })
       .click()

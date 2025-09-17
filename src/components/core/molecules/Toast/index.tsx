@@ -23,7 +23,7 @@ export function ToastViewport() {
           opens ActiveUserPrompt over the toast that confirms it, and on the
           same layer the later portal wins and swallows the message whole. The
           other half of that problem is solved on the card itself. */}
-      <ToastPrimitive.Viewport className="fixed inset-x-4 top-16 z-60 flex flex-col gap-2.5 lg:top-auto lg:right-4 lg:bottom-4 lg:left-auto lg:w-96" />
+      <ToastPrimitive.Viewport className="fixed inset-x-4 top-16 z-60 flex flex-col gap-2.5 md:mx-auto md:w-96 lg:top-auto lg:right-4 lg:bottom-4 lg:left-auto lg:w-96" />
     </ToastPrimitive.Provider>
   )
 }

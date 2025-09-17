@@ -18,8 +18,8 @@ import type { ReactNode } from 'react'
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-border/60 py-3 first:pt-0 last:border-b-0 last:pb-0 lg:flex-row lg:items-baseline lg:gap-4">
-      <span className="text-label-md text-muted-foreground lg:w-40 lg:shrink-0">
+    <div className="flex flex-col gap-1 border-b border-border/60 py-3 first:pt-0 last:border-b-0 last:pb-0 md:flex-row md:items-baseline md:gap-4">
+      <span className="text-label-md text-muted-foreground md:w-40 md:shrink-0">
         {label}
       </span>
       <div className="min-w-0 flex-1 text-body-lg text-foreground">

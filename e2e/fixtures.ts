@@ -104,3 +104,10 @@ export const test = base.extend<Options>({
 })
 
 export { expect }
+
+/**
+ * The origin the server under test is on. Specs that build their own context —
+ * and so get no `baseURL` from the config — need it spelled out, and it has to
+ * follow `E2E_PORT` or they would address whatever else holds 3000.
+ */
+export const BASE_URL = `http://localhost:${process.env.E2E_PORT ?? '3000'}`
