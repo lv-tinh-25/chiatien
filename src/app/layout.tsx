@@ -38,7 +38,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className={jakarta.variable}>
-      <body className="min-h-dvh font-sans antialiased">
+      <body className="min-h-svh font-sans antialiased">
         <Aurora />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <TRPCProvider>{children}</TRPCProvider>

@@ -71,8 +71,18 @@
         "label": "Bạn đang xem với tư cách",
         "description": "Được dùng làm người trả mặc định, và là số dư mà ứng dụng báo cho bạn. Chỉ lưu trên thiết bị này.",
         "placeholder": "Chọn thành viên",
-        "none": "Không có"
+        "none": "Không có",
+        "changed": "Đang xem với tư cách {name}",
+        "cleared": "Không còn xem với tư cách ai"
       }
+    },
+    "MembershipToast": {
+      "starred": "Đã gắn sao",
+      "unstarred": "Đã bỏ gắn sao",
+      "archived": "Đã chuyển vào Lưu trữ",
+      "unarchived": "Đã bỏ lưu trữ",
+      "undo": "Hoàn tác",
+      "undoAlt": "Hoàn tác thay đổi này"
     }
   },
   "GroupForm": {

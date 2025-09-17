@@ -4,7 +4,8 @@ import {
   addRecent,
   partitionGroups,
   removeRecent,
-  toggleIn,
+  setArchived,
+  setStarred,
   type PartitionedGroups,
   type RecentGroup,
   type RecentGroups,
@@ -20,9 +21,14 @@ type RecentGroupsState = {
   markHydrated: () => void
   visit: (group: RecentGroup) => void
   forget: (groupId: string) => void
-  toggleStar: (groupId: string) => void
-  toggleArchive: (groupId: string) => void
+  /** Explicit rather than a toggle, so undoing a change can restore a value. */
+  setStarred: (groupId: string, starred: boolean) => void
+  setArchived: (groupId: string, archived: boolean) => void
   partitioned: () => PartitionedGroups
+}
+
+function membershipOf(state: RecentGroupsState) {
+  return { starredIds: state.starredIds, archivedIds: state.archivedIds }
 }
 
 export const useRecentGroupsStore = create<RecentGroupsState>()(
@@ -40,10 +46,10 @@ export const useRecentGroupsStore = create<RecentGroupsState>()(
           starredIds: get().starredIds.filter((id) => id !== groupId),
           archivedIds: get().archivedIds.filter((id) => id !== groupId),
         }),
-      toggleStar: (groupId) =>
-        set({ starredIds: toggleIn(get().starredIds, groupId) }),
-      toggleArchive: (groupId) =>
-        set({ archivedIds: toggleIn(get().archivedIds, groupId) }),
+      setStarred: (groupId, starred) =>
+        set(setStarred(membershipOf(get()), groupId, starred)),
+      setArchived: (groupId, archived) =>
+        set(setArchived(membershipOf(get()), groupId, archived)),
       partitioned: () =>
         partitionGroups(get().groups, get().starredIds, get().archivedIds),
     }),

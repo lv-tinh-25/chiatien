@@ -9,6 +9,7 @@ import { defaultCategoryFor } from '@/lib/categories'
 import { getCurrency } from '@/lib/currency'
 import { reconcileSplittingOptions } from '@/lib/expense-defaults'
 import { toExpensePayload } from '@/lib/expense-payload'
+import { sameFormValues } from '@/lib/form-dirty'
 import { randomId } from '@/lib/random'
 import { parseReceiptParams } from '@/lib/receipt-params'
 import {
@@ -23,7 +24,7 @@ import type { AppRouterOutput } from '@/trpc/routers/_app'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { useForm, useFormState, useWatch } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 type Expense = AppRouterOutput['groups']['expenses']['get']['expense']
 
@@ -132,10 +133,12 @@ export function useExpenseForm(expense?: Expense) {
     defaultValues: defaults,
   })
 
-  // Through `useFormState`, never `form.formState`: the React Compiler caches
-  // the proxy read that does the subscribing, which would leave the button one
-  // keystroke behind — the same trap `useFormErrors` documents.
-  const { isDirty } = useFormState({ control: form.control })
+  // Not `formState.isDirty`: it compares raw values, so the amount is dirty for
+  // ever once typed — its default is a number and the input writes a string —
+  // and it ignores every `setValue` that was not given `shouldDirty`, which is
+  // most of this form. `sameFormValues` compares what the values mean.
+  const current = useWatch({ control: form.control })
+  const edited = !sameFormValues(current, defaults)
 
   // useWatch rather than form.watch: the latter cannot be memoized, and the
   // React Compiler bails out of the whole hook when it sees one.
@@ -237,7 +240,7 @@ export function useExpenseForm(expense?: Expense) {
     // Saving an expense nobody edited writes the same row back and reports
     // success for nothing. Creating one is different: a settlement or a
     // scanned receipt arrives prefilled and is meant to be submitted as it is.
-    canSubmit: isCreate || isDirty,
+    canSubmit: isCreate || edited,
     ...conversion,
   }
 }

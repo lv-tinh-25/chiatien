@@ -26,7 +26,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => visit(pathname), [pathname, visit])
 
   return (
-    <div className="min-h-dvh">
+    <div className="min-h-svh">
       <AppTopBar chrome={chrome} />
       {chrome.groupId !== null && <Sidebar chrome={chrome} />}
       <MobileTopBar chrome={chrome} shellTitle={shellTitle} />
@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           chrome.groupId !== null && 'lg:pl-70',
         )}
       >
-        <div className="mx-auto w-full max-w-[480px] lg:max-w-[1080px]">
+        <div className="mx-auto w-full max-w-[480px] lg:max-w-[1440px]">
           {children}
         </div>
       </main>

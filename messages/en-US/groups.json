@@ -71,8 +71,18 @@
         "label": "You are viewing as",
         "description": "Used as the default payer, and whose balance the app reports. Stored on this device only.",
         "placeholder": "Select a participant",
-        "none": "None"
+        "none": "None",
+        "changed": "Now viewing as {name}",
+        "cleared": "No longer viewing as anyone"
       }
+    },
+    "MembershipToast": {
+      "starred": "Added to Starred",
+      "unstarred": "Removed from Starred",
+      "archived": "Moved to Archived",
+      "unarchived": "Removed from Archived",
+      "undo": "Undo",
+      "undoAlt": "Undo this change"
     }
   },
   "GroupForm": {

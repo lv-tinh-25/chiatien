@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 import { createGroup, uniqueSuffix } from './app'
 import { expect, test } from './fixtures'
-import { fillStable } from './ui'
+import { fillStable, selectRadixOption } from './ui'
 
 /**
  * Opens the group's own overflow menu. The design draws no controls on the
@@ -93,6 +93,81 @@ test('archiving moves a group into the archived section', async ({ page }) => {
 
   await page.goto('/groups')
   await expect(page.getByRole('heading', { name: 'Archived' })).toBeVisible()
+})
+
+test('archiving a starred group unpins it and stops offering the star', async ({
+  page,
+}) => {
+  const name = `E2E Exclusive ${uniqueSuffix()}`
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Star', exact: true }).click()
+  await page.goto('/groups')
+  await expect(page.getByRole('heading', { name: 'Starred' })).toBeVisible()
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Archive group' }).click()
+  await expect(page.getByText('Moved to Archived')).toBeVisible()
+
+  // Put away means put away: it leaves Starred rather than sitting in both.
+  await page.goto('/groups')
+  await expect(page.getByRole('heading', { name: 'Starred' })).toBeHidden()
+  await expect(page.getByRole('heading', { name: 'Archived' })).toBeVisible()
+
+  await openGroupMenu(page, groupId)
+  const menu = page.locator('[data-radix-popper-content-wrapper]')
+  await expect(
+    menu.getByRole('button', { name: 'Unarchive group' }),
+  ).toBeVisible()
+  await expect(
+    menu.getByRole('button', { name: 'Star', exact: true }),
+  ).toHaveCount(0)
+})
+
+test('undoing an archive hands the star back', async ({ page }) => {
+  const name = `E2E Undo Archive ${uniqueSuffix()}`
+  const groupId = await createGroup(page, {
+    name,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Star', exact: true }).click()
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Archive group' }).click()
+
+  // Archiving took the star with it, so a half undo would leave the group in
+  // Recent rather than back where it was.
+  await page.getByRole('button', { name: 'Undo', exact: true }).click()
+
+  await page.goto('/groups')
+  await expect(page.getByRole('heading', { name: 'Starred' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Archived' })).toBeHidden()
+})
+
+test('confirms starring, archiving and changing who you are', async ({
+  page,
+}) => {
+  const groupId = await createGroup(page, {
+    name: `E2E Feedback ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Star', exact: true }).click()
+  await expect(page.getByText('Added to Starred')).toBeVisible()
+
+  await openGroupMenu(page, groupId)
+  await page.getByRole('button', { name: 'Unstar', exact: true }).click()
+  await expect(page.getByText('Removed from Starred')).toBeVisible()
+
+  await page.goto(`/groups/${groupId}/settings`)
+  await selectRadixOption(page, page.getByRole('combobox').first(), 'Bob')
+  await expect(page.getByText('Now viewing as Bob')).toBeVisible()
 })
 
 test('renaming a group updates the list', async ({ page }) => {

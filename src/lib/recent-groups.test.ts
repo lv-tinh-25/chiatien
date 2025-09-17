@@ -2,6 +2,8 @@ import {
   addRecent,
   partitionGroups,
   removeRecent,
+  setArchived,
+  setStarred,
   toggleIn,
 } from '@/lib/recent-groups'
 
@@ -74,10 +76,15 @@ describe('partitionGroups', () => {
     })
   })
 
-  it('treats starring as stronger than archiving', () => {
+  /**
+   * The two flags cannot both be set any more, but storage written before that
+   * rule can still carry both — and the menu offers no way to unstar an
+   * archived group, so rendering it under Starred would strand it.
+   */
+  it('treats archiving as stronger than starring', () => {
     const result = partitionGroups(groups, ['c'], ['c'])
-    expect(result.starred.map((group) => group.id)).toEqual(['c'])
-    expect(result.archived).toEqual([])
+    expect(result.archived.map((group) => group.id)).toEqual(['c'])
+    expect(result.starred).toEqual([])
   })
 
   it('returns three empty lists for an empty input', () => {
@@ -86,5 +93,65 @@ describe('partitionGroups', () => {
       recent: [],
       archived: [],
     })
+  })
+})
+
+describe('setStarred', () => {
+  it('stars a group without touching what is archived', () => {
+    expect(
+      setStarred({ starredIds: [], archivedIds: ['b'] }, 'a', true),
+    ).toEqual({ starredIds: ['a'], archivedIds: ['b'] })
+  })
+
+  it('unstars a group', () => {
+    expect(
+      setStarred({ starredIds: ['a', 'b'], archivedIds: [] }, 'a', false),
+    ).toEqual({ starredIds: ['b'], archivedIds: [] })
+  })
+
+  it('is idempotent', () => {
+    const state = { starredIds: ['a'], archivedIds: [] }
+    expect(setStarred(state, 'a', true)).toEqual(state)
+    expect(setStarred({ starredIds: [], archivedIds: [] }, 'a', false)).toEqual(
+      {
+        starredIds: [],
+        archivedIds: [],
+      },
+    )
+  })
+})
+
+describe('setArchived', () => {
+  it('takes the star with it when archiving', () => {
+    expect(
+      setArchived({ starredIds: ['a', 'b'], archivedIds: [] }, 'a', true),
+    ).toEqual({ starredIds: ['b'], archivedIds: ['a'] })
+  })
+
+  it('archives a group that was never starred', () => {
+    expect(setArchived({ starredIds: [], archivedIds: [] }, 'a', true)).toEqual(
+      {
+        starredIds: [],
+        archivedIds: ['a'],
+      },
+    )
+  })
+
+  it('does not hand the star back on unarchiving', () => {
+    const archived = setArchived(
+      { starredIds: ['a'], archivedIds: [] },
+      'a',
+      true,
+    )
+    expect(setArchived(archived, 'a', false)).toEqual({
+      starredIds: [],
+      archivedIds: [],
+    })
+  })
+
+  it('leaves another group\u2019s flags alone', () => {
+    expect(
+      setArchived({ starredIds: ['b'], archivedIds: ['c'] }, 'a', true),
+    ).toEqual({ starredIds: ['b'], archivedIds: ['c', 'a'] })
   })
 })
