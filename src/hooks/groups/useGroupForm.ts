@@ -4,6 +4,7 @@ import { useLeaveForm } from '@/hooks/forms/useLeaveForm'
 import { useMutationFeedback } from '@/hooks/forms/useMutationFeedback'
 import { asLocale } from '@/i18n/locales'
 import { defaultCurrencyList } from '@/lib/currency'
+import { sameFormValues } from '@/lib/form-dirty'
 import { groupFormSchema, type GroupFormValues } from '@/lib/schemas'
 import { NO_ACTIVE_USER, useActiveUserStore } from '@/stores/useActiveUserStore'
 import { useRecentGroupsStore } from '@/stores/useRecentGroupsStore'
@@ -11,7 +12,7 @@ import { trpc } from '@/trpc/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocale, useTranslations } from 'next-intl'
 import { useMemo } from 'react'
-import { useFieldArray, useForm, useFormState } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
 type ExistingGroup = {
   id: string
@@ -54,30 +55,29 @@ export function useGroupForm({
     defaultCurrencyList(locale).find((currency) => currency.code === code)
       ?.symbol_native ?? ''
 
+  const defaults: GroupFormValues = group
+    ? {
+        name: group.name,
+        information: group.information ?? '',
+        currency: group.currency,
+        currencyCode: group.currencyCode ?? '',
+        participants: group.participants.map(({ id, name }) => ({ id, name })),
+      }
+    : {
+        name: '',
+        information: '',
+        currency: symbolFor(defaultCurrencyCode),
+        currencyCode: defaultCurrencyCode,
+        participants: [
+          { name: t('Participants.John') },
+          { name: t('Participants.Jane') },
+          { name: t('Participants.Jack') },
+        ],
+      }
+
   const form = useForm<GroupFormValues>({
     resolver: zodResolver(groupFormSchema),
-    defaultValues: group
-      ? {
-          name: group.name,
-          information: group.information ?? '',
-          currency: group.currency,
-          currencyCode: group.currencyCode ?? '',
-          participants: group.participants.map(({ id, name }) => ({
-            id,
-            name,
-          })),
-        }
-      : {
-          name: '',
-          information: '',
-          currency: symbolFor(defaultCurrencyCode),
-          currencyCode: defaultCurrencyCode,
-          participants: [
-            { name: t('Participants.John') },
-            { name: t('Participants.Jane') },
-            { name: t('Participants.Jack') },
-          ],
-        },
+    defaultValues: defaults,
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -85,10 +85,10 @@ export function useGroupForm({
     name: 'participants',
   })
 
-  // Through `useFormState`, never `form.formState`: the React Compiler caches
-  // the proxy read that does the subscribing, which would leave the button one
-  // keystroke behind — the same trap `useFormErrors` documents.
-  const { isDirty } = useFormState({ control: form.control })
+  // Not `formState.isDirty`: it only counts a `setValue` that was given
+  // `shouldDirty`, and it compares raw values rather than what they mean.
+  const current = useWatch({ control: form.control })
+  const edited = !sameFormValues(current, defaults)
 
   const protectedIds = useMemo(
     () => new Set(protectedParticipantIds),
@@ -120,6 +120,9 @@ export function useGroupForm({
 
       await utils.groups.invalidate()
       visit({ id: group.id, name: values.name })
+      // The form is a task, and the task is over: staying on it left the reader
+      // looking at a screen that had already done its job.
+      leaveForm(`/groups/${group.id}/settings`)
       return
     }
 
@@ -147,7 +150,7 @@ export function useGroupForm({
     // Saving a group nobody edited writes the same row back and reports
     // success for nothing. Creating one is different: a form opened from a
     // link can be complete before it is touched.
-    canSubmit: !isEdit || isDirty,
+    canSubmit: !isEdit || edited,
     onCurrencyCodeChange: (code: string) => {
       form.setValue('currencyCode', code)
       form.setValue('currency', symbolFor(code))

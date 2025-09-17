@@ -26,7 +26,9 @@ export function GroupSection({
           'stagger-children gap-3 lg:gap-3.5',
           layout === 'cards'
             ? 'grid grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(14.375rem,1fr))]'
-            : 'flex flex-col gap-2',
+            : // One line each, but a desktop row has space for several: stacking
+              // them left a column of short pills in a wide empty band.
+              'flex flex-col gap-2 lg:flex-row lg:flex-wrap',
         )}
       >
         {children}

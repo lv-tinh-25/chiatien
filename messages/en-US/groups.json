@@ -80,7 +80,7 @@
       "starred": "Added to Starred",
       "unstarred": "Removed from Starred",
       "archived": "Moved to Archived",
-      "unarchived": "Moved back to Recent",
+      "unarchived": "Removed from Archived",
       "undo": "Undo",
       "undoAlt": "Undo this change"
     }
