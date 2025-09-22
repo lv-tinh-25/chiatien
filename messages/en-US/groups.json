@@ -104,7 +104,8 @@
     },
     "Participants": {
       "title": "Participants",
-      "protectedParticipant": "This participant is part of expenses, and can not be removed.",
+      "protectedParticipant": "A participant who is part of an expense cannot be removed.",
+      "lastParticipant": "A group needs at least one participant.",
       "new": "New",
       "add": "Add participant",
       "John": "John",

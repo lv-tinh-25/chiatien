@@ -57,6 +57,46 @@ test('renames a group and adds a participant afterwards', async ({ page }) => {
   await expectBalance(page, 'Dave', 60)
 })
 
+test('says why a participant cannot be removed', async ({ page }) => {
+  const NOTE = 'A participant who is part of an expense cannot be removed.'
+  const row = (index: number) =>
+    page.locator('li').filter({
+      has: page.locator(`input[name="participants.${index}.name"]`),
+    })
+
+  // The last participant standing is locked as well, for a different reason,
+  // and the row must not blame an expense that does not exist.
+  await page.goto('/groups/create')
+  await fillStable(
+    page.locator('input[name="name"]'),
+    `E2E Lock ${uniqueSuffix()}`,
+  )
+  await row(2).getByRole('button').click()
+  await row(1).getByRole('button').click()
+  await expect(row(0).getByRole('button')).toBeDisabled()
+  await expect(row(0).getByRole('button')).toHaveAttribute(
+    'title',
+    'A group needs at least one participant.',
+  )
+  await expect(page.getByText(NOTE)).toHaveCount(0)
+
+  // Once an expense exists the reason changes, and it is written on the screen
+  // rather than left to a tooltip a phone has no way to open.
+  const groupId = await createGroup(page, {
+    name: `E2E Locked ${uniqueSuffix()}`,
+    participants: ['Alice', 'Bob'],
+  })
+  await addExpense(page, groupId, {
+    title: 'Brunch',
+    amount: '60',
+    paidBy: 'Alice',
+  })
+
+  await page.goto(`/groups/${groupId}/settings/edit`)
+  await expect(page.getByText(NOTE)).toBeVisible()
+  await expect(row(0).getByRole('button')).toHaveAttribute('title', NOTE)
+})
+
 test('lists visited groups under Recent', async ({ page }) => {
   const first = `E2E Recent A ${uniqueSuffix()}`
   const second = `E2E Recent B ${uniqueSuffix()}`
