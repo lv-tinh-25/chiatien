@@ -48,9 +48,6 @@
       "DateField": {
         "label": "Ngày"
       },
-      "currencyField": {
-        "label": "Đơn vị tiền tệ"
-      },
       "paidByField": {
         "label": "Nhận bởi"
       },
@@ -68,9 +65,6 @@
       },
       "DateField": {
         "label": "Ngày"
-      },
-      "currencyField": {
-        "label": "Đơn vị tiền tệ"
       },
       "paidByField": {
         "label": "Người trả",
@@ -90,29 +84,6 @@
     },
     "amountField": {
       "label": "Số tiền"
-    },
-    "conversionUnavailable": "Để thiết lập đơn vị tiền tệ khác nhau cho từng khoản chi và quy đổi đơn vị tiền tệ, hãy chọn một đơn vị tiền tệ không tùy chỉnh cho nhóm.",
-    "originalAmountField": {
-      "label": "Số tiền quy đổi",
-      "repaymentLabel": "Số tiền cần chuyển",
-      "repaymentDescription": "Quy đổi từ số tiền phía trên — đó mới là số dư được tất toán."
-    },
-    "conversionRateField": {
-      "useApi": "Sử dụng tỷ giá từ Frankfurter",
-      "useCustom": "Sử dụng tỷ giá tùy chỉnh",
-      "label": "Tỷ giá"
-    },
-    "conversionRateState": {
-      "loading": "Đang tìm tỷ giá hối đoái…",
-      "success": "Tỷ giá đã tìm được:",
-      "error": "Rất tiếc, chúng tôi không thể lấy được tỷ giá mới nhất.",
-      "staleRate": "Sử dụng tỷ giá:",
-      "noRate": "Nhập tỷ giá tùy chỉnh bên dưới.",
-      "currencyNotFound": "Rất tiếc, Frankfurter hiện không có tỷ giá hối đoái cho loại tiền tệ này.",
-      "noDate": "Nhập ngày phát sinh chi tiêu để lấy tỷ giá quy đổi.",
-      "dateMismatch": "Tỷ giá ngày: {date}",
-      "refresh": "Làm mới",
-      "customRate": "Đang dùng tỷ giá tự nhập"
     },
     "categoryField": {
       "label": "Danh mục"

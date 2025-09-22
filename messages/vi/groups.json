@@ -99,7 +99,8 @@
       "placeholder": "₫, $, €…"
     },
     "CurrencyCodeField": {
-      "label": "Đơn vị tiền tệ chính"
+      "label": "Đơn vị tiền tệ chính",
+      "locked": "Nhóm đã có chi tiêu nên không thể đổi đơn vị tiền tệ nữa."
     },
     "Participants": {
       "title": "Thành viên",

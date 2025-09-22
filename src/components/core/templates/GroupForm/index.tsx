@@ -42,6 +42,7 @@ export function GroupForm({
     isSubmitting,
     canSubmit,
     onCurrencyCodeChange,
+    currencyLocked,
   } = useGroupForm({ group, protectedParticipantIds, defaultCurrencyCode })
 
   return (
@@ -55,6 +56,7 @@ export function GroupForm({
       <GroupDetailsFields
         form={form}
         onCurrencyCodeChange={onCurrencyCodeChange}
+        currencyLocked={currencyLocked}
       />
       <ParticipantList
         form={form}

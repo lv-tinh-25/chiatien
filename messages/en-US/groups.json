@@ -99,7 +99,8 @@
       "placeholder": "$, €, £…"
     },
     "CurrencyCodeField": {
-      "label": "Main currency"
+      "label": "Main currency",
+      "locked": "The group already has expenses, so its currency can no longer change."
     },
     "Participants": {
       "title": "Participants",

@@ -12,13 +12,13 @@ type CurrencyChipsProps = {
   label: string
   /** `inset` rides beside the amount input; `outline` fills a form row. */
   variant?: 'inset' | 'outline'
+  disabled?: boolean
   'aria-describedby'?: string
 }
 
 /**
  * The design's currency control: a short row of chips rather than a searchable
- * list, because a group settles in one currency and an expense is entered in
- * that one or in dollars.
+ * list, because a group settles in one currency and picks it once.
  */
 export function CurrencyChips({
   id,
@@ -27,6 +27,7 @@ export function CurrencyChips({
   onValueChange,
   label,
   variant = 'inset',
+  disabled = false,
   'aria-describedby': describedBy,
 }: CurrencyChipsProps) {
   return (
@@ -36,6 +37,7 @@ export function CurrencyChips({
       aria-describedby={describedBy}
       value={value}
       onValueChange={onValueChange}
+      disabled={disabled}
       className={cn(
         'flex gap-1',
         variant === 'inset' &&
@@ -50,6 +52,7 @@ export function CurrencyChips({
           className={cn(
             'cursor-pointer font-bold transition-colors duration-150 ease-out-soft',
             'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+            'disabled:cursor-not-allowed disabled:opacity-60',
             variant === 'inset'
               ? cn(
                   'min-h-9.5 rounded-[0.5625rem] px-3 text-body-lg',

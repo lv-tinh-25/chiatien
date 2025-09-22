@@ -16,11 +16,14 @@ import { useWatch } from 'react-hook-form'
 type GroupDetailsFieldsProps = {
   form: UseFormReturn<GroupFormValues>
   onCurrencyCodeChange: (code: string) => void
+  /** Set once the group has expenses; see `useGroupForm`. */
+  currencyLocked: boolean
 }
 
 export function GroupDetailsFields({
   form,
   onCurrencyCodeChange,
+  currencyLocked,
 }: GroupDetailsFieldsProps) {
   const t = useTranslations('GroupForm')
   const locale = asLocale(useLocale())
@@ -48,6 +51,9 @@ export function GroupDetailsFields({
 
         <FormField
           label={t('CurrencyCodeField.label')}
+          description={
+            currencyLocked ? t('CurrencyCodeField.locked') : undefined
+          }
           errorKey={errors.currencyCode?.message}
         >
           {({ id, describedBy }) => (
@@ -59,6 +65,7 @@ export function GroupDetailsFields({
               options={currencyChoicesWith(locale, currencyCode)}
               onValueChange={onCurrencyCodeChange}
               label={t('CurrencyCodeField.label')}
+              disabled={currencyLocked}
             />
           )}
         </FormField>
@@ -72,6 +79,7 @@ export function GroupDetailsFields({
             maxLength={5}
             errorKey={errors.currency?.message}
             {...form.register('currency')}
+            disabled={currencyLocked}
           />
         )}
       </CardContent>

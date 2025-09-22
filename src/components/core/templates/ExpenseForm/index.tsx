@@ -3,7 +3,6 @@
 import { BackButton } from '@/components/core/atoms/BackButton'
 import { Card } from '@/components/core/atoms/Card'
 import { ExpenseAmountField } from '@/components/core/templates/ExpenseForm/ExpenseAmountField'
-import { ExpenseCurrencyBlock } from '@/components/core/templates/ExpenseForm/ExpenseCurrencyBlock'
 import { ExpenseDocumentsField } from '@/components/core/templates/ExpenseForm/ExpenseDocumentsField'
 import { ExpenseFormFooter } from '@/components/core/templates/ExpenseForm/ExpenseFormFooter'
 import { ExpenseMetaFields } from '@/components/core/templates/ExpenseForm/ExpenseMetaFields'
@@ -49,7 +48,6 @@ function ExpenseFormFields({
     groupId,
     locale,
     groupCurrency,
-    originalCurrency,
     participants,
     isCreate,
     submit,
@@ -57,11 +55,6 @@ function ExpenseFormFields({
     markEdited,
     isSubmitting,
     canSubmit,
-    conversionRequired,
-    exchangeRate,
-    usingCustomRate,
-    setUsingCustomRate,
-    notice,
   } = useExpenseForm(expense)
 
   const amount = useWatch({ control: form.control, name: 'amount' })
@@ -91,18 +84,6 @@ function ExpenseFormFields({
             form={form}
             currency={groupCurrency}
             locale={locale}
-            convertible={groupCurrency.code !== ''}
-          />
-
-          <ExpenseCurrencyBlock
-            form={form}
-            originalCurrency={originalCurrency}
-            conversionRequired={conversionRequired}
-            usingCustomRate={usingCustomRate}
-            notice={notice}
-            isLoadingRate={exchangeRate.isLoading}
-            onUseCustomRate={setUsingCustomRate}
-            onRefreshRate={() => void exchangeRate.refresh()}
           />
 
           <ExpenseMetaFields
