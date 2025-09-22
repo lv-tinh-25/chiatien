@@ -1,6 +1,5 @@
 'use client'
 
-import { useExpenseCurrencyConversion } from '@/hooks/expenses/useExpenseCurrencyConversion'
 import { useExpenseSplitBalancing } from '@/hooks/expenses/useExpenseSplitBalancing'
 import { useLeaveForm } from '@/hooks/forms/useLeaveForm'
 import { useMutationFeedback } from '@/hooks/forms/useMutationFeedback'
@@ -75,16 +74,6 @@ export function useExpenseForm(expense?: Expense) {
         title: expense.title,
         category: expense.categoryId,
         amount: amountAsDecimal(expense.amount, groupCurrency),
-        originalAmount:
-          expense.originalAmount === null
-            ? ''
-            : amountAsDecimal(
-                expense.originalAmount,
-                getCurrency(expense.originalCurrency ?? '', locale, 'Custom'),
-              ),
-        originalCurrency: expense.originalCurrency ?? '',
-        conversionRate:
-          expense.conversionRate === null ? '' : Number(expense.conversionRate),
         paidBy: expense.paidById,
         paidFor: expense.paidFor.map(({ participantId, shares }) => ({
           participant: participantId,
@@ -109,9 +98,6 @@ export function useExpenseForm(expense?: Expense) {
         amount: settlement.active
           ? String(amountAsDecimal(settlement.amount, groupCurrency))
           : (receipt?.amount ?? ''),
-        originalAmount: '',
-        originalCurrency: '',
-        conversionRate: '',
         paidBy: settlement.from ?? activeUserId ?? participants[0]?.id ?? '',
         paidFor:
           settlement.active && settlement.to !== null
@@ -140,22 +126,6 @@ export function useExpenseForm(expense?: Expense) {
   const current = useWatch({ control: form.control })
   const edited = !sameFormValues(current, defaults)
 
-  // useWatch rather than form.watch: the latter cannot be memoized, and the
-  // React Compiler bails out of the whole hook when it sees one.
-  const originalCode = useWatch({
-    control: form.control,
-    name: 'originalCurrency',
-  })
-  const originalCurrency = getCurrency(originalCode ?? '', locale, 'Custom')
-
-  // Order matters: conversion settles the amount fields before the split is
-  // rebalanced against the amount they produced.
-  const conversion = useExpenseCurrencyConversion({
-    form,
-    groupCurrency,
-    originalCurrency,
-    isCreate,
-  })
   const { markEdited } = useExpenseSplitBalancing(form, groupCurrency)
 
   const submit = form.handleSubmit(async (values) => {
@@ -166,11 +136,14 @@ export function useExpenseForm(expense?: Expense) {
       })
     }
 
+    // Nothing converts any more: an amount is always in the group's currency,
+    // so every payload drops the three conversion columns and the rows already
+    // carrying them keep what they were saved with.
     const payload = toExpensePayload(
       values,
       groupCurrency,
-      originalCurrency,
-      conversion.conversionRequired,
+      groupCurrency,
+      false,
     )
 
     const saved = await run(
@@ -227,7 +200,6 @@ export function useExpenseForm(expense?: Expense) {
     group,
     locale,
     groupCurrency,
-    originalCurrency,
     participants,
     isCreate,
     submit,
@@ -241,6 +213,5 @@ export function useExpenseForm(expense?: Expense) {
     // success for nothing. Creating one is different: a settlement or a
     // scanned receipt arrives prefilled and is meant to be submitted as it is.
     canSubmit: isCreate || edited,
-    ...conversion,
   }
 }

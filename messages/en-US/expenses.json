@@ -48,9 +48,6 @@
       "DateField": {
         "label": "Income date"
       },
-      "currencyField": {
-        "label": "Currency of income"
-      },
       "paidByField": {
         "label": "Received by"
       },
@@ -68,9 +65,6 @@
       },
       "DateField": {
         "label": "Date"
-      },
-      "currencyField": {
-        "label": "Currency of expense"
       },
       "paidByField": {
         "label": "Paid by",
@@ -90,29 +84,6 @@
     },
     "amountField": {
       "label": "Amount"
-    },
-    "conversionUnavailable": "To set a different currency per expense and convert amounts, select a non-custom currency for the group.",
-    "originalAmountField": {
-      "label": "Amount to convert",
-      "repaymentLabel": "Amount to transfer",
-      "repaymentDescription": "Converted from the amount above, which is what settles the balance."
-    },
-    "conversionRateField": {
-      "useApi": "Use rates from Frankfurter",
-      "useCustom": "Use custom rate",
-      "label": "Exchange rate"
-    },
-    "conversionRateState": {
-      "loading": "Getting exchange rates…",
-      "success": "Obtained rates:",
-      "error": "Oops, we could not get the most recent rates.",
-      "staleRate": "Using rate:",
-      "noRate": "Enter a custom rate below.",
-      "currencyNotFound": "Oops, Frankfurter does not have the rate for this currency at this day.",
-      "noDate": "Enter the expense date to get a conversion rate.",
-      "dateMismatch": "Rates from date: {date}",
-      "refresh": "Refresh",
-      "customRate": "Using custom rate"
     },
     "categoryField": {
       "label": "Category"

@@ -24,22 +24,14 @@ type Options = {
    * that exercises the dialog itself.
    */
   seedActiveUser: boolean
-
-  /**
-   * Rate returned for every api.fxratesapi.com request, so currency
-   * conversion is deterministic and offline. Null (the default) aborts the
-   * request instead, which is what every non-currency spec wants.
-   */
-  exchangeRate: number | null
 }
 
 export const test = base.extend<Options>({
   seedActiveUser: [true, { option: true }],
-  exchangeRate: [null, { option: true }],
 
   // The second argument is Playwright's `use` callback, renamed because
   // eslint-plugin-react-hooks would otherwise read `use(...)` as React's hook.
-  page: async ({ page, baseURL, seedActiveUser, exchangeRate }, runTest) => {
+  page: async ({ page, baseURL, seedActiveUser }, runTest) => {
     if (baseURL) {
       await page
         .context()
@@ -64,29 +56,10 @@ export const test = base.extend<Options>({
       })
     }
 
-    // The suite must never depend on a third-party API. useCurrencyRate calls
-    // this only when the expense currency differs from the group currency.
-    await page.route('https://api.fxratesapi.com/**', (route) => {
-      if (exchangeRate === null) return route.abort()
-
-      // Request shape: /historical?date=<YYYY-MM-DD>&base=<CODE>&currencies=…
-      // The hook turns the response into a RangeError unless `date` echoes the
-      // requested day, so mirror it back rather than inventing one.
-      const url = new URL(route.request().url())
-      const date = url.searchParams.get('date') ?? ''
-      const base = url.searchParams.get('base') ?? ''
-
-      return route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          success: true,
-          base,
-          date: `${date}T00:00:00.000Z`,
-          rates: { USD: exchangeRate, EUR: exchangeRate, GBP: exchangeRate },
-        }),
-      })
-    })
+    // Nothing in the app calls the rate service any more -- an amount is always
+    // in the group's own currency. The block stays so a reintroduction shows up
+    // as a failing spec rather than as a silent third-party dependency.
+    await page.route('https://api.fxratesapi.com/**', (route) => route.abort())
 
     // Currency and category pickers render flag images from a CDN. Nothing is
     // asserted on them and they only add latency, so keep the run hermetic.

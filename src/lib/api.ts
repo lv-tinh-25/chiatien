@@ -279,6 +279,17 @@ export async function updateExpense(
   })
 }
 
+/**
+ * Refusal of a currency change on a group that already holds amounts. Named so
+ * the tRPC layer can answer with a conflict rather than an internal error.
+ */
+export class CurrencyLockedError extends Error {
+  constructor() {
+    super('The group currency cannot change once the group has expenses')
+    this.name = 'CurrencyLockedError'
+  }
+}
+
 export async function updateGroup(
   groupId: string,
   groupFormValues: GroupFormValues,
@@ -286,6 +297,19 @@ export async function updateGroup(
 ) {
   const existingGroup = await getGroup(groupId)
   if (!existingGroup) throw new Error('Invalid group ID')
+
+  // Amounts are stored as bare integers carrying no unit, so moving the group
+  // to another currency reinterprets every row that already exists. Checked
+  // here rather than in the form alone because the form is not the only way in.
+  // The count is only paid for when the request actually asks for a change.
+  const currencyChanged =
+    groupFormValues.currency !== existingGroup.currency ||
+    (groupFormValues.currencyCode ?? '') !== (existingGroup.currencyCode ?? '')
+  if (
+    currencyChanged &&
+    (await prisma.expense.count({ where: { groupId } })) > 0
+  )
+    throw new CurrencyLockedError()
 
   await logActivity(groupId, ActivityType.UPDATE_GROUP, { participantId })
 

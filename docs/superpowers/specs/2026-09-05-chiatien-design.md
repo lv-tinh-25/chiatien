@@ -197,6 +197,13 @@ fields. It is split along those seams.
 `getDefaultSplittingOptions` → `lib/expense-defaults.ts`; the decimal-to-minor-unit
 conversion inside `submit` → `lib/expense-payload.ts`.
 
+> **Superseded.** Per-expense currency was removed later: an expense is entered in
+> the group's own currency and in no other, so `useExpenseCurrencyConversion`,
+> `ExpenseCurrencyBlock` and `lib/conversion-rate-notice.ts` no longer exist, and a
+> group's currency is fixed once it has expenses. The rate client in `lib/hooks.ts`
+> is kept for a future feature. The two paragraphs below describe the original
+> design.
+
 **To `src/hooks/expenses/`.** `useExpenseForm` orchestrates: form setup, default values,
 submission. `useExpenseCurrencyConversion` owns the three exchange-rate effects —
 fetching the rate, converting original currency to group currency, and the reverse

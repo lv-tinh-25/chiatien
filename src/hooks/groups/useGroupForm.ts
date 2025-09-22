@@ -96,6 +96,15 @@ export function useGroupForm({
   )
 
   /**
+   * The currency is the unit every stored amount is counted in, and the rows
+   * carry no unit of their own -- switching it would silently reinterpret every
+   * one of them. `protectedParticipantIds` is the group's expense participants,
+   * so a non-empty one means the group already has amounts to protect. The
+   * server refuses the same change; this only keeps it off the screen.
+   */
+  const currencyLocked = protectedParticipantIds.length > 0
+
+  /**
    * A participant who already appears in an expense cannot be removed: deleting
    * the row would cascade the expense away with them.
    */
@@ -151,7 +160,9 @@ export function useGroupForm({
     // success for nothing. Creating one is different: a form opened from a
     // link can be complete before it is touched.
     canSubmit: !isEdit || edited,
+    currencyLocked,
     onCurrencyCodeChange: (code: string) => {
+      if (currencyLocked) return
       form.setValue('currencyCode', code)
       form.setValue('currency', symbolFor(code))
     },
