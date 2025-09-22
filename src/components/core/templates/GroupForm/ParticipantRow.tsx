@@ -7,13 +7,16 @@ import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { UseFormRegisterReturn } from 'react-hook-form'
 
+/** Why a row cannot be removed. Two reasons, and they read differently. */
+export type ParticipantLock = 'expenses' | 'lastOne' | null
+
 type ParticipantRowProps = {
   index: number
   name: string
   peers: readonly string[]
   registration: UseFormRegisterReturn
   errorKey?: string
-  removable: boolean
+  lockedBy: ParticipantLock
   onRemove: () => void
 }
 
@@ -31,10 +34,17 @@ export function ParticipantRow({
   peers,
   registration,
   errorKey,
-  removable,
+  lockedBy,
   onRemove,
 }: ParticipantRowProps) {
   const t = useTranslations('GroupForm.Participants')
+
+  const lockReason =
+    lockedBy === 'expenses'
+      ? t('protectedParticipant')
+      : lockedBy === 'lastOne'
+        ? t('lastParticipant')
+        : undefined
 
   // Aligned to the top rather than the centre: a validation message grows the
   // field, and centring would drag the avatar and the delete button down with
@@ -57,8 +67,8 @@ export function ParticipantRow({
         variant="outline"
         size="icon"
         className="shrink-0 text-muted-foreground hover:text-destructive"
-        disabled={!removable}
-        title={removable ? undefined : t('protectedParticipant')}
+        disabled={lockedBy !== null}
+        title={lockReason}
         aria-label={`${t('title')} ${index + 1}`}
         onClick={onRemove}
       >

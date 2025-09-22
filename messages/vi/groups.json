@@ -104,7 +104,8 @@
     },
     "Participants": {
       "title": "Thành viên",
-      "protectedParticipant": "Thành viên này đã tham gia chi tiêu, không thể xóa.",
+      "protectedParticipant": "Thành viên đã tham gia chi tiêu thì không thể xoá.",
+      "lastParticipant": "Nhóm phải có ít nhất một thành viên.",
       "new": "Thêm",
       "add": "Thêm thành viên",
       "John": "An",

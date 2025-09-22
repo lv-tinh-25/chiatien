@@ -7,7 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/atoms/Card'
-import { ParticipantRow } from '@/components/core/templates/GroupForm/ParticipantRow'
+import {
+  ParticipantRow,
+  type ParticipantLock,
+} from '@/components/core/templates/GroupForm/ParticipantRow'
 import { useFormErrors } from '@/hooks/forms/useFormErrors'
 import type { GroupFormValues } from '@/lib/schemas'
 import { Plus } from 'lucide-react'
@@ -36,6 +39,16 @@ export function ParticipantList({
     useWatch({ control: form.control, name: 'participants' }) ?? []
   ).map((participant) => participant?.name ?? '')
 
+  const lockedBy = (index: number): ParticipantLock => {
+    if (isProtected(index)) return 'expenses'
+    return fields.length === 1 ? 'lastOne' : null
+  }
+
+  // The row-level tooltip never reaches a phone, which has no hover, and a
+  // browser does not announce the title of a disabled button either. The note
+  // is what actually tells the reader why the bin is greyed out.
+  const anyProtected = fields.some((_, index) => isProtected(index))
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -53,11 +66,16 @@ export function ParticipantList({
               peers={names}
               registration={form.register(`participants.${index}.name`)}
               errorKey={errors?.[index]?.name?.message}
-              removable={fields.length > 1 && !isProtected(index)}
+              lockedBy={lockedBy(index)}
               onRemove={() => onRemove(index)}
             />
           ))}
         </ul>
+        {anyProtected && (
+          <p className="mt-3 text-body-sm text-muted-foreground">
+            {t('protectedParticipant')}
+          </p>
+        )}
         <Button
           type="button"
           variant="outline"
