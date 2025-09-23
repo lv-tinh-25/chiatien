@@ -1,0 +1,31 @@
+# Vercel reads this instead of .gitignore, so the build artefacts and
+# dependencies have to be named here too or they would be uploaded.
+node_modules/
+.next/
+out/
+build/
+.git/
+src/generated/
+.env
+.env*.local
+
+# Everything below exists for working on ChiaTien, never for serving it.
+# docs/screenshots and .claude alone are 9 of the repository's 11 MB.
+.claude/
+docs/
+e2e/
+playwright.config.ts
+playwright.screenshots.config.ts
+playwright-report/
+test-results/
+.storybook/
+storybook-static/
+coverage/
+design-system/
+scripts/
+jest.config.ts
+CLAUDE.md
+.mcp.json
+.DS_Store
+.swc/
+*.tsbuildinfo
