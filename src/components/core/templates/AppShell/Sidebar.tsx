@@ -48,8 +48,11 @@ export function Sidebar({ chrome }: { chrome: GroupChrome }) {
                 aria-current={item.active ? 'page' : undefined}
                 className={cn(
                   'flex min-h-touch-min items-center gap-3 rounded-control px-3 text-body-md transition-colors duration-150 ease-out-soft',
+                  // The selected chip's colours, not a white card: the sidebar
+                  // is itself near-white glass, so a white pill on it was told
+                  // apart by its text alone.
                   item.active
-                    ? 'border border-white/95 bg-card/85 font-extrabold text-primary-ink shadow-card'
+                    ? 'border border-chip-selected-border bg-chip-selected font-extrabold text-chip-selected-foreground shadow-card'
                     : 'border border-transparent font-semibold text-foreground/80 hover:bg-foreground/5',
                 )}
               >
