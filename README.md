@@ -1,6 +1,6 @@
 <div align="center">
 
-# ChiaTiền
+# ChiaTien
 
 **Split group expenses without the arithmetic or the awkwardness.**
 
@@ -15,11 +15,11 @@ settles every debt.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flv-tinh-25%2Fchiatien&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,BASE_URL&envDescription=Two%20Postgres%20connection%20strings%20and%20the%20public%20URL&envLink=https%3A%2F%2Fgithub.com%2Flv-tinh-25%2Fchiatien%23deploying)
 
-<img src="docs/screenshots/expenses-vi-1440.png" alt="Expense list of a group, with balances and suggested settlements" width="860">
+**[Live demo → chiatien-app.vercel.app](https://chiatien-app.vercel.app)**
 
 </div>
 
-## Why ChiaTiền
+## Why ChiaTien
 
 - **No accounts.** A group lives at its URL. Share the link or the QR code and
   everyone is in; each browser remembers the groups it has opened.
@@ -31,25 +31,6 @@ settles every debt.
   throughout; English is a full alternative.
 - **Yours to host.** One Next.js app and one PostgreSQL database. Runs free on
   Vercel and Neon.
-
-## Screenshots
-
-<table>
-  <tr>
-    <td align="center"><img src="docs/screenshots/balances-vi-1440.png" alt="Balances" width="420"><br><sub>Balances and settlements</sub></td>
-    <td align="center"><img src="docs/screenshots/stats-vi-1440.png" alt="Statistics" width="420"><br><sub>Statistics with drill-down</sub></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/screenshots/expense-form-vi-1440.png" alt="Expense form" width="420"><br><sub>Adding an expense</sub></td>
-    <td align="center"><img src="docs/screenshots/activity-vi-1440.png" alt="Activity log" width="420"><br><sub>Activity log</sub></td>
-  </tr>
-</table>
-
-<p align="center">
-  <img src="docs/screenshots/expenses-vi-390.png" alt="Expenses on mobile" width="200">
-  <img src="docs/screenshots/balances-vi-390.png" alt="Balances on mobile" width="200">
-  <img src="docs/screenshots/stats-vi-390.png" alt="Statistics on mobile" width="200">
-</p>
 
 ## Features
 
@@ -118,7 +99,7 @@ anything at this scale.
 2. **Project.** Import this repository on Vercel, or use the button at the top.
 3. **Environment.** Set `POSTGRES_PRISMA_URL` to the pooled string,
    `POSTGRES_URL_NON_POOLING` to the direct one, and `BASE_URL` to the production
-   domain, such as `https://chiatien.vercel.app`.
+   domain, such as `https://chiatien-app.vercel.app`.
 4. **Deploy.** `vercel.json` runs `prisma migrate deploy` before every production
    build, so the schema is created on the first deploy and kept current after.
 
