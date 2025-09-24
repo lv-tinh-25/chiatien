@@ -14,11 +14,11 @@ language of the codebase.
 
 ## Absolute rules
 
-### 1. Never push. Ever.
+### 1. Work stops at a local commit
 
-This repository must not leave this machine. Do not add a git remote, do not run
-`git push`, do not use `gh`, do not open pull requests on any host. Work stops at a
-local commit. This is a policy constraint, not a preference.
+The owner publishes this repository; an agent does not. Do not push, do not add or
+change a remote, do not use `gh`, and do not open pull requests. Commit locally and
+stop there.
 
 ### 2. English in code, Vietnamese in `messages/vi/`
 
@@ -76,12 +76,11 @@ npx playwright test --config playwright.screenshots.config.ts
 `npm run e2e` serves the last `npm run build`, so build first or the run tests stale
 code.
 
-Run heavy TypeScript commands one at a time — this machine has limited free RAM and
-three of them in one shell will crash it.
+Run `check-types`, `lint`, `build` and `e2e` one at a time: together they exhaust the
+memory of a small machine.
 
-PostgreSQL is the local Homebrew `postgresql@16` service and the database is
-`chiatien`; start it with `brew services start postgresql@16`. Docker is not used.
-Node is pinned to 24 by `.nvmrc` because Prisma 7 rejects odd-numbered releases.
+PostgreSQL 16 is the only external service and the local database is `chiatien`.
+Docker is not used. Node is pinned to 24 by `.nvmrc` because Prisma 7 rejects odd-numbered releases.
 
 ## Git workflow
 
@@ -102,7 +101,7 @@ characters or fewer. The commit author is the repository owner; never add a Clau
 co-author trailer.
 
 Merge into `main` with `git merge --no-ff` so each slice keeps its own history. The
-merge message uses the pull-request format even though no pull request is ever opened:
+merge is made locally, not on GitHub, and its message uses the pull-request format:
 
 ```
 type(scope): subject
@@ -113,7 +112,7 @@ type(scope): subject
 ```
 
 Before merging, all of these must hold: `npm test` green, `npm run check-types` green,
-`npm run lint` green, the e2e specs covering the slice green, no `any`/`as`, no
+`npm run lint` green (CI runs these three on every pull request and push to `main`), the e2e specs covering the slice green, no `any`/`as`, no
 hardcoded colors or display strings.
 
 ## Architecture
